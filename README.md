@@ -1,5 +1,5 @@
 
-Course name: **Advanced Topics in Systems for Big Data and Machine Learning (SYS4BIGML)**
+# Advanced Topics in Systems for Big Data and Machine Learning (SYS4BIGML)
 
 Hong-Linh Truong
 
