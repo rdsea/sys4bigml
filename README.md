@@ -1,7 +1,7 @@
 
 # Advanced Topics in Systems for Big Data and Machine Learning (SYS4BIGML)
 
-Hong-Linh Truong
+[Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
 
 Department of Computer Science,
 
@@ -127,7 +127,7 @@ A student is interested in quantum computing for AI, so the student might have
 ### Digital Tools
 
 * [Mycourses](http://mycourses.aalto.fi): will be the main source where we will have lectures, surveys, topic discussions, project works and other materials.
-* [Git Repository](https://version.aalto.fi): will be the place for code examples, hands-on tutorials, dataset, etc.
+* [Git Repository](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020): will be the place for code examples, hands-on tutorials, dataset, etc. Student works will be managed by student own Git but we ask for the Git to be open as a document for the project work.
 * Other cloud services for the course
 
 
