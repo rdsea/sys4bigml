@@ -23,8 +23,8 @@
 
 ## II Monitoring the machine learning experiments
 
-    1. Example code:
-        [Code](https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html)
+    1. Example
+            <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>
 
     2. Compare the results
         a. script_of_experiments
