@@ -69,6 +69,20 @@
       o curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "ddity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
 
 
+## IV Practical Example
+In this example, students will write a sample pipeline and use mlflow to measure required information of the pipeline. For example, students will implement the following pipeline 
+
+### The pipeline
+
+    Prepare data --> build a model --> make prediction --> evaluate the model
+
+### Monitoring
+
+    - input parameters: the input of a specific machine learning algorithm such as linear regression, decision tree, etc.
+    - metrics: performance metrics of machine learning algorithms such as MAE, RMSE, R2, etc.
+    - models: the training models that can be used to predict new data. 
+
+
 
 
 
