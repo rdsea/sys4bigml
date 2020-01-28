@@ -2,5 +2,5 @@
 
 We have the following hands-on tutorials:
 
-* [Performance monitoring](./tutorial1/)
-* [ML project management](./tutorial2/)
+* [Performance monitoring](./PerformanceMonitoring/)
+* [ML project management](./MLProjectManagement/)
