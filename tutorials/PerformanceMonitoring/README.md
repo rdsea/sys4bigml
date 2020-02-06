@@ -40,11 +40,11 @@
 
 ## 3. Some examples:
 
-### 3.1 Monitoring a server
+* 3.1 Monitoring a server
 
-### 3.2 Monitoring a Linux process
+* 3.2 Monitoring a Linux process
 
-### 3.3 Monitoring an application
+* 3.3 Monitoring an application
 
 
       
