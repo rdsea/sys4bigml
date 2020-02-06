@@ -41,16 +41,10 @@
 ## 3. Some examples:
 
 ### 3.1 Monitoring a server
-    o Example 1
 
 ### 3.2 Monitoring a Linux process
-    o Example 2
 
-### 3.3. Monitoring disk I/O using Exporter
-    o Example 3
-
-### 3.4 Monitoring an application
-    o Example 4
+### 3.3 Monitoring an application
 
 
       
