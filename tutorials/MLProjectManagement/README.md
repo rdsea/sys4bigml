@@ -1,5 +1,5 @@
 # MLFlow
-Machine learning algorithms usually have a lot of configurable parameters, therefore, it is hard to track the parameters, code and the input data for each experiment. In addition, reproducibility of a machine learning algorithm often has trouble due to the lack of information of configurable parameters. MLFlow is used to deal with these challenges. It provides three main functions: Tracking, Project and Models.
+Machine learning algorithms usually have a lot of configurable parameters, therefore, it is hard to track the parameters, code and the input data for each experiment. In addition, reproducibility of a machine learning algorithm often has trouble due to the lack of information of configurable parameters. MLFlow is used to deal with these challenges. It provides three main functions: Tracking, Projects and Models.
 
 - Tracking: track experiments to store parameters and results.
 - Projects: package the code in reproducible form in order to share or transfer to production.
