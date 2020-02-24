@@ -20,8 +20,10 @@ For executing some examples of this tutorials, students need to install scikit-l
     $pip install scikit-learn
 ```
 
-## Basic Examples
-At this point, we recommend that students take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>. Copy the below example and run it. 
+## Basic Example
+At this point, we recommend that students take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>. 
+
+### 1. A simple python example 
 
 ```python
 
@@ -56,7 +58,7 @@ if __name__ == "__main__":
 ```
 
 
-## Packing the code using MLProjects
+### 2. Packing the code using MLProjects
 After executing the code, students can packing the code in a virtual environment such as conda so that the code can be executed everywhere. In order to package the code using mlflow, students have to create MLProject and description files which define the requirements for executing the code. The below files are an example for packaging the code at <https://github.com/mlflow/mlflow-example> and execute it in the conda environment. 
 
 Create MLProject file
@@ -86,7 +88,7 @@ Create conda.yaml to define all requirements for the python program
 ```
 
 
-## Serving Models
+### 3. Serving Models
 MLflow Model has a standard format for packaging machine learning models that can be used in a variety of downstream tools.
 For example, the model can be used to serve as a service through a REST API. 
 
