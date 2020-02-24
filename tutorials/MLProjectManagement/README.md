@@ -1,52 +1,79 @@
-# Introduction to MLFlow
+# MLFlow
+Machine learning algorithms usually have a lot of configurable parameters, therefore, it is hard to track the parameters, code and the input data for each experiment. In addition, reproducibility of a machine learning algorithm often has trouble due to the lack of information of configurable parameters. MLFlow is used to deal with these challenges. It provides three main functions: Tracking, Project and Models.
 
-  * How to setup MLFlow: a support tool for managing the machine learning pipeline
-  
-  * How to monitor the machine learning experiments with MLFlow
-  
-  * How to deploy the obtained models
+- Tracking: track experiments to store parameters and results.
+- Projects: package the code in reproducible form in order to share or transfer to production.
+- Models: manage and deploy models from a variety of machine learning libraries.
 
-## I Setup MLFlow
-    Install Anaconda
-      o Go to the Anaconda page
-          https://www.anaconda.com/distribution/
-      o Download Anaconda bash script
-          curl -O https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
-      o Execute the script
-        $ bash Anaconda3-2019.03-Linux-x86_64.sh
-  
-    Install mlflow
-      $ pip install mlflow
-  
-    Install scikit-learn
-      $ pip install scikit-learn
+## Installation
+It is recommended that students install Anaconda for simplifying package management and deployment. Student can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
 
-## II Monitoring the machine learning experiments
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install mlflow.
 
-    1. Example
-            <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>
+```bash
+    $pip install mlflow
+```
 
-    2. Compare the results
-        a. script_of_experiments
-            i. Change the arguments of the training code
-            ii. Create a script 
-        b. mlflow ui
-            i. Check and compare the results.
+For executing some examples of this tutorials, students need to install scikit-learn
 
-    3. Packing the code in a virtual environment such as conda
-        a. Create MLProject file
-            [//]: # sklearn_elasticnet_wine/MLproject
-            name: tutorial
-            conda_env: conda.yaml
-            entry_points: 
-              main:  
-                parameters:    
-                  alpha: float   
-                  l1_ratio: {type: float, default: 0.1}  
-                command: "python train.py {alpha} {l1_ratio}"
+```bash
+    $pip install scikit-learn
+```
 
-        b. Create conda.yaml
-            [//]: # sklearn_elasticnet_wine/conda.yaml
+## Basic Examples
+At this point, we recommend that students take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>. Copy the below example and run it. 
+
+```python
+
+import os
+from mlflow import log_metric, log_param, log_artifact
+
+if __name__ == "__main__":
+    # Log a parameter (key-value pair)
+    log_param("parameter1", 1)
+    log_param("parameter2", 2)
+
+    # Log a metric; metrics can be updated throughout the run
+    log_metric("error", 0.1)
+    log_metric("accuracy", 0.9)
+
+    # Log an artifact (output file)
+    with open("mlflow_data.txt", "w") as f:
+        f.write("MLFlow tracking!")
+    log_artifact("mlflow_data.txt")
+    
+```
+
+
+* Students should write a simple script to run the aboved example many times.
+```bash
+    $./script_of_experiments.sh
+```
+
+* After running the examples repeatedly, open a terminal in the current working directory and call mlflow user interface using the below command:
+```bash
+    $mlflow ui
+```
+
+
+## Packing the code using MLProjects
+After executing the code, students can packing the code in a virtual environment such as conda so that the code can be executed everywhere. In order to package the code using mlflow, students have to create MLProject and description files which define the requirements for executing the code. The below files are an example for packaging the code at <https://github.com/mlflow/mlflow-example> and execute it in the conda environment. 
+
+Create MLProject file
+```yaml
+[//]: # sklearn_elasticnet_wine/MLproject
+        name: tutorial
+        conda_env: conda.yaml
+        entry_points: 
+          main:  
+            parameters:    
+              alpha: float   
+              l1_ratio: {type: float, default: 0.1}  
+            command: "python train.py {alpha} {l1_ratio}"
+```
+Create conda.yaml to define all requirements for the python program
+```yaml
+[//]: # sklearn_elasticnet_wine/conda.yaml
             name: tutorial
             channels:  
               - defaults
@@ -55,19 +82,27 @@
               - pandas=0.22.0  
               - scikit-learn=0.19.1  
               - pip:    
-                - mlflow
+                - mlflow            
+```
 
 
+## Serving Models
+MLflow Model has a standard format for packaging machine learning models that can be used in a variety of downstream tools.
+For example, the model can be used to serve as a service through a REST API. 
 
-## III Deploying the model and put it into product
-  1. Go to the UI to check the saving model
+Student can go to the UI to check the saving model:
+```bash
+    $mlflow ui
+```
 
-  2. Deploy the server using the saving model:
-      o mlflow models serve -m /home/phuong/PycharmProjects/monitoring/tutorial2/examples/mlruns/0/79936866205949f0843a941829e59f0a/artifacts/model -p 1234
-      
-  3. Using the deployed model to do prediction
-      o curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "ddity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
-
+Deploy the server using the saving model:
+```bash
+   $mlflow models serve -m /home/phuong/PycharmProjects/monitoring/tutorial2/examples/mlruns/0/79936866205949f0843a941829e59f0a/artifacts/model -p 1234
+```      
+Dong predicting using the deployed model
+```bash
+   $ curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "ddity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
+```
 
 ## IV Practical Example
 In this example, students will write a sample pipeline and use mlflow to measure required information of the pipeline. For example, students will implement the following pipeline 
