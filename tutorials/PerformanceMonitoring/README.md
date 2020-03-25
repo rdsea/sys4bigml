@@ -27,11 +27,11 @@ Prometheus is an open-source metrics-based monitoring systems which is widely us
 ### 2.3. Install docker and docker-compose
   a. Install docker
   
-     The instruction is [doc docker](https://docs.docker.com)
+     The instruction is [doc_docker](https://docs.docker.com)
      
   b. Install docker-compose
   
-     The instruction is [doc docker-compose](https://docs.docker.com/compose/install)
+     The instruction is [doc_docker-compose](https://docs.docker.com/compose/install)
 
 ### 2.4 Set up Prometheus, add Exporter and install Grafana
   a. Introduce prometheus.yml
