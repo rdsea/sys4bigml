@@ -1,10 +1,12 @@
 # 1. Prometheus
 Prometheus is an open-source metrics-based monitoring systems which is widely used by many companies and organizations for monitoring their applications and infrastructures. Mainly, prometheus provides the following components:
 
-- Prometheus server - This scrapes and stores time series data from client systems and applications.
+- Prometheus server - used to scrape and store data from client systems and applications.
 - Exporters - used in exporting existing metrics from third-party systems as Prometheus metrics.
-- An alertmanager used to handle alerts
-- The client libraries for instrumenting application code
+- Pushgateway - used to handle push information from targets
+- The client libraries - used for instrumenting application code
+
+In this tutorial, students will study the provided components to monitor different targets such as a machine or a server, a system process, and an arbitrary application. The goal of this tutorial is to equip the students with basic skills to monitor their real systems and applications. 
 
 ## 2. Installation
 
@@ -48,16 +50,16 @@ Prometheus is an open-source metrics-based monitoring systems which is widely us
 
 * 3.1 Monitoring a server
 
-    Monitoring a server using [Node_Exporter](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/Node_Exporter)
+In this example, student will learn how to monitor a server using [Node_Exporter](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/Node_Exporter). Node Exporter is provided by Prometheus, students only need to select the correct version of it corresponding to the operating system.
 
 
 * 3.2 Monitoring a Linux process
   
-    Monitoring a process using [Pushgateway](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/Pushgateway)
+This example introduces how to monitor a system process using [Pushgateway](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/Pushgateway)
 
 
 * 3.3 Monitoring an application
 
-    Monitoring an application using [Client library](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/ClientLibrary)
+Finally, students will study monitoring an arbitrary application using [Client library](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/ClientLibrary). Client library provided by Prometheus is more flexible so students can use its API to monitor the operations of an application.
 
       
