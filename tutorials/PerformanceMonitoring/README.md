@@ -55,7 +55,7 @@ In this example, student will learn how to monitor a server using [Node_Exporter
 
 * 3.2 Monitoring a Linux process
   
-This example introduces how to monitor a system process using [Pushgateway](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/Pushgateway). Pushgateway is available for download according to different operating system.
+This example introduces how to monitor a system process using [Pushgateway](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/Pushgateway). Pushgateway is available for download according to different operating systems.
 
 
 * 3.3 Monitoring an application
