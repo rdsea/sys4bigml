@@ -5,6 +5,8 @@ Machine learning algorithms usually have a lot of configurable parameters, there
 - Projects: package the code in reproducible form in order to share or transfer to production.
 - Models: manage and deploy models from a variety of machine learning libraries.
 
+The goal of this tutorial is to introduce to students basic functionalities of mlflow such as mentioned above. Further to this, students will study how to use mlflow in measuring metrics of a machine learning application via examples. After completing this tutorial, students can use mlflow to collect experimental data for their machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.  
+
 ## Installation
 It is recommended that students install Anaconda for simplifying package management and deployment. Student can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
 
@@ -111,7 +113,7 @@ In this example, students will write a sample pipeline and use mlflow to measure
 
 ### The pipeline
 
-    Prepare data --> build a model --> make prediction --> evaluate the model
+    Prepare data --> build a model --> evaluate the model -->  make prediction
 
 ### Monitoring
 
