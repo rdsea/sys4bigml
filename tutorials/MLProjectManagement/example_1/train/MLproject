@@ -1,0 +1,9 @@
+name: salary
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      data_file: path
+    command: "python sal_train.py {data_file}"

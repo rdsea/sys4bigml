@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/phuong/pythonprogs/mlpipelines/salmlflow/train/mlruns/0/c43aa4eb6a86482e9e1d39f9eb9e8fe2/artifacts
+end_time: 1577178312192
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: c43aa4eb6a86482e9e1d39f9eb9e8fe2
+run_uuid: c43aa4eb6a86482e9e1d39f9eb9e8fe2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1577178312010
+status: 3
+tags: []
+user_id: phuong
