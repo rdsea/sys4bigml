@@ -1,14 +1,18 @@
-# MLFlow
-Machine learning algorithms usually have a lot of configurable parameters, therefore, it is hard to track the parameters, code and the input data for each experiment. In addition, reproducibility of a machine learning algorithm often has trouble due to the lack of information of configurable parameters. MLFlow is used to deal with these challenges. It provides three main functions: Tracking, Projects and Models.
+# ML Experiment Management
+The goal of this tutorial is to practice experiment management by using [MLflow](https://mlflow.org/). The goal of experiment management is to run various experiments for a given ML model to understand various quality attributes of the ML model under different input data and computing resources. Within an experiment we will capture  relationshipes among configurable parameters, ML code, the input data, output result, and performance metrics. Using experiment management we can also check reproducibility of a machine learning algorithm. 
+
+MLFlow is one framework for experiment management. It provides three main functions
 
 - Tracking: track experiments to store parameters and results.
 - Projects: package the code in reproducible form in order to share or transfer to production.
 - Models: manage and deploy models from a variety of machine learning libraries.
 
-The goal of this tutorial is to introduce to students basic functionalities of mlflow such as mentioned above. Further to this, students will study how to use mlflow in measuring metrics of a machine learning application via examples. After completing this tutorial, students can use mlflow to collect experimental data for their machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.  
+In this tutorial you can practice basic functionalities of mlflow such as mentioned above. Further to this, you will study how to use mlflow in measuring 
+metrics of a machine learning application via examples. After completing this tutorial, you can use mlflow to collect experimental data for their machine learning applications. 
+These data are usually useful for further analysis, statistics, prediction and optimization.  
 
 ## Installation
-It is recommended that students install Anaconda for simplifying package management and deployment. Student can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
+It is recommended that you install Anaconda for simplifying package management and deployment. You can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install mlflow.
 
@@ -16,14 +20,14 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install mlflow.
     $pip install mlflow
 ```
 
-For executing some examples of this tutorials, students need to install scikit-learn
+For executing some examples of this tutorials, you need to install scikit-learn
 
 ```bash
     $pip install scikit-learn
 ```
 
 ## Basic Example
-At this point, we recommend that students take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>. 
+At this point, we recommend you take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>. 
 
 ### 1. A simple python example 
 
@@ -49,7 +53,7 @@ if __name__ == "__main__":
 ```
 
 
-* Students should write a simple script to run the aboved example many times.
+* You should write a simple script to run the aboved example many times.
 ```bash
     $./script_of_experiments.sh
 ```
@@ -61,7 +65,7 @@ if __name__ == "__main__":
 
 
 ### 2. Packing the code using MLProjects
-After executing the code, students can packing the code in a virtual environment such as conda so that the code can be executed everywhere. In order to package the code using mlflow, students have to create MLProject and description files which define the requirements for executing the code. The below files are an example for packaging the code at <https://github.com/mlflow/mlflow-example> and execute it in the conda environment. 
+After executing the code, you can packing the code in a virtual environment such as conda so that the code can be executed everywhere. In order to package the code using mlflow, you have to create MLProject and description files which define the requirements for executing the code. The below files are an example for packaging the code at <https://github.com/mlflow/mlflow-example> and execute it in the conda environment. 
 
 Create MLProject file
 ```yaml
@@ -109,7 +113,7 @@ Do predicting using the deployed model
 ```
 
 ## Practical Example
-In this example, students will write a sample pipeline and use mlflow to measure required information of the pipeline. For example, students will implement the following pipeline 
+In this example, you will write a sample pipeline and use mlflow to measure required information of the pipeline. For example, students will implement the following pipeline 
 
 ### The pipeline
 
@@ -123,5 +127,7 @@ In this example, students will write a sample pipeline and use mlflow to measure
 
 
 
-
+## References
+The tutorial is built atop MLflow documents. Main references are:
+* https://mlflow.org/docs/latest/tutorials-and-examples/index.html
 
