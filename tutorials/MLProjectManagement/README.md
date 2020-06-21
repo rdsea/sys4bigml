@@ -1,5 +1,6 @@
 # ML Experiment Management
-The goal of this tutorial is to practice experiment management by using [MLflow](https://mlflow.org/). The goal of experiment management is to run various experiments for a given ML model to understand various quality attributes of the ML model under different input data and computing resources. Within an experiment we will capture  relationshipes among configurable parameters, ML code, the input data, output result, and performance metrics. Using experiment management we can also check reproducibility of a machine learning algorithm. 
+
+The purpose of this tutorial is to introduce you to manage machine learning experiments using [MLFlow](https://mlflow.org/). This will consist of how to reproduce, track and evaluate your experiments. Within an experiment we will capture  relationshipes among configurable parameters, ML code, the input data, output result, and performance metrics. Using experiment management we can also check reproducibility of a machine learning algorithm. 
 
 MLFlow is one framework for experiment management. It provides three main functions
 
