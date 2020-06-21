@@ -129,6 +129,6 @@ In this example, you will write a sample pipeline and use mlflow to measure requ
 
 
 ## References
-The tutorial is built atop MLflow documents. Main references are:
+The tutorial is built upon MLflow documents. Main references are:
 * https://mlflow.org/docs/latest/tutorials-and-examples/index.html
 
