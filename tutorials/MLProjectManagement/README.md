@@ -94,6 +94,14 @@ Create conda.yaml to define all requirements for the python program
                 - mlflow            
 ```
 
+After defining the MLProject and conda.yaml files. You can run your code in another conda environment using the following command:
+
+```bash
+    $ mflow run ml_experiments/ -P alpha=0.01
+
+```
+
+Notably, The directory ml_experiments is where your MLProject and conda.yaml are located. It can be any name that you have created for your project.
 
 ### 3. Serving Models
 MLflow Model has a standard format for packaging machine learning models that can be used in a variety of downstream tools.
