@@ -38,21 +38,30 @@ import os
 from mlflow import log_metric, log_param, log_artifact
 
 if __name__ == "__main__":
-    # Log a parameter (key-value pair)
-    log_param("parameter1", 1)
-    log_param("parameter2", 2)
 
-    # Log a metric; metrics can be updated throughout the run
-    log_metric("error", 0.1)
-    log_metric("accuracy", 0.9)
+        ...
+        with mlflow.start_run():
+        lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
+        lr.fit(train_x, train_y)
 
-    # Log an artifact (output file)
-    with open("mlflow_data.txt", "w") as f:
-        f.write("MLFlow tracking!")
-    log_artifact("mlflow_data.txt")
+        predicted_qualities = lr.predict(test_x)
+
+        (rmse, mae, r2) = eval_metrics(test_y, predicted_qualities)
+
+        print("Elasticnet model (alpha=%f, l1_ratio=%f):" % (alpha, l1_ratio))
+        print("  RMSE: %s" % rmse)
+        print("  MAE: %s" % mae)
+        print("  R2: %s" % r2)
+
+        mlflow.log_param("alpha", alpha)
+        mlflow.log_param("l1_ratio", l1_ratio)
+        mlflow.log_metric("rmse", rmse)
+        mlflow.log_metric("r2", r2)
+        mlflow.log_metric("mae", mae)
+
+        mlflow.sklearn.log_model(lr, "model")
     
 ```
-
 
 * You should write a simple script to run the aboved example many times.
 ```bash
@@ -63,6 +72,10 @@ if __name__ == "__main__":
 ```bash
     $mlflow ui
 ```
+
+![Figure 1 - Experimental Results of The ElasticNet method on wine-quality dataset](./images/experiments.png)
+
+* The results are illustrated in the Figure 1 where you can see all the logging parameters and metrics as well as different runs of your experiment. You can also see that the parameters and metrics are separate in the top row since they are logged with different mlflow api (log_param and log_metric.). 
 
 
 ### 2. Packing the code using MLProjects
@@ -97,11 +110,15 @@ Create conda.yaml to define all requirements for the python program
 After defining the MLProject and conda.yaml files. You can run your code in another conda environment using the following command:
 
 ```bash
-    $ mflow run ml_experiments/ -P alpha=0.01
+    $ mlflow run ml_experiments/ -P alpha=0.01
 
 ```
 
-Notably, The directory ml_experiments is where your MLProject and conda.yaml are located. It can be any name that you have created for your project.
+Notably, The directory ml_experiments is where your MLProject and conda.yaml are located. It can be any name that you have created for your project. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with the id 'mlflow-f175708099db6c37e65aca9c773737a0ff03ecbc' and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
+
+![Figure 2 - Packing your project in a conda environment](./images/conda-envs.png)
+
+
 
 ### 3. Serving Models
 MLflow Model has a standard format for packaging machine learning models that can be used in a variety of downstream tools.
@@ -116,29 +133,24 @@ Deploy the server using the saving model:
 ```bash
    $mlflow models serve -m /home/phuong/PycharmProjects/monitoring/tutorial2/examples/mlruns/0/79936866205949f0843a941829e59f0a/artifacts/model -p 1234
 ```      
-Do predicting using the deployed model
+
+After the server is deployed successfully, you will see a result similar to the Figure 3 where your training model is deployed and ready to serve the prediction.
+
+![Figure 3 - The training model is deployed and ready to be used for doing prediction](./images/training-model.png)
+
+Then you can do prediction for your testing data using the deployed model such as follows:
+
 ```bash
    
-   curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
+   $curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
+
+[4.3112116648803545] 
 
 ```
 
-## Practical Example
-In this example, you will write a sample pipeline and use mlflow to measure required information of the pipeline. For example, students will implement the following pipeline 
-
-### The pipeline
-
-    Prepare data --> build a model --> evaluate the model -->  make prediction
-
-### Monitoring
-
-    - input parameters: the input of a specific machine learning algorithm such as linear regression, decision tree, etc.
-    - metrics: performance metrics of machine learning algorithms such as MAE, RMSE, R2, etc.
-    - models: the training models that can be used to predict new data. 
-
-
-
 ## References
-The tutorial is built upon MLflow documents. Main references are:
+The tutorial is built upon MLflow documents. The main references is:
+
 * https://mlflow.org/docs/latest/tutorials-and-examples/index.html
+
 
