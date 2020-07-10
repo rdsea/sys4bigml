@@ -12,9 +12,10 @@ MLFlow is just one of existing frameworks for experiment management. It provides
 In this tutorial you can practice basic functionalities of mlflow such as mentioned above. Further to this, you will study how to use mlflow in measuring
 metrics of a machine learning application via examples. After completing this tutorial, you can use mlflow to collect experimental data for their machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
 
-## Accompany Video
-A hands-on video as part of this tutorial is available at
-* https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5371b5b9-431a-41fa-add2-abec00dfdc61
+## Accompanying Slides and Video
+* [Slides](ML_ProjectManagement_2020.pdf)
+* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5371b5b9-431a-41fa-add2-abec00dfdc61)
+
 ## Installation
 It is recommended that you install Anaconda for simplifying package management and deployment. You can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
 
