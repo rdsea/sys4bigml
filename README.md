@@ -2,7 +2,7 @@
 # Advanced Topics in Software Systems (SYS4BIGML)
 
 * Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
-* Other teacher: [Phuong Pham]
+* Other teachers/Assistants: [Phuong Pham]
 
 ## Overview
 
@@ -53,8 +53,18 @@ Here are the generic plan of the course:
 
 Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
 
-For the detailed plan, pls. check course versions and mycourses.aalto.fi information.   
-## Course versions
+For the detailed plan, pls. check course versions and mycourses.aalto.fi information.
 
-* Initial seminar
-* Fall 2020
+## Fall 2020 - Schedule and Content
+* Lectures
+* Hands-on tutorials
+  - [Machine Learning experiment management](./tutorials/MLProjectManagement/)
+* Project ideas presentations
+* Final project demonstration
+## Previous course versions
+
+* [Initial seminar](./spring-2020)
+
+## Contact
+
+[Linh Truong](linh.truong@aalto.fi)
