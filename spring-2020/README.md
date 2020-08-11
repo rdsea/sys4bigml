@@ -4,14 +4,18 @@
 This is a pre-version of the CS-E4660. The course is focused on advanced topics in big data and ML systems.
 
 ## Lectures
-* Robustness, Reliability, Resilience and Elasticity: We will examine  how systems should support the design of big data/ML with  Robustness, Reliability, Resilience and Elasticity
-* Benchmarking, Monitoring, Data Validation: For Big Data/ML various techniques are needed for understanding and support R4E. We examine basic benchmarking, monitoring and data validation techniques
-* Coordination of Big Data/ML Tasks: We will discuss about coordination and the relationship with R3E in Big Data/ML systems, including pipeline coordination, model serving, and experiment management.
-* Machine Learning with Edge Systems: We discuss key open issues of machine learning in edge systems from the software system viewpoint.
+* [Robustness, Reliability, Resilience and Elasticity](slides/lecture1-design-v0.1.pdf): We will examine  how systems should support the design of big data/ML with  Robustness, Reliability, Resilience and Elasticity
+* [Benchmarking, Monitoring, Data Validation](lecture2-analytics-v0.1.pdf): For Big Data/ML various techniques are needed for understanding and support R4E. We examine basic benchmarking, monitoring and data validation techniques
+* [Coordination of Big Data/ML Tasks](slides/lecture3-framework-v0.1.pdf): We will discuss about coordination and the relationship with R3E in Big Data/ML systems, including pipeline coordination, model serving, and experiment management.
+* [Machine Learning with Edge Systems](slides/lecture4-edgecloud-v0.1.1.pdf): We discuss key open issues of machine learning in edge systems from the software system viewpoint.
 
 ## Hands-on tutorials
 * [Machine learning experiments management](../tutorials/MLProjectManagement/README.md)
 * [Performance monitoring](../tutorials/PerformanceMonitoring/README.md)
+
+## Other relevant materials:
+
+* [Quality of Analytics as an Approach for Optimizing ML Systems - Initial Results and Roadmap](slides/truong-fcai-2020-v0.3.pdf)
 
 ## Student Projects and Demonstration
 
