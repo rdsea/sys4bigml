@@ -2,7 +2,7 @@
 # Advanced Topics in Software Systems (SYS4BIGML)
 
 * Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
-* Other teachers/Assistants: [Phuong Pham]
+* Other teachers/Assistants: [Phuong Pham] and [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
 
 ## Overview
 
@@ -61,6 +61,8 @@ For the detailed plan, pls. check course versions and mycourses.aalto.fi informa
   - [Machine Learning experiment management](./tutorials/MLProjectManagement/)
 * Project ideas presentations
 * Final project demonstration
+* [How to write study/learning logs](./StudyLog.md)
+
 ## Previous course versions
 
 * [Initial seminar](./spring-2020)
