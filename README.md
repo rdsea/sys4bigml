@@ -56,16 +56,26 @@ Passing the course will require the students to (i) participating in lectures an
 For the detailed plan, pls. check course versions and mycourses.aalto.fi information.
 
 ## Fall 2020 - Schedule and Content
-* Lectures
-* Hands-on tutorials
+### Lectures
+- Lecture 1:
+  - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/cs-e4660-lecture1-r3e-design-v0.2.pdf)
+  - Key reading 1: [R3E -An Approach to Robustness, Reliability, Resilience and Elasticity Engineering for End-to-End Machine Learning Systems](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
+  - Key reading 2: [The New Frontier of Machine Learning Systems](https://arxiv.org/pdf/1904.03257.pdf)
+- Lecture 2
+- Lecture 3
+- Lecture 4
+### Hands-on tutorials
   - [Machine Learning experiment management](./tutorials/MLProjectManagement/)
-* Project ideas presentations
-* Final project demonstration
+  - [Observability and Monitoring](./PerformanceMonitoring)
+### Project ideas presentations
+  - Students will propose the project idea. If a student cannot propose, the teacher will suggest some concrete ideas.
+### Final project demonstration
+### Guides
 * [How to write study/learning logs](./StudyLog.md)
 
 ## Previous course versions
 
-* [Initial seminar](./spring-2020)
+* [Initial seminar in Spring 2020](./spring-2020)
 
 ## Contact
 
