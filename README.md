@@ -62,6 +62,14 @@ For the detailed plan, pls. check course versions and mycourses.aalto.fi informa
   - Key reading 1: [R3E -An Approach to Robustness, Reliability, Resilience and Elasticity Engineering for End-to-End Machine Learning Systems](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
   - Key reading 2: [The New Frontier of Machine Learning Systems](https://arxiv.org/pdf/1904.03257.pdf)
 - Lecture 2
+  - Slides: [Benchmarking, Monitoring, Validation and Experimenting for
+Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.2.1.pdf)
+  - Key reading 1: [Benchmarking big data systems: A survey](https://www.sciencedirect.com/science/article/pii/S0140366419312344)
+  - Key reading 2: [MLPERF Training Benchmark](https://arxiv.org/pdf/1910.01500.pdf)
+  - Key reading 3: [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
+  - Key reading 4: [Developments in MLflow: A System to Accelerate the Machine Learning Lifecycle](https://dl.acm.org/doi/abs/10.1145/3399579.3399867) and [ModelDB: a system for machine learning model management](https://dl.acm.org/doi/10.1145/2939502.2939516)
+  - Key reading 5: [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847)
+  - Site 1: [AI Matrix](https://aimatrix.ai/en-us/index.html)
 - Lecture 3
 - Lecture 4
 ### Hands-on tutorials
@@ -73,6 +81,8 @@ For the detailed plan, pls. check course versions and mycourses.aalto.fi informa
 ### Guides
 * [How to write study/learning logs](./StudyLog.md)
 
+## Reading list
+* [Interesting and relevant papers and sites](./ReadingList.md)
 ## Previous course versions
 
 * [Initial seminar in Spring 2020](./spring-2020)
