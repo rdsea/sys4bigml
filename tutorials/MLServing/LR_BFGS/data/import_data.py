@@ -1,7 +1,3 @@
-"""
-Import sample data for classification engine
-"""
-
 import predictionio
 import argparse
 

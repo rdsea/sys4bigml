@@ -4,4 +4,4 @@
 [0m[[0m[0mdebug[0m] [0m[0mMerging files...[0m
 [0m[[0m[0mdebug[0m] [0m[0mMerging 'META-INF/MANIFEST.MF' with strategy 'discard'[0m
 [0m[[0m[0minfo[0m] [0m[0mStrategy 'discard' was applied to a file (Run the task at debug level to see details)[0m
-[0m[[0m[0minfo[0m] [0m[0mAssembly up to date: /templates/pio-linear-regression-bfgs/target/scala-2.11/template-scala-parallel-recommendation-assembly-0.1.0-SNAPSHOT-deps.jar[0m
+[0m[[0m[0minfo[0m] [0m[0mAssembly up to date: /templates/LR_BFGS/target/scala-2.11/template-scala-parallel-recommendation-assembly-0.1.0-SNAPSHOT-deps.jar[0m

@@ -4,7 +4,7 @@
   "engineFactory": "org.template.vanilla.VanillaEngine",
   "datasource": {
     "params" : {
-      "appName": "demo_linear_bfgs"
+      "appName": "demo_linear_regression"
     }
   },
   "algorithms": [
