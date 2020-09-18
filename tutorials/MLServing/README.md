@@ -5,7 +5,7 @@ The purpose of this tutorial is to create a simple end-to-end pipeline providing
 
 Apache PredictionIO is an open source ML Server for developers and data scientists to create predictive engines solving many ML tasks. Since other Apache's product such as Hadoop, Spark, HBase focus on develop a single components for the whole ML system, the open source of PredictionIO allows user to deploy the end-to-end ML pipeline with certain level or scalability, elasticity and reliability. 
 
-In this tutorial, we only practice basic functionalities of PredictionIO including creating simple ML cluster, colllecting data, developing, providing ML service as well as tuning, retraining or even replacing model at the runtime as it's a part of elasticity while providing ML service. Further, this tutorial gives you some references where you can learn how to completely evaluate your model. 
+In this tutorial, we practice ML serving using some basic functionalities of PredictionIO including creating simple ML cluster, colllecting data, developing, providing ML service as well as tuning, retraining or even replacing model at the runtime as it's a part of elasticity while providing ML service. Further, this tutorial gives you some references where you can learn how to completely evaluate your model. 
 
 It is recommended that you use linux environment.
 
@@ -20,13 +20,24 @@ It is recommended that you use linux environment.
 * [PredictionIO library](https://pypi.org/project/PredictionIO/)
 
 ## Models under Testing
-Withing this tutorial, we introduce 2 ML linear [models](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/tri_tutorial/tutorials/MLServing) which are Linear regression, one uses stochastic gradient descent (SGD) and the other uses BFGS algorithm. Our practices currently are applied on a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640). Both mentioned models are used to predict the time that the next alarm happen at the specific station based on the previous alarm events. 
+Withing this tutorial, we introduce 2 ML linear [models](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/tri_tutorial/tutorials/MLServing) which are Linear regression, one uses stochastic gradient descent (SGD) and the other uses BFGS algorithm. Both mentioned models are used to predict the time that the next alarm happen at the specific station based on the previous alarm events. Both models are built based on Apache's template under the [Apache Software Foundation version 2](http://www.apache.org/licenses/LICENSE-2.0) as they must follow the predefined protocol to be deployed in PredicionIO server. [Here](http://predictionio.apache.org/gallery/template-gallery/), you can find more useful templates and instructions. 
+
+Our practices currently are applied on a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640).
+
+Sample data:
+|index|old_idx|station_id|datapoint_id|alarm_id|event_time|value|valueThreshold|isActive|
+|---|---|---|---|---|---|---|---|---|
+0|983|1160629000|121|308|1487441883|231|230|True|
+1|984|1160629000|121|308|1487442194|231|230|True|
+2|985|1160629000|121|308|1487442922|231|230|True|
+
+As we're trying to predict the next alarm event for a specific alarm at one station, basically, we only use `index` and `event_time` for our experiments.
 
 Note: Inside the sample test, the `event_time` has been converted to unix timestamp.
 
 At first, we will deploy the first model using SGD to see how well the performance that we got while tuning and update model's parameters at the runtime. Then we train the second model which slightly improves accuracy and may be more efficient for low-end resources.
 
-## Setup Server cluster
+## Setup PredictionIO cluster
 We first start a cluster including a predictionIO server, a spark master, a spark worker and an elasticsearch service.
 
 ```bash
@@ -96,8 +107,8 @@ For example:
 
 Now your Server is ready to deploy ML application
 
-### Deploy the first model
-- Declare you application: All application must be register before deploying on server.
+### Deploy the SGD model for serving
+- Declare your application: At first, we must register our application on server so that we can deploy our models on it.
 
 ```bash
     $ pio-docker new app YOUR_APPLICATION_NAME
@@ -123,12 +134,7 @@ You can also check your application list:
     [INFO] [Pio$] Finished listing 2 app(s).
 ```
 
-- Clone the example code: both models are built based on Apache's template under the [Apache Software Foundation version 2](http://www.apache.org/licenses/LICENSE-2.0) as they must follow the predefined protocol to be deployed in PredicionIO server. [Here](http://predictionio.apache.org/gallery/template-gallery/), you can find more useful templates and instructions.
-```bash
-    $ git clone OUR_EXAMPLE_REPOSITORY
-```
-
-Inside each directory, you can find the ML model is implemented in `src` folder while other things are to help you build and deloy the model right the way.
+Inside LR_SGD directory, you can find the ML model is implemented in `src` folder while other things are to help you build and deloy the model right the way.
 The `source code` is implemented in Scala and it's using `predictionio` library to utilize pre-modified ML algorithms.
 
 Under the directory, you should find an engine.json file; this is where you specify parameters for deploying your application as well as some required parameters in your model. You have to modify the appname the same as the one you registered on your server.
@@ -230,7 +236,11 @@ Then re-train the model using `pio-docker train` and `deploy` the updated model 
 
 ### Model replacement
 
-Besides, with a low dimensional model in our experience, the linear regression may apply BFGS algorithm for more efficiency and lower memory requirements. Hence we can replace the current model by the one implemented in folder: LR_BFGS. Again, we can build, train and deploy new model without interrupting current service.
+Given the IoT concept, the data may come from many different sources and its characteristics or distributions would change unpredictably, it is of great importance to monitoring the whole system then we would know when we should refresh our models or when our models can not fit the data anymore, so that we can replace them to ensure the quality of service.
+Hence, an elastic ML platform must be able to provide flexible services base on user's requirements about accuracy, underlying resource and so on, then it allow user to update, retrain or event replace ML model for different purposes.
+
+With a low dimensional model in our experience, the linear regression may apply BFGS algorithm for more efficiency and lower memory requirements. Hence we can replace the current model by the one implemented in folder: LR_BFGS. Again, we can build, train and deploy new model without interrupting current service.
+
 ```bash
     $ cd ../LR_BFGS
     $ pio-docker build --verbose
@@ -240,9 +250,6 @@ Besides, with a low dimensional model in our experience, the linear regression m
 This time we evaluate the new model using `evaluate.py` inside folder `LR_BFGS/data`:
 
 ![localhost](./img/third_evaluate.png)
-
-Given the IoT concept, the data may come from many different sources and its characteristics or distributions would change unpredictably, it is of great importance to monitoring the whole system then we would know when we should refresh our models or when our models do not fit the data anymore, so that we can replace them to ensure the quality of service.
-Hence, an elastic ML platform must be able to provide flexible services base on user's requirements about accuracy, underlying resource and so on, then it allow user to update, retrain or event replace ML model for different purposes.
 
 - Streaming data (Optional)
 
@@ -265,6 +272,11 @@ You should see the following output:
     Sent data: 3
     ...
 ```
+
+## Open question for student
+- What is the role of system monitoring on Elastic ML serving?
+- How do we know the current model is outdated then when we should update the serving model or deploy the new one?
+- Should we deploy multiple models for one service (e.g: different requests might be served by different models)?
 
 ## Issues you may encounter during the tutorial
 - Docker build problem due to broken maven repo
@@ -289,3 +301,8 @@ For example:
 The tutorial is built upon PredictionIO documents. The main references is:
 
 * http://predictionio.apache.org/gallery/template-gallery/
+
+Title:    Machine Learning Serving Tutorial  
+Author:   Minh-Tri Nguyen   
+Email: tri.m.nguyen@aalto.fi  
+Date:     September 18, 2020 
