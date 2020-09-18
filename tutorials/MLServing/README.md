@@ -25,11 +25,13 @@ Withing this tutorial, we introduce 2 ML linear [models](https://version.aalto.f
 Our practices currently are applied on a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640).
 
 Sample data:
-|index|old_idx|station_id|datapoint_id|alarm_id|event_time|value|valueThreshold|isActive|
-|---|---|---|---|---|---|---|---|---|
-0|983|1160629000|121|308|1487441883|231|230|True|
-1|984|1160629000|121|308|1487442194|231|230|True|
-2|985|1160629000|121|308|1487442922|231|230|True|
+| index | old_idx | station_id | datapoint_id | alarm_id | event_time | value | valueThreshold | isActive |
+|-------|---------|------------|--------------|----------|------------|-------|----------------|----------|
+| 0     | 983     | 1160629000 | 121          | 308      | 1487441883 | 231   | 230            | TRUE     |
+| 1     | 984     | 1160629000 | 121          | 308      | 1487442194 | 231   | 230            | TRUE     |
+| 2     | 985     | 1160629000 | 121          | 308      | 1487442922 | 231   | 230            | TRUE     |
+| 3     | 986     | 1160629000 | 121          | 308      | 1487442929 | 231   | 230            | TRUE     |
+| 4     | 987     | 1160629000 | 121          | 308      | 1487442933 | 231   | 230            | TRUE     |
 
 As we're trying to predict the next alarm event for a specific alarm at one station, basically, we only use `index` and `event_time` for our experiments.
 
