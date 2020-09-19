@@ -113,7 +113,7 @@ Now your Server is ready to deploy ML application
 - Declare your application: At first, we must register our application on server so that we can deploy our models on it.
 
 ```bash
-    $ pio-docker new app YOUR_APPLICATION_NAME
+    $ pio-docker app new YOUR_APPLICATION_NAME
 ```
 Example result with application name: demo_linear_regression
 ```
