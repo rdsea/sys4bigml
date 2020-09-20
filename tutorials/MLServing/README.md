@@ -11,7 +11,7 @@ It is recommended that you use linux environment.
 
 ## Accompanying Slides and Video
 * [Slides](ml_serving_2020.pdf)
-* A hands-on video as part of this tutorial
+* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=23c4ca9b-6b15-41ac-bd87-ac3c00e0ce55)
 
 ## Prerequisite
 
