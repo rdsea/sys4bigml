@@ -1,11 +1,10 @@
 # ML Serving tutorial
 
 ## Study goal
-The purpose of this tutorial is to create a simple end-to-end pipeline providing Machine Learning (ML) as a service using [PredicitonIO](https://predictionio.apache.org/). This will consists of collecting and preparing data, and developing, training as well as deploying your ML model on PredictionIO server. Given many useful APIs, we can not only import existing data but also send streaming data to server using light weight client application. After deploying model, we can also re-train or replace the model on run time without interrupting ML service.
+The purpose of this tutorial is to create a simple end-to-end pipeline providing Machine Learning (ML) as a service using [PredicitonIO](https://predictionio.apache.org/). This will consists of collecting and preparing data, and developing, training as well as deploying your ML model on PredictionIO server. Given many useful APIs, we can import existing data and send streaming data to the model-as-a-service using a lightweight client application. After deploying model, we can also re-train or replace the model on run time without interrupting the ML service.
 
-Apache PredictionIO is an open source ML Server for developers and data scientists to create predictive engines solving many ML tasks. Since other Apache's product such as Hadoop, Spark, HBase focus on develop a single components for the whole ML system, the open source of PredictionIO allows user to deploy the end-to-end ML pipeline with certain level or scalability, elasticity and reliability. 
+Apache PredictionIO is an open source ML Server for developers and data scientists to create predictive engines solving many ML tasks. Since other Apache's product such as Hadoop, Spark, HBase focus on develop a single components for the whole ML system, the open source of PredictionIO allows user to deploy the end-to-end ML pipeline with certain level or scalability, elasticity and reliability. we practice ML serving using some basic functionalities of PredictionIO including creating simple ML cluster, colllecting data, developing, providing ML service as well as tuning, retraining or even replacing model at the runtime as it's a part of elasticity while providing ML service.
 
-In this tutorial, we practice ML serving using some basic functionalities of PredictionIO including creating simple ML cluster, colllecting data, developing, providing ML service as well as tuning, retraining or even replacing model at the runtime as it's a part of elasticity while providing ML service. Further, this tutorial gives you some references where you can learn how to completely evaluate your model. 
 
 It is recommended that you use linux environment.
 
@@ -19,10 +18,12 @@ It is recommended that you use linux environment.
 * [Docker PredictionIO](http://predictionio.apache.org/install/install-docker/)
 * [PredictionIO library](https://pypi.org/project/PredictionIO/)
 
-## Models under Testing
-Withing this tutorial, we introduce 2 ML linear [models](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/tri_tutorial/tutorials/MLServing) which are Linear regression, one uses stochastic gradient descent (SGD) and the other uses BFGS algorithm. Both mentioned models are used to predict the time that the next alarm happen at the specific station based on the previous alarm events. Both models are built based on Apache's template under the [Apache Software Foundation version 2](http://www.apache.org/licenses/LICENSE-2.0) as they must follow the predefined protocol to be deployed in PredicionIO server. [Here](http://predictionio.apache.org/gallery/template-gallery/), you can find more useful templates and instructions. 
+## Machine Learning Models under Test
+Withing this tutorial, we introduce 2 ML linear [models](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/tri_tutorial/tutorials/MLServing) which are Linear regression, one uses stochastic gradient descent (SGD) and the other uses BFGS algorithm. Both mentioned models are used to predict the time that the next alarm happen at the specific station based on the previous alarm events.
 
-Our practices currently are applied on a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640).
+Both models are built based on Apache's template under the [Apache Software Foundation version 2](http://www.apache.org/licenses/LICENSE-2.0) as they must follow the predefined protocol to be deployed in PredicionIO server. [Here](http://predictionio.apache.org/gallery/template-gallery/), you can find more useful templates and instructions.
+
+Our models currently are applied on a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640).
 
 Sample data:
 | index | old_idx | station_id | datapoint_id | alarm_id | event_time | value | valueThreshold | isActive |
@@ -68,7 +69,7 @@ Now we can check the server status using `pio-docker`
 Returned result
 ```
     [INFO] [Management$] Inspecting PredictionIO...
-    [INFO] [Management$] PredictionIO 0.13.0 is installed at /usr/share/predictionio 
+    [INFO] [Management$] PredictionIO 0.13.0 is installed at /usr/share/predictionio
     [INFO] [Management$] Inspecting Apache Spark...
     [INFO] [Management$] Apache Spark is installed at /usr/share/spark-2.2.3-bin-hadoop2.7
     [INFO] [Management$] Apache Spark 2.2.3 detected (meets minimum requirement of 1.6.3)
@@ -110,7 +111,7 @@ For example:
 Now your Server is ready to deploy ML application
 
 ### Deploy the SGD model for serving
-- Declare your application: At first, we must register our application on server so that we can deploy our models on it.
+- Declare your application (the ML service): At first, we must register our application on server so that we can deploy our models on it.
 
 ```bash
     $ pio-docker app new YOUR_APPLICATION_NAME
@@ -206,7 +207,7 @@ By default, the deployed model binds to <http://localhost:8000>. You can visit t
 
 ![localhost](./img/model_server.png)
 
-- Make prediction 
+- Make prediction
 
 There are some APIs that you can use to send a request for making prediction. Here, an example in python is prepared at `evaluate.py` where queries are made using data from the csv file `1160629000_121_308_test.csv` to evaluate our models.
 ```bash
@@ -275,18 +276,18 @@ You should see the following output:
     ...
 ```
 
-## Open question for student
-- What is the role of system monitoring on Elastic ML serving?
+## Open questions for studies
+- What is the role of observability for Elastic ML serving? Can you setup an observability system for this ML serving example?
 - How do we know the current model is outdated then when we should update the serving model or deploy the new one?
 - Should we deploy multiple models for one service (e.g: different requests might be served by different models)?
 
 ## Issues you may encounter during the tutorial
-- Docker build problem due to broken maven repo
 
+#### Docker build problem due to broken maven repo
 Replace the link by: <https://repo1.maven.org/maven2/org/postgresql/postgresql/$PGSQL_VERSION/postgresql-$PGSQL_VERSION.jar>
 
-- Broken link for sbt-launcher while traing ML model
 
+#### Broken link for sbt-launcher while traing ML model
 Access the predictionIO server using `docker exec`
 ```bash
     $ docker exec -it name_container /bin/bash
@@ -298,13 +299,12 @@ For example:
     $ wget https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.2.8/sbt-launch-1.2.8.jar
 ```
 
-
 ## References
 The tutorial is built upon PredictionIO documents. The main references is:
 
 * http://predictionio.apache.org/gallery/template-gallery/
 
-Title:    Machine Learning Serving Tutorial  
-Author:   Minh-Tri Nguyen   
-Email: tri.m.nguyen@aalto.fi  
-Date:     September 18, 2020 
+## Contributions
+
+Author:   Minh-Tri Nguyen, (tri.m.nguyen@aalto.fi)
+Editor:   Linh Truong
