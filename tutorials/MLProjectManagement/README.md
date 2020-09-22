@@ -14,7 +14,7 @@ metrics of a machine learning application via examples. After completing this tu
 
 ## Accompanying Slides and Video
 * [Slides](ML_ProjectManagement_2020.pdf)
-* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5371b5b9-431a-41fa-add2-abec00dfdc61)
+* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
 
 ## Installation
 It is recommended that you install Anaconda for simplifying package management and deployment. You can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
