@@ -14,7 +14,7 @@ metrics of a machine learning application via examples. After completing this tu
 
 ## Accompanying Slides and Video
 * [Slides](ML_ProjectManagement_2020.pdf)
-* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
+* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5371b5b9-431a-41fa-add2-abec00dfdc61)
 
 ## Installation
 It is recommended that you install Anaconda for simplifying package management and deployment. You can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
@@ -156,3 +156,12 @@ Then you can do prediction for your testing data using the deployed model such a
 The tutorial is built upon MLflow documents. The main references is:
 
 * https://mlflow.org/docs/latest/tutorials-and-examples/index.html
+
+
+## Open Questions
+1/ Generally, you want to run thousands of experiemnts. What would you do to manage this situation?
+
+2/ In case you want to monitor more complex metrics such as cost, peformance of your API functions, etc? Which are suitable solutions for those cases?
+
+3/ If you want to evaluate or compare your experiments based on multiple metrics? What would you do?
+
