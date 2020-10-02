@@ -1,4 +1,5 @@
 # Pushgateway
+The Pushgateway is another type of built-in program that you can send the collected metrics to it. For using a pushgateway, you can follow the instruction below:
 
 ## Installation
 Head over to the download page and download the pushgateway for your system.
@@ -7,7 +8,7 @@ Head over to the download page and download the pushgateway for your system.
 user@test:~$ wget https://github.com/prometheus/pushgateway/releases/download/v1.1.0/pushgateway-1.1.0.linux-amd64.tar.gz
 
 ```
-Go to the path "http://yourhost:9100/metrics" to verify that the node exporter is correctly up and running.
+Go to the path "http://yourhost:9100/metrics" to verify that the pushgateway is correctly up and running.
 
 ## Prometheus Configuration
 Go to the download page and download the corresponding prometheus for your system. 
@@ -16,12 +17,12 @@ Go to the download page and download the corresponding prometheus for your syste
 user@test:~$ wget https://github.com/prometheus/prometheus/releases/download/v2.16.0-rc.0/prometheus-2.16.0-rc.0.linux-amd64.tar.gz
 
 ```
-Extract the folder prometheus-version.targ.gz and go inside the folder. Then perform the modifications such as follows:
+Extract the folder prometheus-version.targ.gz and go inside the folder. Then perform the modifications for the prometheus.yml file such as follows:
 ```properties
 static_configs:
             - targets: ['localhost:9090', 'localhost:9091']
 ```  
-You can also modify the scrape_interval to an arbitrary number upon your demand. Notably, the port number of pushgateway is different to the exporter's, so you have to change the port for it correctly. 
+You can also modify the scrape_interval to an arbitrary number upon your demand. Notably, the port number of pushgateway is different to the exporter's, so you have to change the port so prometheus can collect information from it correctly. 
 
 ```console
 user@test:~$ ./prometheus
