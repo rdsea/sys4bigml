@@ -1,4 +1,5 @@
 # Node Exporter
+The node exporter is a built-in program that can be used to extract information of your machine. For using a node exporter, you can follow the instruction below:
 
 ## Installation
 First, user should download the exporter. Select the exporter for your system and execute it like a binary file. 
@@ -9,7 +10,7 @@ user@test:~$ wget https://github.com/prometheus/node_exporter/releases/download/
 
 ```
 
-Go to the path "http://yourhost:9100/metrics" to verify that the node exporter is correctly up and running.
+Go to the path "http://yourhost:9100/metrics" to verify that the node exporter is correctly up and running. Notably, you should select the right version of node exporter for your machine, for instance, linux, window, etc. After having the node exporter for your machine, you have to configure Prometheus and Grafana.
 
 
 ## Prometheus Configuration
@@ -19,7 +20,7 @@ Go to the download page and download the corresponding prometheus for your syste
 user@test:~$ wget https://github.com/prometheus/prometheus/releases/download/v2.16.0-rc.0/prometheus-2.16.0-rc.0.linux-amd64.tar.gz
 
 ```
-Extract the folder prometheus-version.targ.gz and go inside the folder. Then perform the modifications such as follows:
+Extract the folder prometheus-version.targ.gz and go inside the folder. Then perform the modifications for the prometheus.yml file such as follows:
 ```properties
 static_configs:
             - targets: ['localhost:9090', 'localhost:9100']
@@ -32,7 +33,7 @@ user@test:~$ ./prometheus
 ```
 
 ## Grafana
-head over to https://grafana.com/grafana/download and download the corresponding binary file for your system.
+head over to https://grafana.com/grafana/download and download the corresponding binary file for your system. Grafana will be used to visualize the data collected by prometheus.
 
 ```console
 user@test:~$ wget https://dl.grafana.com/oss/release/grafana-6.6.0.linux-amd64.tar.gz 
