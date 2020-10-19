@@ -62,4 +62,11 @@ This example introduces how to monitor a system process using [Pushgateway](http
 
 Finally, students will study monitoring an arbitrary application using [Client library](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/ClientLibrary). Client library provided by Prometheus is more flexible so students can use its API to monitor the operations of an application.
 
+## Open Questions
+
+* How to monitor a machine learning pipeline with Prometheus?
+
+* How to make alert for a specific event in your program or system using Prometheus?
+
+* How to monitor multiple nodes or a cluster using Prometheus? Kubernetes? 
       
