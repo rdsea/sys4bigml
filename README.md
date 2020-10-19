@@ -1,9 +1,6 @@
 
 # Advanced Topics in Software Systems (SYS4BIGML)
 
-* Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
-* Other teachers/Assistants: [Phuong Pham] and [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
-
 Citation (if you use the material):
 
 Hong-Linh Truong, *Advanced Topics in Software Systems*, https://version.aalto.fi/gitlab/sys4bigml/cs-e4660, 2020 [BIB Entry](site.bib)
@@ -61,6 +58,10 @@ Passing the course will require the students to (i) participating in lectures an
 For the detailed plan, pls. check course versions and mycourses.aalto.fi information.
 
 ## Fall 2020 - Schedule and Content
+
+* Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
+* Other teachers/Assistants: [Phuong Pham] and [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
+
 ### Lectures
 - Lecture 1:
   - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/cs-e4660-lecture1-r3e-design-v0.2.pdf)
