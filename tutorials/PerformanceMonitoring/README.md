@@ -6,7 +6,7 @@ Prometheus is an open-source metrics-based monitoring systems which is widely us
 - Pushgateway - used to handle push information from targets
 - The client libraries - used for instrumenting application code
 
-In this tutorial, students will study the provided components to monitor different targets such as a machine or a server, a system process, and an arbitrary application. The goal of this tutorial is to equip the students with basic skills to monitor their real systems and applications. 
+In this tutorial, students will study the provided components to monitor different targets such as a machine or a server, a system process, and an arbitrary application. The goal of this tutorial is to equip the students with basic skills to monitor their real systems and applications.
 
 ## 2. Installation
 
@@ -16,7 +16,7 @@ In this tutorial, students will study the provided components to monitor differe
     $ sudo groupadd --system prometheus
     $ grep prometheus /etc/group
     prometheus:x:999:
-``` 
+```
 
 ### 2.2. Create Prometheus system user
 
@@ -28,22 +28,22 @@ In this tutorial, students will study the provided components to monitor differe
 
 ### 2.3. Install docker and docker-compose
 * Install docker
-  
+
      The instruction is [doc_docker](https://docs.docker.com)
-     
+
 * Install docker-compose
-  
+
      The instruction is [doc_docker-compose](https://docs.docker.com/compose/install)
 
 ### 2.4 Set up Prometheus, add Exporter and install Grafana
 
 * Introduce prometheus.yml
 * Introduce docker-compose file
-  
+
       - Configure prometheus
       - Add exporter
       - Add visualization with Grafana
-      
+
   The information of this installation is at this blog [link](https://dzone.com/articles/monitoring-with-prometheus)
 
 ## 3. Examples:
@@ -54,7 +54,7 @@ In this example, student will learn how to monitor a server using [Node_Exporter
 
 
 * 3.2 Monitoring a Linux process
-  
+
 This example introduces how to monitor a system process using [Pushgateway](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/Pushgateway). Pushgateway is available for download according to different operating systems.
 
 
@@ -68,5 +68,4 @@ Finally, students will study monitoring an arbitrary application using [Client l
 
 * How to make alerts for specific conditions of ML metrics detected in your ML program or system using Prometheus?
 
-* How to monitor multiple nodes or a cluster using Prometheus? Kubernetes? 
-      
+* How to monitor multiple nodes or a cluster using Prometheus? Kubernetes?
