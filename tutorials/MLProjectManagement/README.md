@@ -1,16 +1,16 @@
 # ML Experiment Management
 
 ## Study goal
-The purpose of this tutorial is to introduce you to manage machine learning experiments using [MLFlow](https://mlflow.org/). This will consist of how to reproduce, track and evaluate your experiments. Within an experiment we will capture  relationshipes among configurable parameters, ML code, the input data, output result, and performance metrics. Using experiment management we can also check reproducibility of a machine learning algorithm.
+The purpose of this tutorial is to introduce you to manage machine learning experiments using [MLFlow](https://mlflow.org/).  Within an experiment we will capture  relationshipes among configurable parameters, ML code, the input data, output result, and performance metrics. Using experiment management we can also check reproducibility of a machine learning algorithm.
 
-MLFlow is just one of existing frameworks for experiment management. It provides three main functions:
+MLFlow is just one of existing frameworks for ML experiment management. It provides three main functions:
 
 - Tracking: track experiments to store parameters and results.
-- Projects: package the code in reproducible form in order to share or transfer to production.
-- Models: manage and deploy models from a variety of machine learning libraries.
+- Packaging: package the project code in reproducible form in order to share or transfer to production.
+- Deploying: manage and deploy models from a variety of machine learning libraries.
 
 In this tutorial you can practice basic functionalities of mlflow such as mentioned above. Further to this, you will study how to use mlflow in measuring
-metrics of a machine learning application via examples. After completing this tutorial, you can use mlflow to collect experimental data for their machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
+metrics of a machine learning application via concrete examples. After completing this tutorial, you can use mlflow to collect experimental data for their machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
 
 ## Accompanying Slides and Video
 * [Slides](ML_ProjectManagement_2020.pdf)
