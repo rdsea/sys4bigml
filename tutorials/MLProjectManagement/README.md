@@ -153,15 +153,17 @@ Then you can do prediction for your testing data using the deployed model such a
 ```
 
 ## References
-The tutorial is built upon MLflow documents. The main references is:
+The tutorial is built upon MLflow official documents. The main references are:
 
 * https://mlflow.org/docs/latest/tutorials-and-examples/index.html
 
+* https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
+
 
 ## Open Questions
-1/ Generally, you want to run thousands of experiemnts. What would you do to manage this situation?
+1. Generally, you want to run thousands of experiemnts. What would you do to manage this situation?
 
-2/ In case you want to monitor more complex metrics such as cost, peformance of your API functions, etc? Which are suitable solutions for those cases?
+2. In case you want to monitor more complex metrics such as cost, peformance of your API functions, etc? Which are suitable solutions for those cases?
 
-3/ If you want to evaluate or compare your experiments based on multiple metrics? What would you do?
+3. If you want to evaluate or compare your experiments based on multiple metrics? What would you do?
 

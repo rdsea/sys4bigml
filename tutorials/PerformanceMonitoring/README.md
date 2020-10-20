@@ -62,10 +62,23 @@ This example introduces how to monitor a system process using [Pushgateway](http
 
 Finally, students will study monitoring an arbitrary application using [Client library](https://version.aalto.fi/gitlab/sys4bigml/sys4bigml-2020/tree/master/tutorials/PerformanceMonitoring/ClientLibrary). Client library provided by Prometheus is more flexible so students can use its API to monitor the operations of an application.
 
+## References
+
+* https://dzone.com/articles/monitoring-with-prometheus
+
+* https://devconnected.com/complete-node-exporter-mastery-with-prometheus
+
+* https://devconnected.com/monitoring-linux-processes-using-prometheus-and-grafana
+
+* https://github.com/rycus86/prometheus_flask_exporter
+
+* https://sysdig.com/blog/prometheus-metrics
+
+
 ## Open Questions
 
-* How to monitor a machine learning pipeline with Prometheus?
+1. How to monitor a machine learning pipeline with Prometheus?
 
-* How to make alerts for specific conditions of ML metrics detected in your ML program or system using Prometheus?
+2. How to make alerts for specific conditions of ML metrics detected in your ML program or system using Prometheus?
 
-* How to monitor multiple nodes or a cluster using Prometheus? Kubernetes?
+3. How to monitor multiple nodes or a cluster using Prometheus? Kubernetes?
