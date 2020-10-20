@@ -66,7 +66,7 @@ Finally, students will study monitoring an arbitrary application using [Client l
 
 * How to monitor a machine learning pipeline with Prometheus?
 
-* How to make alert for a specific event in your program or system using Prometheus?
+* How to make alerts for specific conditions of ML metrics detected in your ML program or system using Prometheus?
 
 * How to monitor multiple nodes or a cluster using Prometheus? Kubernetes? 
       
