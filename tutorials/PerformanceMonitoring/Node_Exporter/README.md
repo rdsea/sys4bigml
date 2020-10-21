@@ -47,5 +47,8 @@ You have to add a data source from Grafana dashboard. Choose Prometheus
 ### Import dashboard
 You can use the variety of existing dashboards of grafana from the website https://grafana.com/grafana/dashboards. Select Prometheus as the datasource for your dashboard and you will see the metrics monitoring by the exporters in your dashboard. 
 
+## References
 
+* https://devconnected.com/the-definitive-guide-to-prometheus-in-2019
+* https://devconnected.com/complete-node-exporter-mastery-with-prometheus
       

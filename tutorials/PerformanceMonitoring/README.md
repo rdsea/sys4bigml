@@ -1,10 +1,10 @@
 # 1. Prometheus
-Prometheus is an open-source metrics-based monitoring systems which is widely used by many companies and organizations for monitoring their applications and infrastructures. Mainly, prometheus provides the following components:
+Prometheus is an open-source metrics-based monitoring system which is widely used by many companies and organizations for monitoring their applications and infrastructures. Mainly, prometheus provides the following components:
 
 - Prometheus server - used to scrape and store data from client systems and applications.
 - Exporters - used in exporting existing metrics from third-party systems as Prometheus metrics.
 - Pushgateway - used to handle push information from targets
-- The client libraries - used for instrumenting application code
+- The client libraries - used for instrumenting application codes
 
 In this tutorial, students will study the provided components to monitor different targets such as a machine or a server, a system process, and an arbitrary application. The goal of this tutorial is to equip the students with basic skills to monitor their real systems and applications.
 
@@ -65,20 +65,15 @@ Finally, students will study monitoring an arbitrary application using [Client l
 ## References
 
 * https://dzone.com/articles/monitoring-with-prometheus
-
 * https://devconnected.com/complete-node-exporter-mastery-with-prometheus
-
 * https://devconnected.com/monitoring-linux-processes-using-prometheus-and-grafana
-
 * https://github.com/rycus86/prometheus_flask_exporter
-
 * https://sysdig.com/blog/prometheus-metrics
-
 
 ## Open Questions
 
 1. How to monitor a machine learning pipeline with Prometheus?
 
-2. How to make alerts for specific conditions of ML metrics detected in your ML program or system using Prometheus?
+2. How to make an alert for the specific conditions of metrics detected in your machine learning programs or systems with Prometheus?
 
-3. How to monitor multiple nodes or a cluster using Prometheus? Kubernetes?
+3. How to monitor multiple nodes or a cluster using Prometheus? What is about the monitoring of a Kubernetes cluster?

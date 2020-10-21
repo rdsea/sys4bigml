@@ -41,4 +41,8 @@ user@test:~$ ./run_bash_program.sh
 You now go to prometheus http://yourhost:9090 and go to the 'Expression' field, type the words "cpu_usage". You should see the metrics in your browser.
 
 
-      
+## Reference
+
+* https://devconnected.com/the-definitive-guide-to-prometheus-in-2019
+* https://devconnected.com/monitoring-linux-processes-using-prometheus-and-grafana
+
