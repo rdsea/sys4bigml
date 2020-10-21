@@ -2,7 +2,7 @@
 The node exporter is a built-in program that can be used to extract information of your machine. For using a node exporter, you can follow the instruction below:
 
 ## Installation
-First, user should download the exporter. Select the exporter for your system and execute it like a binary file. 
+First, you select the exporter for your system and execute it like a binary file. 
 Notably, you do not have to set the exporter as a service in your system.
 
 ```console
@@ -33,7 +33,7 @@ user@test:~$ ./prometheus
 ```
 
 ## Grafana
-head over to https://grafana.com/grafana/download and download the corresponding binary file for your system. Grafana will be used to visualize the data collected by prometheus.
+Grafana will be used to visualize the data collected by prometheus. Visit https://grafana.com/grafana/download to download the corresponding binary file for your system. 
 
 ```console
 user@test:~$ wget https://dl.grafana.com/oss/release/grafana-6.6.0.linux-amd64.tar.gz 
