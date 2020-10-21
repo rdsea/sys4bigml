@@ -51,5 +51,8 @@ user@test:~$ python sample3.py
 
 Now, you can go to the local address http://localhost:8001 to see the accuracy of the pipeline. Check in the prometheus, you will see the performance of your pipeline. 
 
+## References
 
+* https://sysdig.com/blog/prometheus-metrics
+* https://github.com/rycus86/prometheus_flask_exporter
       

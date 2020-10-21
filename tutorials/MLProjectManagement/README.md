@@ -1,16 +1,15 @@
 # ML Experiment Management
 
 ## Study goal
-The purpose of this tutorial is to introduce you to manage machine learning experiments using [MLFlow](https://mlflow.org/). This will consist of how to reproduce, track and evaluate your experiments. Within an experiment we will capture  relationshipes among configurable parameters, ML code, the input data, output result, and performance metrics. Using experiment management we can also check reproducibility of a machine learning algorithm.
+The purpose of this tutorial is to introduce you to manage machine learning experiments using [MLFlow](https://mlflow.org/).  Within an experiment we will capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics. Using experiment management we can also guarantee the reproducibility of a machine learning algorithm.
 
-MLFlow is just one of existing frameworks for experiment management. It provides three main functions:
+MLFlow is a popular framework for machine learning experiment management. It provides many functions such as follows:
 
 - Tracking: track experiments to store parameters and results.
-- Projects: package the code in reproducible form in order to share or transfer to production.
-- Models: manage and deploy models from a variety of machine learning libraries.
+- Packaging: package the project code in reproducible form in order to share or transfer to production.
+- Deploying: manage and deploy models from a variety of machine learning libraries.
 
-In this tutorial you can practice basic functionalities of mlflow such as mentioned above. Further to this, you will study how to use mlflow in measuring
-metrics of a machine learning application via examples. After completing this tutorial, you can use mlflow to collect experimental data for their machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
+In this tutorial you can practice basic functionalities of mlflow such as mentioned above. Further to this, you will study how to use mlflow in measuring metrics of a machine learning application via concrete examples. After completing this tutorial, you can use mlflow to collect experimental data for your machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
 
 ## Accompanying Slides and Video
 * [Slides](ML_ProjectManagement_2020.pdf)
@@ -32,7 +31,7 @@ For executing some examples of this tutorials, you need to install scikit-learn
 ```
 
 ## Basic Example
-At this point, we recommend you take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>.
+At this point, we recommend you to take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>.
 
 ### 1. A simple python example
 
@@ -153,15 +152,16 @@ Then you can do prediction for your testing data using the deployed model such a
 ```
 
 ## References
-The tutorial is built upon MLflow documents. The main references is:
+The tutorial is built upon MLflow official documents. The main references are:
 
 * https://mlflow.org/docs/latest/tutorials-and-examples/index.html
+* https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
 
 
 ## Open Questions
-1/ Generally, you want to run thousands of experiemnts. What would you do to manage this situation?
+1. What would you do to improve the tutorial to manage thousands of experiments?
 
-2/ In case you want to monitor more complex metrics such as cost, peformance of your API functions, etc? Which are suitable solutions for those cases?
+2. Assume that you want to monitor more complex metrics such as cost, peformance of your API functions, what are the suitable solutions?
 
-3/ If you want to evaluate or compare your experiments based on multiple metrics? What would you do?
+3. How to evaluate or compare your experiments based on multiple metrics? What would be an appropriate solution?
 

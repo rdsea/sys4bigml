@@ -1,9 +1,13 @@
 
 # Advanced Topics in Software Systems (SYS4BIGML)
 
-* Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
-* Other teachers/Assistants: [Phuong Pham] and [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
+Citation (if you use the material):
 
+Hong-Linh Truong, *Advanced Topics in Software Systems*, https://version.aalto.fi/gitlab/sys4bigml/cs-e4660, 2020 [BIB Entry](site.bib)
+
+*If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
+
+**Copyrights/Licences: the lecture slides and course structure/info use [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Individual tutorials have their own licenses ([Apache Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0))**
 ## Overview
 
 Complex Big Data and Machine Learning (ML) applications and services and their reliability and robustness are strongly dependent on the underlying systems empowering such applications and services. On the one hand, techniques for supporting performance engineering, configuration management, testing and debugging of Big Data and ML are extremely important. On the other hand, large-scale distributed systems and new computing models  have been evolved with new hardware and infrastructure architectures, such as edge systems, tensor processing units,  and quantum  computing systems. Such systems and computing models are being exploited for advanced Big Data and ML applications and services. Developing and optimizing Big Data and ML applications and services in such systems and models require in-depth understanding of the systems and the roles of systems for Big Data and ML. Currently, we lack courses to deal with the above-mentioned issues, especially in-depth analysis and forward-looking research directions in (software) systems for Big Data and ML.  This course will study advanced topics in systems for big data and ML/AI.
@@ -11,13 +15,13 @@ Complex Big Data and Machine Learning (ML) applications and services and their r
 
 ## Study programme/major/minor/modules
 
-The course is for students in [Doctoral Programme in Science](https://into.aalto.fi/display/endoctoralsci/Courses+offered) and the [CCIS Master Programme](https://into.aalto.fi/display/enccis/Computer+Science+%28CS%29+2018-2020), especially for *Big Data and Large-scale computing* track and *Software Systems and Technologies* track.
+The course is for students in Doctoral and Master studies. In Aalto the course is for students in [Doctoral Programme in Science](https://into.aalto.fi/display/endoctoralsci/Courses+offered) and the [CCIS Master Programme](https://into.aalto.fi/display/enccis/Computer+Science+%28CS%29+2018-2020), especially for *Big Data and Large-scale computing* track and *Software Systems and Technologies* track.
 
-This course provides advanced knowledge about computing and software systems that are useful for big data and machine learning domains. Therefore, it connects to various other courses, such as *Big Data Platforms*, *Mobile Cloud Computing*, *Deep Learning* and *Master thesis*, by providing complementary in-depth knowledge w.r.t system aspects.
+This course provides advanced knowledge about computing and software systems that are useful for big data and machine learning domains. Therefore, it connects to various other courses, such as *Big Data Platforms*, *Cloud Computing*, *Deep Learning* and *Master thesis*, by providing complementary in-depth knowledge w.r.t system aspects.
 
 ## Required previous knowledge/courses
 
-Students should have knowledge about cloud computing, big data, operating systems, distributed systems and machine learning. Therefore, it is important that students have passed courses with these topics, such as *Mobile Cloud Computing*, *Big Data Platforms*, *Operating Systems*, and *Machine Learning*.
+Students should have knowledge about cloud computing, big data, operating systems, distributed systems and machine learning. Therefore, it is important that students have passed courses with these topics, such as *Cloud Computing*, *Big Data Platforms*, *Operating Systems*, and *Machine Learning*.
 
 This course is an advanced one, aiming at supporting research topics in master theses and PhD studies. Therefore, it is not  a prerequisite for any course.
 
@@ -43,19 +47,22 @@ Advanced Topics in Systems for Big Data and ML will focus on the following areas
 *  Edge systems and edge-cloud continuum for Big Data/ML (with also engineering work)
 *  New hardware architectures and quantum systems for Big Data/ML (more on the concepts and state-of-the-art)
 
-## Course Plan
-Here are the generic plan of the course:
+## Course Plan and Teaching methods
+We define the generic plan of the course as follows:
 * Lectures given by teachers: students must provide study logs
-* Hands-on tutorials given by teachers
+* Hands-on tutorials given by teachers: the goal is to give some concrete examples of the techniques discussed in the lectures. However, since it is a research-oriented course, students can also practice similar problems with different software stack.
 * Project topic proposal and presentation: students must identify a topic related to the content of the course and present it
 * Topic implementation and demonstration: students will implement the topic and demonstrate the project
-* Students will make public material about the topic project available in Git spaces (e.g., in Aalto, Github, gitlab, ...)
+* Students will make public material about the topic project available in Git spaces (e.g., in Aalto, Github, Gitlab, ...)
 
-Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
+As an advanced and research-oriented course, it does not make sense to grade the success of the students based on the numeric grade. We will use the pass/fail as a way to evaluate students. Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
 
-For the detailed plan, pls. check course versions and mycourses.aalto.fi information.
 
 ## Fall 2020 - Schedule and Content
+
+* Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
+* Other teachers/Assistants: [Phuong Pham](https://scholar.google.at/citations?user=VbQgrpsAAAAJ&hl=en) and [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
+
 ### Lectures
 - Lecture 1:
   - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/cs-e4660-lecture1-r3e-design-v0.2.pdf)
