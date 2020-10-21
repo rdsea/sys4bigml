@@ -258,7 +258,7 @@ This time we evaluate the new model using `evaluate.py` inside folder `LR_BFGS/d
 
 Since the server is running, you can send data to it in real-time using the same APIs mentioned before.
 
-An example is repared in `stream_data.py`, and the data for streaming is in `1160629000_121_308_train.csv`
+An example is prepared in `stream_data.py`, and the data for streaming is in `1160629000_121_308_train.csv`
 
 ```bash
     $ python ./data/stream_eventserver.py
@@ -280,6 +280,7 @@ You should see the following output:
 - What is the role of observability for Elastic ML serving? Can you setup an observability system for this ML serving example?
 - How do we know the current model is outdated then when we should update the serving model or deploy the new one?
 - Should we deploy multiple models for one service (e.g: different requests might be served by different models)?
+- What would happen if any service container is down? how to backup and recover?
 
 ## Issues you may encounter during the tutorial
 
