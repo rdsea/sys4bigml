@@ -1,9 +1,9 @@
 # ML Serving tutorial
 
 ## Study goal
-The purpose of this tutorial is to create a simple end-to-end pipeline providing Machine Learning (ML) as a service using [PredicitonIO](https://predictionio.apache.org/). This will consists of collecting and preparing data, and developing, training as well as deploying your ML model on PredictionIO server. Given many useful APIs, we can import existing data and send streaming data to the model-as-a-service using a lightweight client application. After deploying model, we can also re-train or replace the model on run time without interrupting the ML service.
+The purpose of this tutorial is to create a simple end-to-end pipeline providing Machine Learning (ML) as a service using [PredicitonIO](https://predictionio.apache.org/). This will consist of collecting and preparing data, and developing, training as well as deploying your ML model on PredictionIO server. Given many useful APIs, we can import existing data and send streaming data to the model-as-a-service using a lightweight client application. After deploying the model, we can also re-train or replace the model on run time without interrupting the ML service.
 
-Apache PredictionIO is an open source ML Server for developers and data scientists to create predictive engines solving many ML tasks. Since other Apache's product such as Hadoop, Spark, HBase focus on develop a single components for the whole ML system, the open source of PredictionIO allows user to deploy the end-to-end ML pipeline with certain level or scalability, elasticity and reliability. we practice ML serving using some basic functionalities of PredictionIO including creating simple ML cluster, colllecting data, developing, providing ML service as well as tuning, retraining or even replacing model at the runtime as it's a part of elasticity while providing ML service.
+Apache PredictionIO is an open-source for serving ML dynamically, allowing the developer to deploy their ML applications on top of state-of-the-art software stack provided by Apache. Since other Apache's products such as Hadoop, Spark, HBase focus on developing a single component in ML system, this open-source, PredictionIO, allows users to deploy the end-to-end ML pipeline with a certain level of scalability, elasticity, and reliability. Here, we will practice ML serving using some basic functionalities of PredictionIO including creating a simple ML cluster, collecting data, developing, providing ML service as well as tuning, retraining or even replacing model at the runtime as it's a part of elasticity while providing ML service.
 
 
 It is recommended that you use linux environment.
@@ -18,12 +18,12 @@ It is recommended that you use linux environment.
 * [Docker PredictionIO](http://predictionio.apache.org/install/install-docker/)
 * [PredictionIO library](https://pypi.org/project/PredictionIO/)
 
-## Machine Learning Models under Test
-Withing this tutorial, we introduce 2 ML linear [models](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/tri_tutorial/tutorials/MLServing) which are Linear regression, one uses stochastic gradient descent (SGD) and the other uses BFGS algorithm. Both mentioned models are used to predict the time that the next alarm happen at the specific station based on the previous alarm events.
+## Machine Learning Models under Testing
+Within this tutorial, we introduce 2 ML linear [models](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/tri_tutorial/tutorials/MLServing) which are Linear regression, one uses stochastic gradient descent (SGD) and the other uses the BFGS algorithm. Both mentioned models are used to predict the time that the next alarm happens at the specific station based on the previous alarm events.
 
 Both models are built based on Apache's template under the [Apache Software Foundation version 2](http://www.apache.org/licenses/LICENSE-2.0) as they must follow the predefined protocol to be deployed in PredicionIO server. [Here](http://predictionio.apache.org/gallery/template-gallery/), you can find more useful templates and instructions.
 
-Our models currently are applied on a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640).
+Our models currently are applied to a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640).
 
 Sample data:
 | index | old_idx | station_id | datapoint_id | alarm_id | event_time | value | valueThreshold | isActive |
@@ -36,12 +36,12 @@ Sample data:
 
 As we're trying to predict the next alarm event for a specific alarm at one station, basically, we only use `index` and `event_time` for our experiments.
 
-Note: Inside the sample test, the `event_time` has been converted to unix timestamp.
+Note: Inside the sample test, the `event_time` has been converted to Unix timestamp.
 
-At first, we will deploy the first model using SGD to see how well the performance that we got while tuning and update model's parameters at the runtime. Then we train the second model which slightly improves accuracy and may be more efficient for low-end resources.
+At first, we will deploy the first model using SGD to see how well the performance that we got while tuning and update the model's parameters at the runtime. Then we train the second model which slightly improves accuracy and maybe more efficient for low-end resources.
 
 ## Setup PredictionIO cluster
-We first start a cluster including a predictionIO server, a spark master, a spark worker and an elasticsearch service.
+We first start a cluster containing a PredictionIO server, a Spark master, a Spark worker, and an Elasticsearch service.
 
 ```bash
     $ docker-compose -f docker-compose.yml \
@@ -93,7 +93,7 @@ Make sure your cluster is up:
     f6d312588d29        docker.elastic.co/elasticsearch/elasticsearch:5.6.4   "/bin/bash bin/es-do…"   3 months ago        Up 41 seconds       9200/tcp, 9300/tcp                                                       docker_elasticsearch_1
 ```
 
-You may want to run other options which are described at: <https://github.com/apache/predictionio/blob/develop/docker/README.md#run-predictionio-with-selectable-docker-compose-files>.
+You may want to run other options that are introduced at <https://github.com/apache/predictionio/blob/develop/docker/README.md#run-predictionio-with-selectable-docker-compose-files>.
 
 Or you may want to expose some service from your virtual cluster to your real machine for monitoring, you can modify the dockerfiles
 
@@ -108,10 +108,10 @@ For example:
           - "7077:7077"
 ```
 
-Now your Server is ready to deploy ML application
+Now your server is ready to deploy ML applications
 
 ### Deploy the SGD model for serving
-- Declare your application (the ML service): At first, we must register our application on server so that we can deploy our models on it.
+- Declare your application (the ML service): At first, we must register our application on the server so that we can deploy our models on it.
 
 ```bash
     $ pio-docker app new YOUR_APPLICATION_NAME
@@ -124,7 +124,7 @@ Example result with application name: demo_linear_regression
     [INFO] [App$]         ID: 2
     [INFO] [App$] Access Key: ayA5BT7mhFLsAokkIEu5TBvVHhPnK_CDhAjXTXMmDoWf8YmYk4gPUmzm31Ix9rBY
 ```
-Server will return application `ID` and the `Access Key` which are used to specify your application while collecting data as well as deploying and providing ML service.
+The server will return the application `ID` and the `Access Key` that are required to specify your application while collecting data as well as deploying and providing ML service.
 
 You can also check your application list:
 ```bash
@@ -137,10 +137,10 @@ You can also check your application list:
     [INFO] [Pio$] Finished listing 2 app(s).
 ```
 
-Inside LR_SGD directory, you can find the ML model is implemented in `src` folder while other things are to help you build and deloy the model right the way.
+Inside the LR_SGD directory, you can find the ML model is implemented in the `src` folder while other things are to help you build and deploy the model right the way.
 The `source code` is implemented in Scala and it's using `predictionio` library to utilize pre-modified ML algorithms.
 
-Under the directory, you should find an engine.json file; this is where you specify parameters for deploying your application as well as some required parameters in your model. You have to modify the appname the same as the one you registered on your server.
+Under the directory, you should find an engine.json file; this is where you specify parameters for deploying your application as well as some required parameters in your model. You have to modify the app name the same as the one you registered on your server.
 
 ```json
       ...
@@ -153,7 +153,7 @@ Under the directory, you should find an engine.json file; this is where you spec
 ```
 - Import existing data to your server
 
-In this experiment, we are using a sample data in the [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts). The data is ready at `1160629000_121_308_test.csv` and `1160629000_121_308_train.csv`.
+In this experiment, we are using sample data in the [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts). The data is ready at `1160629000_121_308_test.csv` and `1160629000_121_308_train.csv`.
 
 To import data, you may want to use some supported [APIs](http://predictionio.apache.org/datacollection/eventapi/). Here, a python application is provided in `import_data.py` but you should give the `ACCESS_KEY` when running the command.
 
@@ -169,13 +169,13 @@ At the end, you should see the following output:
 
 - Build your model
 
-Start with building your first Model using SGD algorithm. Run the following command
+Start with building your first Model the SGD algorithm. Run the following command
 ```bash
     $ cd LR_SGD
     $ pio-docker build --verbose
 ```
 
-Upon successful build, you should see a console message similar to the following.
+Upon a successful build, you should see a console message similar to the following.
 ```
     [INFO] [Console$] Your engine is ready for training.
 ```
@@ -209,13 +209,13 @@ By default, the deployed model binds to <http://localhost:8000>. You can visit t
 
 - Make prediction
 
-There are some APIs that you can use to send a request for making prediction. Here, an example in python is prepared at `evaluate.py` where queries are made using data from the csv file `1160629000_121_308_test.csv` to evaluate our models.
+There are some APIs that you can use to send requests for making predictions. Here, an example in python is prepared at `evaluate.py` where queries are made using data from the CSV file `1160629000_121_308_test.csv` to evaluate our models.
 ```bash
     $ cd ./data
     $ python ./data/evaluate.py
 ```
 
-After running the `evaluate`, you would see an `csv` file appear in the evaluation directory, visualizing the result, we can see that with the default parameters, the first model shows not really good predictions.
+After running the `evaluate`, you would see a `CSV` file appear in the evaluation directory, visualizing the result, we can see that with the default parameters, the first model shows not really good predictions.
 
 ![localhost](./img/first_evaluate.png)
 
@@ -233,16 +233,16 @@ To improve the prediction, we can modify the parameters in `engine.json` as foll
   ...
 ```
 
-Then re-train the model using `pio-docker train` and `deploy` the updated model into server. The old model will automatically stop running service and again, we check the result using `evaluation.py`. We can see that the prediction is improved significantly:
+Then re-train the model using `pio-docker train` and `deploy` the updated model into the server. The old model will automatically stop serving, and again, we check the result using `evaluation.py`. We can see that the prediction is improved significantly:
 
 ![localhost](./img/second_evaluate.png)
 
 ### Model replacement
 
-Given the IoT concept, the data may come from many different sources and its characteristics or distributions would change unpredictably, it is of great importance to monitoring the whole system then we would know when we should refresh our models or when our models can not fit the data anymore, so that we can replace them to ensure the quality of service.
-Hence, an elastic ML platform must be able to provide flexible services base on user's requirements about accuracy, underlying resource and so on, then it allow user to update, retrain or event replace ML model for different purposes.
+Given the IoT concept, the data may come from many different sources and its characteristics or distributions would change unpredictably, it is of great importance to monitor the whole system then we would know when we should refresh our models or when our models can not fit the data anymore so that we can replace them to ensure the quality of service.
+Hence, an elastic ML platform must be able to provide flexible services base on user's requirements about the accuracy, underlying resource, and so on, then it allows users to update, retrain or event replace ML model for different purposes.
 
-With a low dimensional model in our experience, the linear regression may apply BFGS algorithm for more efficiency and lower memory requirements. Hence we can replace the current model by the one implemented in folder: LR_BFGS. Again, we can build, train and deploy new model without interrupting current service.
+With a low dimensional model in our experience, the linear regression may apply the BFGS algorithm for more efficiency and lower memory requirements. Hence we can replace the current model with the one implemented in the folder: LR_BFGS. Again, we can build, train, and deploy a new model without interrupting the current service.
 
 ```bash
     $ cd ../LR_BFGS
