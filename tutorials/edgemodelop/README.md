@@ -1,10 +1,10 @@
-# Machine Learning pipeline on Edge tutorial
+# Hands-on Machine Learning pipeline on Edge
 
-## Study goal
+## Learning objectives
 
-The purpose of this tutorial is to build a simple system providing Machine Learning serving on edge devices. This system will consist of 2 subsystems that are IoT streaming data and ML pipeline.
+The purpose of this tutorial is to build a simple dynamic inferencing system with Machine Learning serving on edge devices. The inferencing system will consist of 2 subsystems that are IoT data streaming data and ML pipeline.
 
-In the first part, IoT streaming, we have to face the variety of edge resources, where not any software or application can work accurately. To deal with it, we are going to use one of the most common messages delivery protocol, MQTT, which is an open OASIS and ISO standard for lightweight transporting messages over TCP/IP. In the second part, an ML pipeline would be deployed partially on edge devices, which have limited resources but are located close to users, to make predictions in real-time. While the main process of data pre-processing and model training are still performed in a centralized manner on cloud, moving ML inference to the edge can mitigate the burden on cloud computing as well as network functions.
+In the first part, IoT data streaming, we have to face the variety of edge resources, where not any software or application can work accurately. To deal with it, we are going to use one of the most common messages delivery protocol, MQTT, which is an open OASIS and ISO standard for lightweight transporting messages over TCP/IP. In the second part, an ML pipeline would be deployed partially on edge devices, which have limited resources but are located close to users, to make predictions in real-time. While the main process of data pre-processing and model training are still performed in a centralized manner on cloud, moving ML inference to the edge can mitigate the burden on cloud computing as well as network functions.
 
 To complete this tutorial, you are recommended to use linux environment.
 
