@@ -38,6 +38,7 @@ if __name__ == '__main__':
     parser.add_argument('--stationid', default=1160629000)
     parser.add_argument('--datapointid', default=121)
     parser.add_argument('--alarmid', default=308)
+    parser.add_argument('--interval', default=5)
     parser.add_argument('--file', default="../data/1160629000_121_308_train_receive.csv")
 
     args = parser.parse_args()
@@ -62,4 +63,4 @@ if __name__ == '__main__':
     # Loop waiting for message coming
     while (flag):
         print("waiting")
-        time.sleep(1)
+        time.sleep(args.interval)

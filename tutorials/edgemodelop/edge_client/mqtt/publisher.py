@@ -3,13 +3,11 @@ import time
 import argparse
 
 # Publish message from file
-def publish_message(client, file):
+def publish_message(client, file, interval):
     f = open(file, 'r')
     count = 0
     print("Sending data...")
     for line in f:
-        time.sleep(0.1)
-
         # Parse data
         data = line.rstrip('\r\n').split(",")
         index = (float(data[0]))
@@ -20,11 +18,11 @@ def publish_message(client, file):
         value = data[6]
         threadhold = data[7]
         active_status = data[8]
-
         # Publish data to a specific topic
         client.publish("alarm/{}/{}/{}".format(station_id,datapoint_id,alarm_id),"{},{},{},{},{}".format(index,event_time,value,threadhold,active_status))
         print("Sent data: {}".format(count))
         count += 1
+        time.sleep(interval)
     # Notify the process is finished
     print("Publishing message finish")
     client.publish("alarm/finish", "True")
@@ -37,6 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('--host', default="127.0.0.1")
     parser.add_argument('--port', default=1883)
     parser.add_argument('--keepalive', default=60)
+    parser.add_argument('--interval', default=0.1)
     parser.add_argument('--file', default="../data/1160629000_121_308_train_send.csv")
 
     args = parser.parse_args()
@@ -46,5 +45,5 @@ if __name__ == '__main__':
     # Connect the client to MQTT broker
     client.connect(args.host, port=args.port, keepalive=args.keepalive)
     
-    publish_message(client, args.file)
+    publish_message(client, args.file, args.interval)
 

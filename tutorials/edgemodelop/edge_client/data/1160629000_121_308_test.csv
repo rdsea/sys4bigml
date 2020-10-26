@@ -1,4 +1,3 @@
-index,old_idx,station_id,datapoint_id,alarm_id,event_time,value,valueThreshold,isActive,predict
 0,983,1160629000,121,308,1487441883,231,230,True,
 1,984,1160629000,121,308,1487442194,231,230,True,
 2,985,1160629000,121,308,1487442922,231,230,True,

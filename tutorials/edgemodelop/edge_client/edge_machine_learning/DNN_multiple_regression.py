@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import tensorflow as tf
 
 from tensorflow import keras
@@ -11,7 +10,7 @@ from tensorflow.keras.layers.experimental import preprocessing
 np.set_printoptions(precision=3, suppress=True)
 
 # Read dataset from file
-raw_dataset = pd.read_csv("./data/1160629000_121_308_train_receive.csv", index_col=None)
+raw_dataset = pd.read_csv("../data/1160629000_121_308_train_receive.csv", index_col=None)
 raw_dataset = raw_dataset.astype({'index':'float','event_time':'float', 'value':'int', 'valueThreshold':'int', 'isActive':'bool'})
 dataset = raw_dataset.copy()
 dataset = dataset.dropna().drop(['isActive'], axis=1)
@@ -33,7 +32,9 @@ normalizer.adapt(np.array(train_features))
 
 # Model Init fucntion
 def build_and_compile_model(norm):
+  inputs = tf.keras.layers.Input(shape=(3,))
   model = keras.Sequential([
+      inputs,
       norm,
       layers.Dense(64, activation='relu'),
       layers.Dense(64, activation='relu'),
@@ -68,6 +69,11 @@ history = DNN_multi_var_model.fit(
 test_results = {}
 test_results['DNN_multi_var_model'] = DNN_multi_var_model.evaluate(test_features, test_labels, verbose=0)
 print (pd.DataFrame(test_results, index=['Mean absolute error [event_time]']).T)
+
+DNN_multi_var_model.save("../exported_models/DNN_multi_regression")
+converter = tf.lite.TFLiteConverter.from_saved_model("../exported_models/DNN_multi_regression")
+tflite_model = converter.convert()
+open("../exported_models/tflite_model/DNN_multi_regression.tflite", "wb").write(tflite_model)
 
 # Ploting result
 # test_predictions = DNN_multi_var_model.predict(test_features).flatten()

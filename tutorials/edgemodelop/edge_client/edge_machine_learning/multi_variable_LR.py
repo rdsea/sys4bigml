@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import tensorflow as tf
 
 from tensorflow import keras
@@ -11,7 +10,7 @@ from tensorflow.keras.layers.experimental import preprocessing
 np.set_printoptions(precision=3, suppress=True)
 
 # Read dataset from file
-raw_dataset = pd.read_csv("./data/1160629000_121_308_train_receive.csv", index_col=None)
+raw_dataset = pd.read_csv("../data/1160629000_121_308_train_receive.csv", index_col=None)
 raw_dataset = raw_dataset.astype({'index':'float','event_time':'float', 'value':'int', 'valueThreshold':'int', 'isActive':'bool'})
 dataset = raw_dataset.copy()
 dataset = dataset.dropna().drop(['isActive'], axis=1)
@@ -30,9 +29,10 @@ test_labels = test_features.pop('event_time')
 # Normalize whole dataset
 normalizer = preprocessing.Normalization()
 normalizer.adapt(np.array(train_features))
-
 # Init model
+inputs = tf.keras.layers.Input(shape=(3,))
 linear_model = tf.keras.Sequential([
+    inputs,
     normalizer,
     layers.Dense(units=1)
 ])
@@ -66,6 +66,11 @@ test_results = {}
 test_results['linear_multi_var_model'] = linear_model.evaluate(
     test_features, test_labels, verbose=0)
 print (pd.DataFrame(test_results, index=['Mean absolute error [event_time]']).T)
+
+linear_model.save("../exported_models/multi_var_LR")
+converter = tf.lite.TFLiteConverter.from_saved_model("../exported_models/multi_var_LR")
+tflite_model = converter.convert()
+open("../exported_models/tflite_model/multi_var_LR.tflite", "wb").write(tflite_model)
 
 # Ploting result
 # test_predictions = linear_model.predict(test_features).flatten()
