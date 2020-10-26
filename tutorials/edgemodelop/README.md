@@ -8,6 +8,9 @@ In the first part, IoT data streaming, we have to face the variety of edge resou
 
 To complete this tutorial, you are recommended to use linux environment.
 
+## Accompanying Slides and Video
+* [Slides](cs-e4660-hands-on-edge_ml.pdf)
+
 ## Prerequisite
 
 Given two Raspberry Pi 4, one would be installed with Unbuntu (64-bit) 20.04 (Ubuntu-Rasp), the other has the newest Raspberry Pi OS - Raspbian (32-bit) Released: 2020-08-20 (Raspbian-Rasp).
