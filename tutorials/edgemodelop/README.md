@@ -6,6 +6,11 @@ The purpose of this tutorial is to build a simple dynamic inferencing system wit
 
 In the first part, IoT data streaming, we have to face the variety of edge resources. We are going to use one of the most common messages delivery protocol, [MQTT](https://mqtt.org/) for transporting IoT data over TCP/IP. In the second part, an ML pipeline would be deployed partially on edge devices, which have limited resources but are located close to users, to make predictions in real-time. While the main process of data pre-processing and model training are still performed in a centralized manner on cloud, moving ML inference to the edge can mitigate the burden on cloud computing as well as network functions.
 
+<div style="text-align:center"><img src="./img/overview.PNG" alt="drawing" style="width:800px;"/>
+
+Machine Learning Inference on Edge Abstraction View
+<div style="text-align:left">
+
 To complete this tutorial, you are recommended to use linux environment.
 
 ## Accompanying Slides and Video
@@ -37,6 +42,11 @@ In this section, we will build the simplest streaming pipeline for IoT using MQT
 
 Here, our model includes two clients (one publisher and one subscriber) and one MQTT broker. The Raspbian-Rasp will play as a data collector and publish data to the MQTT broker running on the Ubuntu-Rasp, while your computer will be a subscriber which may save data to database for pre-processing or ML training later.
 
+<div style="text-align:center"><img src="./img/demo.PNG" alt="drawing" style="width:800px;"/>
+
+An Overview of our System in this Tutorial
+<div style="text-align:left">
+
 First, you need to implement an MQTT broker for receiving and forwarding messages. HiveMQ provides a community edition to help you build your own broker at the following [link](https://github.com/hivemq/hivemq-community-edition). *You should not use the public broker as this may lead to data leak.*
 
 Note: *We have built many IoT data pipelines that you can reuse from [Big Data Platforms](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/tutorials) and [IoTCloudSamples](https://github.com/rdsea/IoTCloudSamples)
@@ -63,6 +73,11 @@ Sample data:
 As we're trying to predict the next alarm event for a specific alarm at one station, basically, we only use `index` and `event_time` for our experiments.
 
 Note: Inside the sample test, the `event_time` has been converted to Unix timestamp.
+
+<div style="text-align:center"><img src="./img/MLpipeline.PNG" alt="drawing" style="width:800px;"/>
+
+Moving Machine Learning Inference to the Edge
+<div style="text-align:left">
 
 Here, all model is ready in `edge_machine_learning` folder. You should train, test, or modify them one by one to see the differences. You can even customize your own model, uncomment some parts of our source to plot the results, compare the accuracy or runtime with others.
 
