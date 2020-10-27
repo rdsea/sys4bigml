@@ -39,7 +39,7 @@ Clone the source code to all devices and start python 3 virtual environment to m
 
 ## IoT Streaming data
 
-In this section, we will build the simplest streaming pipeline for IoT using MQTT protocol provided by [HiveMQ](https://www.hivemq.com/). To have a well understanding of the HiveMQ Pub/Sub mechanism, you may prefer to [this](https://youtu.be/jTeJxQFD8Ak)
+In this section, we will build a simple streaming pipeline for IoT using the MQTT broker provided by [HiveMQ](https://www.hivemq.com/). To have a well understanding of the HiveMQ Pub/Sub mechanism, you may prefer to [this](https://youtu.be/jTeJxQFD8Ak).
 
 Here, our model includes two clients (one publisher and one subscriber) and one MQTT broker. The Raspbian-Rasp will play as a data collector and publish data to the MQTT broker running on the Ubuntu-Rasp, while your computer will be a subscriber which may save data to database for pre-processing or ML training later.
 
@@ -51,7 +51,7 @@ An Overview of our System in this Tutorial
 
 First, you need to implement an MQTT broker for receiving and forwarding messages. HiveMQ provides a community edition to help you build your own broker at the following [link](https://github.com/hivemq/hivemq-community-edition). *You should not use the public broker as this may lead to data leak.*
 
-Note: *We have built many IoT data pipelines that you can reuse from [Big Data Platforms](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/tutorials) and [IoTCloudSamples](https://github.com/rdsea/IoTCloudSamples)
+Note: *We have built many IoT data pipelines that you can reuse from [Big Data Platforms](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/tutorials) and [IoTCloudSamples](https://github.com/rdsea/IoTCloudSamples).*
 
 After having an MQTT broker running on the Unbuntu-Rasp, we start initializing a subscriber on your computer. A python application is prepared in `mqtt/subcriber.py` to help you subscribe to the right topic and save data to an `CSV` file. Then, another application in `mqtt/publisher.py` will simulate a sensor collecting data then publish it to a pre-set topic (this app should be run on Raspbian-Rasp).
 
@@ -93,7 +93,7 @@ Now we can easily simulate an user application to send request to our edge devic
 
 ## Open question for studies
 * How can you measure the quality of ML service and system performance on the edge?
-* How would you detect the quality of data that can influence the serving at near-real time?
+* How would you detect the quality of data that can influence the serving at near-real time? If you need to implement data cleaning and other data quality check for the serving, what would do you?
 * Can you identify a scenario for backup and restore service when failure occur on edge?
 * Proposed a scenario for elastic, dynamic, collaborative, resource specific, multiple ML applications serving on edge cluster?
 
