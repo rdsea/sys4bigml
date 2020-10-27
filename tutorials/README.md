@@ -6,6 +6,7 @@ We have the following hands-on tutorials for practicing some concepts discussed 
 * [Performance monitoring/observability](./PerformanceMonitoring/)
 * [ML project management](./MLProjectManagement/)
 * [ML Serving and elasticity](./MLServing)
+* [Edge ML Pipeline](./edgemodelop)
 * [Common ML Development Activities in Edge Systems](./edgemlcommons)
 ## Videos
 Some tutorials have hands-on videos that can be found at:
