@@ -4,7 +4,7 @@
 
 The purpose of this tutorial is to build a simple dynamic inferencing system with Machine Learning serving on edge devices. The inferencing system will consist of 2 subsystems that are IoT data streaming data and ML pipeline.
 
-In the first part, IoT data streaming, we have to face the variety of edge resources, where not any software or application can work accurately. To deal with it, we are going to use one of the most common messages delivery protocol, MQTT, which is an open OASIS and ISO standard for lightweight transporting messages over TCP/IP. In the second part, an ML pipeline would be deployed partially on edge devices, which have limited resources but are located close to users, to make predictions in real-time. While the main process of data pre-processing and model training are still performed in a centralized manner on cloud, moving ML inference to the edge can mitigate the burden on cloud computing as well as network functions.
+In the first part, IoT data streaming, we have to face the variety of edge resources. We are going to use one of the most common messages delivery protocol, [MQTT](https://mqtt.org/) for transporting IoT data over TCP/IP. In the second part, an ML pipeline would be deployed partially on edge devices, which have limited resources but are located close to users, to make predictions in real-time. While the main process of data pre-processing and model training are still performed in a centralized manner on cloud, moving ML inference to the edge can mitigate the burden on cloud computing as well as network functions.
 
 To complete this tutorial, you are recommended to use linux environment.
 
@@ -12,9 +12,9 @@ To complete this tutorial, you are recommended to use linux environment.
 * [Slides](cs-e4660-hands-on-edge_ml.pdf)
 
 ## Prerequisite
-
+We assume that edge devices will be Raspberry PIs.
 Given two Raspberry Pi 4, one would be installed with Unbuntu (64-bit) 20.04 (Ubuntu-Rasp), the other has the newest Raspberry Pi OS - Raspbian (32-bit) Released: 2020-08-20 (Raspbian-Rasp).
-Since two different OSs would support different software stack and runtime environment, it partially demonstrates the variety of edge resources. 
+Since two different OSs would support different software stack and runtime environment, it partially demonstrates the variety of edge resources.
 
 Raspberry Pi:
 * [Python 3](https://www.python.org/download/releases/3.0/)
@@ -33,17 +33,17 @@ Clone the source code to all devices and start python 3 virtual environment to m
 
 ## IoT Streaming data
 
-In this section, we will build the simplest streaming pipeline for IoT using MQTT protocol provided by [HiveMQ](https://www.hivemq.com/). To have a well understanding of the Pub/Sub mechanism, you may prefer to [this](https://youtu.be/jTeJxQFD8Ak)
+In this section, we will build the simplest streaming pipeline for IoT using MQTT protocol provided by [HiveMQ](https://www.hivemq.com/). To have a well understanding of the HiveMQ Pub/Sub mechanism, you may prefer to [this](https://youtu.be/jTeJxQFD8Ak)
 
 Here, our model includes two clients (one publisher and one subscriber) and one MQTT broker. The Raspbian-Rasp will play as a data collector and publish data to the MQTT broker running on the Ubuntu-Rasp, while your computer will be a subscriber which may save data to database for pre-processing or ML training later.
 
-First, you need to implement an MQTT broker for receiving and forwarding messages. HiveMQ provides a community edition to help you build your own broker at the following [link](https://github.com/hivemq/hivemq-community-edition)
+First, you need to implement an MQTT broker for receiving and forwarding messages. HiveMQ provides a community edition to help you build your own broker at the following [link](https://github.com/hivemq/hivemq-community-edition). *You should not use the public broker as this may lead to data leak.*
 
-Note: DO NOT use public broker as this may lead to data leak. 
+Note: *We have built many IoT data pipelines that you can reuse from [Big Data Platforms](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/tutorials) and [IoTCloudSamples](https://github.com/rdsea/IoTCloudSamples)
 
 After having an MQTT broker running on the Unbuntu-Rasp, we start initializing a subscriber on your computer. A python application is prepared in `mqtt/subcriber.py` to help you subscribe to the right topic and save data to an `CSV` file. Then, another application in `mqtt/publisher.py` will simulate a sensor collecting data then publish it to a pre-set topic (this app should be run on Raspbian-Rasp).
 
-While running those applications, you may need to set the `ip address` and `port` of you MQTT broker using options `--host`, `--port` or data collecting interval using `--interval` 
+While running those applications, you may need to set the `ip address` and `port` of you MQTT broker using options `--host`, `--port` or data collecting interval using `--interval`
 
 
 ## Machine Learning Models under Testing
@@ -74,13 +74,14 @@ To serve Machine Learning on our edge devices, you need to copy the `exported_mo
 Now we can easily simulate an user application to send request to our edge device using MQTT protocol (`send_request.py`).
 
 ## Open question for studies
-* How can we measure the quality of ML service, system performance on the edge?
-* Any scenario for backup and restore service when failure occur on edge?
+* How can you measure the quality of ML service and system performance on the edge?
+* How would you detect the quality of data that can influence the serving at near-real time?
+* Can you identify a scenario for backup and restore service when failure occur on edge?
 * Proposed a scenario for elastic, dynamic, collaborative, resource specific, multiple ML applications serving on edge cluster?
 
 ## References
 * https://docs.openvinotoolkit.org/2020.4/openvino_docs_MO_DG_Deep_Learning_Model_Optimizer_DevGuide.html
 ## Contributions
 
-Author:   Minh-Tri Nguyen, (tri.m.nguyen@aalto.fi)  
+Author:   Minh-Tri Nguyen, (tri.m.nguyen@aalto.fi)
 Editor:   Linh Truong

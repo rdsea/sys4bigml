@@ -95,9 +95,12 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.2.1
   - [Machine Learning experiment management](./tutorials/MLProjectManagement/)
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
   - [Machine Learning Serving](./tutorials/MLServing)
+  - [Edge ML Pipeline](./tutorials/edgemodelop)
+  - [Common tasks with Edge ML](./tutorials/edgemlcommons)
 ### Project ideas presentations
-  - Students will propose the project idea. If a student cannot propose, the teacher will suggest some concrete ideas.
+  - Students will propose the project idea. This is an important aspect of *research-oriented course*. If a student cannot propose an idea, the teacher will suggest some concrete ideas for students.
 ### Final project demonstration
+  - The final project demonstration should be organized like an "event" where all students can demonstrate their work and students can discuss experiences in their projects. 
 ### Guides
 * [How to write study/learning logs](./StudyLog.md)
 
