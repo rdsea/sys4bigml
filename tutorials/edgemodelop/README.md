@@ -5,10 +5,8 @@
 The purpose of this tutorial is to build a simple dynamic inferencing system with Machine Learning serving on edge devices. The inferencing system will consist of 2 subsystems that are IoT data streaming data and ML pipeline.
 
 In the first part, IoT data streaming, we have to face the variety of edge resources. We are going to use one of the most common messages delivery protocol, [MQTT](https://mqtt.org/) for transporting IoT data over TCP/IP. In the second part, an ML pipeline would be deployed partially on edge devices, which have limited resources but are located close to users, to make predictions in real-time. While the main process of data pre-processing and model training are still performed in a centralized manner on cloud, moving ML inference to the edge can mitigate the burden on cloud computing as well as network functions.
-
-<div style="text-align:center">
-
 ![localhost](./img/overview.PNG)
+<div style="text-align:center">
 Machine Learning Inference on Edge Abstraction View
 <div style="text-align:left">
 
@@ -43,9 +41,9 @@ In this section, we will build the simplest streaming pipeline for IoT using MQT
 
 Here, our model includes two clients (one publisher and one subscriber) and one MQTT broker. The Raspbian-Rasp will play as a data collector and publish data to the MQTT broker running on the Ubuntu-Rasp, while your computer will be a subscriber which may save data to database for pre-processing or ML training later.
 
-<div style="text-align:center">
-
 ![localhost](./img/demo.PNG)
+
+<div style="text-align:center">
 An Overview of our System in this Tutorial
 <div style="text-align:left">
 
@@ -76,9 +74,8 @@ As we're trying to predict the next alarm event for a specific alarm at one stat
 
 Note: Inside the sample test, the `event_time` has been converted to Unix timestamp.
 
-<div style="text-align:center">
-
 ![localhost](./img/MLpipeline.PNG)
+<div style="text-align:center">
 Moving Machine Learning Inference to the Edge
 <div style="text-align:left">
 
