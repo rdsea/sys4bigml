@@ -92,7 +92,8 @@ To serve Machine Learning on our edge devices, you need to copy the `exported_mo
 Now we can easily simulate an user application to send request to our edge device using MQTT protocol (`send_request.py`).
 
 ## Open question for studies
-* How can you measure the quality of ML service and system performance on the edge?
+*  What happens if the edge device sends wrong data to the broker?
+*  How can you measure the quality of ML service and system performance on the edge?
 * How would you detect the quality of data that can influence the serving at near-real time? If you need to implement data cleaning and other data quality check for the serving, what would do you?
 * Can you identify a scenario for backup and restore service when failure occur on edge?
 * Proposed a scenario for elastic, dynamic, collaborative, resource specific, multiple ML applications serving on edge cluster?
