@@ -2,24 +2,21 @@
 # Advanced Topics in Software Systems (SYS4BIGML)
 
 Citation (if you use the material):
-
 Hong-Linh Truong, *Advanced Topics in Software Systems*, https://version.aalto.fi/gitlab/sys4bigml/cs-e4660, 2020 [BIB Entry](site.bib)
-
-*If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
 
 **Copyrights/Licences: the lecture slides and course structure/info use [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Individual tutorials have their own licenses ([Apache Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0))**
 ## Overview
 
-Complex Big Data and Machine Learning (ML) applications and services and their reliability and robustness are strongly dependent on the underlying systems empowering such applications and services. On the one hand, techniques for supporting performance engineering, configuration management, testing and debugging of Big Data and ML are extremely important. On the other hand, large-scale distributed systems and new computing models  have been evolved with new hardware and infrastructure architectures, such as edge systems, tensor processing units,  and quantum  computing systems. Such systems and computing models are being exploited for advanced Big Data and ML applications and services. Developing and optimizing Big Data and ML applications and services in such systems and models require in-depth understanding of the systems and the roles of systems for Big Data and ML. Currently, we lack courses to deal with the above-mentioned issues, especially in-depth analysis and forward-looking research directions in (software) systems for Big Data and ML.  This course will study advanced topics in systems for big data and ML/AI.
+The current focus of this course is on **software systems for big data and machine learning**. Complex Big Data and Machine Learning (ML) applications and services and their reliability and robustness are strongly dependent on the underlying systems empowering such applications and services. On the one hand, techniques for supporting performance engineering, configuration management, testing and debugging of Big Data and ML are extremely important. On the other hand, large-scale distributed systems and new computing models  have been evolved with new hardware and infrastructure architectures, such as edge systems, tensor processing units,  and quantum  computing systems. Such systems and computing models are being exploited for advanced Big Data and ML applications and services. Developing and optimizing Big Data and ML applications and services in such systems and models require in-depth understanding of the systems and the roles of systems for Big Data and ML. Currently, we lack courses to deal with the above-mentioned issues, especially in-depth analysis and forward-looking research directions in (software) systems for Big Data and ML.  This course will study advanced topics in systems for big data and ML/AI.
 
 
 ## Study programme/major/minor/modules
 
 The course is for students in Doctoral and Master studies. In Aalto the course is for students in [Doctoral Programme in Science](https://into.aalto.fi/display/endoctoralsci/Courses+offered) and the [CCIS Master Programme](https://into.aalto.fi/display/enccis/Computer+Science+%28CS%29+2018-2020), especially for *Big Data and Large-scale computing* track and *Software Systems and Technologies* track.
 
-This course provides advanced knowledge about computing and software systems that are useful for big data and machine learning domains. Therefore, it connects to various other courses, such as *Big Data Platforms*, *Cloud Computing*, *Deep Learning* and *Master thesis*, by providing complementary in-depth knowledge w.r.t system aspects.
+This course provides advanced knowledge about computing and software systems that are useful for big data and machine learning domains. Therefore, it connects to various other courses, such as *[Big Data Platforms](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640)*, *Cloud Computing*, *Deep Learning* and *Master thesis*, by providing complementary in-depth knowledge w.r.t system aspects.
 
-## Required previous knowledge/courses
+## Required previous knowledge
 
 Students should have knowledge about cloud computing, big data, operating systems, distributed systems and machine learning. Therefore, it is important that students have passed courses with these topics, such as *Cloud Computing*, *Big Data Platforms*, *Operating Systems*, and *Machine Learning*.
 
@@ -91,6 +88,9 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.2.1
   - Key reading 2:[From the Edge to the Cloud: Model Serving in ML.NET](http://sites.computer.org/debull/A18dec/p46.pdf)
   - Key reading 3: [Machine Learning at Facebook:Understanding Inference at the Edge](https://research.fb.com/wp-content/uploads/2018/12/Machine-Learning-at-Facebook-Understanding-Inference-at-the-Edge.pdf)
   - Key reading 4: [Distributing Deep Neural Networks with Containerized Partitions at the Edge](https://www.usenix.org/system/files/hotedge19-paper-zhou.pdf)
+
+*If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
+
 ### Hands-on tutorials
   - [Machine Learning experiment management](./tutorials/MLProjectManagement/)
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
@@ -100,7 +100,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.2.1
 ### Project ideas presentations
   - Students will propose the project idea. This is an important aspect of *research-oriented course*. If a student cannot propose an idea, the teacher will suggest some concrete ideas for students.
 ### Final project demonstration
-  - The final project demonstration should be organized like an "event" where all students can demonstrate their work and students can discuss experiences in their projects. 
+  - The final project demonstration should be organized like an "event" where all students can demonstrate their work and students can discuss experiences in their projects.
 ### Guides
 * [How to write study/learning logs](./StudyLog.md)
 
