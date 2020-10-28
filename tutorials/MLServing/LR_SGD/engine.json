@@ -12,10 +12,10 @@
       "name": "algo",
       "params": {
         "intercept" : 1,
-        "weight" : 200.0,
+        "weight" : 20.0,
         "event_mean": 1487508915.0,
-        "index_mean": 500.0,
-        "index_scale": 200.0
+        "index_mean": 300.0,
+        "index_scale": 10.0
       }
     }
   ]

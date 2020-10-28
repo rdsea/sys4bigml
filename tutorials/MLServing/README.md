@@ -212,7 +212,7 @@ By default, the deployed model binds to <http://localhost:8000>. You can visit t
 There are some APIs that you can use to send requests for making predictions. Here, an example in python is prepared at `evaluate.py` where queries are made using data from the CSV file `1160629000_121_308_test.csv` to evaluate our models.
 ```bash
     $ cd ./data
-    $ python ./data/evaluate.py
+    $ python ./evaluate.py
 ```
 
 After running the `evaluate`, you would see a `CSV` file appear in the evaluation directory, visualizing the result, we can see that with the default parameters, the first model shows not really good predictions.

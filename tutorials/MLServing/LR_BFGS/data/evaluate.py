@@ -33,3 +33,4 @@ if __name__ == '__main__':
   
   evaluated_df = evaluate(engine_client, args.file)
   evaluated_df.to_csv(args.output, header=True, index=False)
+  print "Finish evaluation"
