@@ -21,15 +21,14 @@ This is a pre-version of the CS-E4660. The course is focused on advanced topics 
 
 * Modeling Automation - From Human to Machine:
   - Git project: https://github.com/OmerAhmedKhan/CS-E4002-Project
-  - [Demonstration Video](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=f3c7a157-fdd1-428d-91f8-ab98007e0805)
+
 
 * Machine Learning for Trading data:
   - Git project: https://github.com/jonatanvm/s4ml-project
-  - [Demonstration Video](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=98c8ac66-276b-4390-b647-ab98007bcef7)
+
 
 * MLFlow Meditrinae
   - Git project: https://github.com/vdandenault/MLFlow_Meditrinae
-  -[Demonstration Video](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=940e7362-a140-4108-9b58-abac00fa3363)
 
 ## Reading List
 ### Robustness, Reliability, Resilience and Elasticity
