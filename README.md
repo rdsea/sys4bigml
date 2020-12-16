@@ -102,7 +102,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.2.1
 ### Final project demonstration
   - The final project demonstration should be organized like an "event" where all students can demonstrate their work and students can discuss experiences in their projects.
   - Demos:
-    - [Chao Engineering Data Validation](https://version.aalto.fi/gitlab/kutluk1/chaos-engineering-data-validation)
+    - [Chaos Engineering Data Validation](https://version.aalto.fi/gitlab/kutluk1/chaos-engineering-data-validation)
     - [Elastic Image Search][https://version.aalto.fi/gitlab/nguyenh36/elastic-image-search]
 ### Guides
 * [How to write study/learning logs](./StudyLog.md)
