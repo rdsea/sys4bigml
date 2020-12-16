@@ -10,7 +10,7 @@ Hong-Linh Truong, *Advanced Topics in Software Systems*, https://version.aalto.f
 The current focus of this course is on **software systems for big data and machine learning**. Complex Big Data and Machine Learning (ML) applications and services and their reliability and robustness are strongly dependent on the underlying systems empowering such applications and services. On the one hand, techniques for supporting performance engineering, configuration management, testing and debugging of Big Data and ML are extremely important. On the other hand, large-scale distributed systems and new computing models  have been evolved with new hardware and infrastructure architectures, such as edge systems, tensor processing units,  and quantum  computing systems. Such systems and computing models are being exploited for advanced Big Data and ML applications and services. Developing and optimizing Big Data and ML applications and services in such systems and models require in-depth understanding of the systems and the roles of systems for Big Data and ML. Currently, we lack courses to deal with the above-mentioned issues, especially in-depth analysis and forward-looking research directions in (software) systems for Big Data and ML.  This course will study advanced topics in systems for big data and ML/AI.
 
 
-## Study programme/major/minor/modules
+## Target Participants/Learners
 
 The course is for students in Doctoral and Master studies. In Aalto the course is for students in [Doctoral Programme in Science](https://into.aalto.fi/display/endoctoralsci/Courses+offered) and the [CCIS Master Programme](https://into.aalto.fi/display/enccis/Computer+Science+%28CS%29+2018-2020), especially for *Big Data and Large-scale computing* track and *Software Systems and Technologies* track.
 
@@ -49,7 +49,7 @@ We define the generic plan of the course as follows:
 * Lectures given by teachers: students must provide study logs
 * Hands-on tutorials given by teachers: the goal is to give some concrete examples of the techniques discussed in the lectures. However, since it is a research-oriented course, students can also practice similar problems with different software stack.
 * Project topic proposal and presentation: students must identify a topic related to the content of the course and present it
-* Topic implementation and demonstration: students will implement the topic and demonstrate the project
+* Topic implementation and demonstration: [students will implement the topic and demonstrate the project](demos.md)
 * Students will make public material about the topic project available in Git spaces (e.g., in Aalto, Github, Gitlab, ...)
 
 As an advanced and research-oriented course, it does not make sense to grade the success of the students based on the numeric grade. We will use the pass/fail as a way to evaluate students. Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
@@ -101,6 +101,9 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.2.1
   - Students will propose the project idea. This is an important aspect of *research-oriented course*. If a student cannot propose an idea, the teacher will suggest some concrete ideas for students.
 ### Final project demonstration
   - The final project demonstration should be organized like an "event" where all students can demonstrate their work and students can discuss experiences in their projects.
+  - Demos:
+    - [Chao Engineering Data Validation](https://version.aalto.fi/gitlab/kutluk1/chaos-engineering-data-validation)
+    - [Elastic Image Search][https://version.aalto.fi/gitlab/nguyenh36/elastic-image-search]
 ### Guides
 * [How to write study/learning logs](./StudyLog.md)
 
