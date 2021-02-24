@@ -19,7 +19,8 @@
 * https://dl.acm.org/doi/10.1145/3352020.3352024
 
 ### Monitoring:
-* https://www.sysml.cc/doc/2019/199.pdf
+* [Towards Observability Data Management at Scale](https://sigmodrecord.org/publications/sigmodRecord/2012/pdfs/05_Vision_Karumuri.pdf) 
+*  https://www.sysml.cc/doc/2019/199.pdf
 * https://monitorml.com/index.html
 * https://dl.acm.org/doi/pdf/10.5555/1251203.1251209
 * https://github.com/rdsea/bigdataincidentanalytics/tree/reasoning
