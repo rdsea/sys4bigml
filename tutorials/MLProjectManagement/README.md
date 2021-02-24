@@ -1,7 +1,7 @@
 # ML Experiment Management
 
 ## Study goal
-The purpose of this tutorial is to introduce you to manage machine learning experiments using [MLFlow](https://mlflow.org/).  Within an experiment we will capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics. Using experiment management we can also guarantee the reproducibility of a machine learning algorithm.
+The purpose of this tutorial is to study the management of machine learning experiments using [MLFlow](https://mlflow.org/).  Within an experiment we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics. Using experiment management we study the reproducibility of a machine learning algorithm.
 
 MLFlow is a popular framework for machine learning experiment management. It provides many functions such as follows:
 
@@ -9,7 +9,7 @@ MLFlow is a popular framework for machine learning experiment management. It pro
 - Packaging: package the project code in reproducible form in order to share or transfer to production.
 - Deploying: manage and deploy models from a variety of machine learning libraries.
 
-In this tutorial you can practice basic functionalities of mlflow such as mentioned above. Further to this, you will study how to use mlflow in measuring metrics of a machine learning application via concrete examples. After completing this tutorial, you can use mlflow to collect experimental data for your machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
+In this tutorial you can practice basic functionalities of Mlflow such as mentioned above. Further to this, you will study how to use Mlflow in measuring metrics of a machine learning application via concrete examples. After completing this tutorial, you can use Mlflow to collect experimental data for your machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
 
 ## Accompanying Slides and Video
 * [Slides](ML_ProjectManagement_2020.pdf)
@@ -34,6 +34,8 @@ For executing some examples of this tutorials, you need to install scikit-learn
 At this point, we recommend you to take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>.
 
 ### 1. A simple python example
+
+The following example is based on [mlflow-example-sklearn-elasticnet-wine](https://github.com/databricks/mlflow-example-sklearn-elasticnet-wine/blob/master/train.py)
 
 ```python
 
@@ -66,12 +68,12 @@ if __name__ == "__main__":
 
 ```
 
-* You should write a simple script to run the aboved example many times.
+* You should write a simple script to run the above example many times.
 ```bash
     $./script_of_experiments.sh
 ```
 
-* After running the examples repeatedly, open a terminal in the current working directory and call mlflow user interface using the below command:
+* After running the examples repeatedly, open a terminal in the current working directory and call Mlflow user interface using the below command:
 ```bash
     $mlflow ui
 ```
@@ -164,4 +166,3 @@ The tutorial is built upon MLflow official documents. The main references are:
 2. Assume that you want to monitor more complex metrics such as cost, peformance of your API functions, what are the suitable solutions?
 
 3. How to evaluate or compare your experiments based on multiple metrics? What would be an appropriate solution?
-
