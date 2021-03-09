@@ -1,17 +1,18 @@
 # Client Library
 For monitoring the metrics of your program, for instance, a python program, you can client api provided by prometheus to log all the metrics. Then you should export the information to an endpoint such as a http port (8000) or a web application port (5000), etc. You can follow the instruction below to practice monitor your python program using prometheus.
 
-## Install Prometheus
+<!-- ## Install Prometheus
 Go to the download page and download the corresponding prometheus for your system. 
 
 ```console
 user@test:~$ wget https://github.com/prometheus/prometheus/releases/download/v2.16.0-rc.0/prometheus-2.16.0-rc.0.linux-amd64.tar.gz
 
-```
+``` -->
 
 ## Configure prometheus to monitor the python program sample2.py
 
-Extract the folder prometheus-version.targ.gz and go inside the folder. Then perform the modifications such as follows:
+<!-- Extract the folder prometheus-version.targ.gz and go inside the folder. Then  -->
+Inside the prometheus.yml file, perform the modifications such as follows:
 ```properties
 
 scrape_configs:
@@ -24,7 +25,10 @@ scrape_configs:
     - targets: ['localhost:8000']
 
 ```  
-
+or if you run Prometheus through docker:
+```static_configs:
+  - targets: ['your_ip_address:8000']
+```
 You can also modify the scrape_interval to an arbitrary number upon your demand. Then you can run prometheus
 
 ```console
@@ -32,7 +36,7 @@ user@test:~$ ./prometheus
 
 ```
 
-## Select the language and corresponding client library. Forexample: Python
+## Select the language and corresponding client library. For example: Python
 After configuring prometheus and run it. You can start to run your python program:
 
 ```console

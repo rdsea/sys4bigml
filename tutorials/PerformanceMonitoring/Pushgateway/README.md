@@ -1,26 +1,17 @@
 # Pushgateway
-The Pushgateway is another type of built-in program that you can send the collected metrics to it. For using a pushgateway, you can follow the instruction below:
-
-## Installation
-Download the pushgateway for your system.
-
-```console
-user@test:~$ wget https://github.com/prometheus/pushgateway/releases/download/v1.1.0/pushgateway-1.1.0.linux-amd64.tar.gz
-
-```
->Through "http://yourhost:9100/metrics" you can check if the pushgateway is correctly up and running.
+The Pushgateway is another type of built-in program that you can send the collected metrics to it. After installing the pushgateway for your system, go to "http://yourhost:9091/metrics" (or the port that you have assigned) to check if it's up and running correctly. For using a pushgateway, you can follow the instructions below:
 
 ## Prometheus Configuration
-Download the corresponding Prometheus for your system. 
 
-```console
-user@test:~$ wget https://github.com/prometheus/prometheus/releases/download/v2.16.0-rc.0/prometheus-2.16.0-rc.0.linux-amd64.tar.gz
-
-```
-Extract the folder prometheus-version.targ.gz and go inside the folder. Then perform the modifications for the prometheus.yml file such as follows:
+Perform the modifications for the prometheus.yml file such as follows:
 ```properties
 static_configs:
-            - targets: ['localhost:9090', 'localhost:9091']
+    - targets: ['localhost:9090', 'localhost:9091']
+```
+or if you run Prometheus through docker:
+```properties
+static_configs:
+    - targets: ['localhost:9090', 'your_ip_address:9091']
 ```
 You can also modify the scrape_interval to an arbitrary number upon your demand. Notably, the port number of pushgateway is different to the exporter's, so you have to change the port so prometheus can collect information from it correctly.
 
