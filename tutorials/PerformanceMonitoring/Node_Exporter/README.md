@@ -7,12 +7,12 @@ For using a node exporter, you can follow the instruction below:
 Perform the modifications for the prometheus.yml file such as follows:
 ```properties
 static_configs:
-            - targets: ['localhost:9090', 'localhost:9100']
+    - targets: ['localhost:9090', 'localhost:9100']
 ```
 or if you run Prometheus through docker:
 ```properties
 static_configs:
-            - targets: ['localhost:9090', 'your_ip_address:9100']
+    - targets: ['localhost:9090', 'your_ip_address:9100']
 ```
 You can also modify the scrape_interval to an arbitrary number upon your demand.
 ```console

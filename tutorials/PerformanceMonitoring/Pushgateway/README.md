@@ -6,12 +6,12 @@ The Pushgateway is another type of built-in program that you can send the collec
 Perform the modifications for the prometheus.yml file such as follows:
 ```properties
 static_configs:
-            - targets: ['localhost:9090', 'localhost:9091']
+    - targets: ['localhost:9090', 'localhost:9091']
 ```
 or if you run Prometheus through docker:
 ```properties
 static_configs:
-            - targets: ['localhost:9090', 'your_ip_address:9091']
+    - targets: ['localhost:9090', 'your_ip_address:9091']
 ```
 You can also modify the scrape_interval to an arbitrary number upon your demand. Notably, the port number of pushgateway is different to the exporter's, so you have to change the port so prometheus can collect information from it correctly.
 

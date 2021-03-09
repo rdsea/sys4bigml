@@ -27,7 +27,7 @@ scrape_configs:
 ```  
 or if you run Prometheus through docker:
 ```static_configs:
-            - targets: ['your_ip_address:8000']
+  - targets: ['your_ip_address:8000']
 ```
 You can also modify the scrape_interval to an arbitrary number upon your demand. Then you can run prometheus
 
