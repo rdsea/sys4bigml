@@ -1,9 +1,14 @@
 # ML Experiment Management
 ## Motivation and study goal
+
 Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. For instance, choosing the best value for a paremeter alpha is not obvious. How do you keep record of the model peformance with different parameters and compare them to get the best result? 
+
 After choosing the best parameter, you might want to share your model to either your teammates or other stakeholder who need to examine your models etc. This process might take a lot of time an effort, and does not guarantee that they would be able to reproduce your best result. This means the model should be packaged in a reusable, and reproducable form.
+
 The ultimate goal of most machine learning model is to be served to end users ideally in a variety of downstream tools - for example real time through REST API or batch inference on Apache Spark. This can be a very time consuming process if you do not have the right tool to deploy your model. 
+
 Last but not least, after all mentioned concerns, it would be a big bonus point in your machine learning project management if you can govern the full life cycle of an model, including diferent versions, stage transitions, and annotations.
+
 If one of these issues have been your challenges on managing the project, MLflow might be a good tool to help you stay on top of what is going on.
 In this tutorial, we would introduce the management of machine learning experiments using [MLflow](https://mlflow.org/). Within an experiment we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics. We aim to give you a big picture of machine learning life cycle in this example. 
 ## MLFlow introduction
@@ -74,6 +79,7 @@ if __name__ == "__main__":
 ```
 
 * The model takes two parameter alpha and l1_ratio. You can run the model with default parameters, or try experimenting different values with the command: 
+
 ```bash
     $python examples/linear_regression_model/train.py <alpha> <l1_ratio>
 ``` 
