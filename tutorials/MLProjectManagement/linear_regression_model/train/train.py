@@ -1,3 +1,6 @@
+# The code is from https://github.com/databricks/mlflow-example-sklearn-elasticnet-wine/blob/master/train.py
+# https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
+# we reuse it for the teaching
 # The data set used in this example is from http://archive.ics.uci.edu/ml/datasets/Wine+Quality
 # P. Cortez, A. Cerdeira, F. Almeida, T. Matos and J. Reis.
 # Modeling wine preferences by data mining from physicochemical properties. In Decision Support Systems, Elsevier, 47(4):547-553, 2009.

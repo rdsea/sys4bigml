@@ -1,3 +1,8 @@
+'''
+This code is from  https://github.com/databricks/mlflow-example-sklearn-elasticnet-wine/blob/master/train.py
+
+the data should be downloaded from https://www.kaggle.com/rajyellow46/wine-quality
+'''
 import os
 import warnings
 import sys
