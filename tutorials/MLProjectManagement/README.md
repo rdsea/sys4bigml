@@ -1,15 +1,16 @@
 # End-to-End ML Experiment Management
 
-The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiment includes many steps, not just running the ML model.
+The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiment includes many steps, not just running experiments for the ML models.
 
 >Accompanying Slides and Video (to be updated)
 * [Slides](ML_ProjectManagement_2020.pdf)
 * [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
 
->Currently, we use data and models based on the tutorial from ML flows. Key materials we reuse are from:
+>Currently, we use data and models based on the tutorial from MLflows. Key materials we reuse are from:
 * https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
 
 ## Motivation and study goal
+>To be revised to follow the end-to-end view
 
 Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. For instance, choosing the best value for a paremeter alpha is not obvious. How do you keep record of the model peformance with different parameters and compare them to get the best result?
 
@@ -40,20 +41,20 @@ You start building an ML model based on data. Key steps in preparing data
 
 ## Developing ML model
 
-We assume that you follow techniques to develop suitable models.
+We assume that you follow existing techniques to develop suitable models.
 >To be written
 
 
 ## Training and ML model experiments
 
-After having the model, we will do the training and experiments. We will need to record performance metrics, machine information, etc. and associate them with the data to be used (and the metadata) so that we can have all information is linked for an end-to-end ML experiment.
+After having the model, we will do the training and model experiments. We will need to record performance metrics, machine information, etc. and associate them with the data to be used (and the metadata) so that we can have all information is linked for an end-to-end ML experiment.
 
-### Tools for ML model experiments.
+### Tools for experimenting ML models
 
 There are many tools.
-If one of these issues have been your challenges on managing the project, [MLflow](https://mlflow.org/) might be a good tool to help you stay on top of what is going on. Using MLFlow,  we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics.
+If one of these issues have been your challenges on managing ML models, [MLflow](https://mlflow.org/) might be a good tool to help you stay on top of what is going on. Using MLFlow,  we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics.
 
-#### MLFlow Introduction and installation
+#### MLflow introduction and installation
 >Note: to be simplified, reducing the text
 MLFlow is a popular python package for machine learning life cycle. It provides many functions such as follows:
 
@@ -117,9 +118,11 @@ if __name__ == "__main__":
         mlflow.sklearn.log_model(lr, "model")
 
 ```
->Note: we host a local version under [linear_regression_model](linear_regression_model/)
+>Note: we host a local version under [linear_regression_model](linear_regression_model/train/train.py)
 
-#### Running experiments
+#### Running model experiments
+
+>Withe wine model:
 
 * The model takes two parameter alpha and l1_ratio. You can run the model with default parameters, or try experimenting different values with the command:
 
@@ -146,13 +149,14 @@ Now you have the metadata about data used, models and model experiments, you can
 >Here will be example of all metrics, metadata, etc. associated with the model in an end-to-end view to explain the relationship between data, model and metrics obtained from model experiment, all together are part of ML experiments.
 
 ## Model Serving /ML Service
-Given the model experimented, we can package and perform model serving.
+Given the model experimented, we can package and perform the model serving.
 >Pls. check our serving tutorial.
 
 In the following explain basic steps to package models and record them.
 
-### Packing the code
+### Packing the model code
 >Note: this example is based on the model mentioned in the previous section
+
 Now, after discovering the best combination of alpha and l1_ratio, you want to share your ml code with other data scientist in a reusable, and reproducible form. You can packing the code in a virtual environment such as conda so that the code can be executed everywhere.
 In order to package the code using MLflow, you have to create MLProject and description files which define the requirements for executing the code. The below files are an example for packaging the code at <https://github.com/mlflow/mlflow-example> and execute it in the conda environment.
 
@@ -229,7 +233,7 @@ But maybe it is a good practice to test if the deployed model is actually workin
 [4.3112116648803545]
 
 ```
-### Monitoring ML services and link to ML Experiments
+### Monitoring ML services and link the service monitoring data to ML Experiments
 
 Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service (see other tutorials).
 >Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
