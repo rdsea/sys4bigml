@@ -2,12 +2,7 @@
 
 The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiment includes many steps, not just running experiments for the ML models.
 
->Accompanying Slides and Video (to be updated)
-* [Slides](ML_ProjectManagement_2020.pdf)
-* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
-
->Currently, we use data and models based on the tutorial from MLflows. Key materials we reuse are from:
-* https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
+>Currently we are working on the tutorial. Material will be updated soon.
 
 ## Motivation and study goal
 >To be revised to follow the end-to-end view
@@ -29,7 +24,8 @@ You start building an ML model based on data. Key steps in preparing data
 * checking quality of data, improving data and updating metadata
 
 ### Data to be used
->Note: for the current example, we use the following dataset: https://www.kaggle.com/rajyellow46/wine-quality
+
+We use the BTS data:
 
 ### Create metadata
 
@@ -85,49 +81,22 @@ For executing some examples of this tutorials, you need to install scikit-learn
 You would need to have a machine learning model to test out MLflow, you can use any model that you have already developed, or develop one if you feel like.
 The model is described at the beginning of this tutorial.
 
->Note: in the following we use the model from https://github.com/databricks/mlflow-example-sklearn-elasticnet-wine
-However, if you do not have time for that, or just want a supper simple model, that is hard to go wrong, you can use this simple linear regression example. The example is based on [mlflow-example-sklearn-elasticnet-wine](https://github.com/databricks/mlflow-example-sklearn-elasticnet-wine/blob/master/train.py)
+We use the model from https://github.com/rdsea/IoTCloudSamples/tree/master/MLUnits/BTSPrediction
+>To be updated
 
 ```python
 
-import os
-from mlflow import log_metric, log_param, log_artifact
 
-if __name__ == "__main__":
-
-        ...
-        with mlflow.start_run():
-        lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
-        lr.fit(train_x, train_y)
-
-        predicted_qualities = lr.predict(test_x)
-
-        (rmse, mae, r2) = eval_metrics(test_y, predicted_qualities)
-
-        print("Elasticnet model (alpha=%f, l1_ratio=%f):" % (alpha, l1_ratio))
-        print("  RMSE: %s" % rmse)
-        print("  MAE: %s" % mae)
-        print("  R2: %s" % r2)
-
-        mlflow.log_param("alpha", alpha)
-        mlflow.log_param("l1_ratio", l1_ratio)
-        mlflow.log_metric("rmse", rmse)
-        mlflow.log_metric("r2", r2)
-        mlflow.log_metric("mae", mae)
-
-        mlflow.sklearn.log_model(lr, "model")
 
 ```
->Note: we host a local version under [linear_regression_model](linear_regression_model/train/train.py)
+
 
 #### Running model experiments
 
->Withe wine model:
-
-* The model takes two parameter alpha and l1_ratio. You can run the model with default parameters, or try experimenting different values with the command:
+* TODO:
 
 ```bash
-    $python examples/linear_regression_model/train.py <alpha> <l1_ratio>
+    $python
 ```
 You should write a simple script to run the above example many times.
 ```bash
@@ -139,7 +108,7 @@ You should write a simple script to run the above example many times.
     $mlflow ui
 ```
 
-![Figure 1 - Experimental Results of The ElasticNet method on wine-quality dataset](./images/experiments.png)
+>TODO figure
 
 * The results are illustrated in the Figure 1 where you can see all the logging parameters and metrics as well as different runs of your experiment. You can also see that the parameters and metrics are separate in the top row since they are logged with different MLflow api (log_param and log_metric.).
 
@@ -162,40 +131,23 @@ In order to package the code using MLflow, you have to create MLProject and desc
 
 Create MLProject file
 ```yaml
-[//]: # sklearn_elasticnet_wine/MLproject
-        name: tutorial
-        conda_env: conda.yaml
-        entry_points:
-          main:
-            parameters:
-              alpha: float
-              l1_ratio: {type: float, default: 0.1}
-            command: "python train.py {alpha} {l1_ratio}"
+
 ```
 Create conda.yaml to define all requirements for the python program
 ```yaml
-[//]: # sklearn_elasticnet_wine/conda.yaml
-            name: tutorial
-            channels:
-              - defaults
-            dependencies:
-              - numpy=1.14.3
-              - pandas=0.22.0
-              - scikit-learn=0.19.1
-              - pip:
-                - mlflow
+
 ```
 
 After defining the MLProject and conda.yaml files. You can run your code in another conda environment using the following command:
 
 ```bash
-    $ mlflow run ml_experiments/ -P alpha=0.01
+    $ mlflow run
 
 ```
 
 Notably, the directory ml_experiments is where your MLProject and conda.yaml are located. It can have any name that you have created for your project. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with the id 'mlflow-f175708099db6c37e65aca9c773737a0ff03ecbc' and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
 
-![Figure 2 - Packing your project in a conda environment](./images/conda-envs.png)
+>TODO figure
 
 ### Link Packaged models with ML experiments
 
@@ -217,20 +169,19 @@ Student can go to the UI to check the saving model:
 <!-- FIX ME: CHANGE THIS TO SOMETHING ELSE -->
 Deploy the server using the saving model:
 ```bash
-   $mlflow models serve -m /home/path/mlruns/0/79936866205949f0843a941829e59f0a/artifacts/model -p 1234
+   $mlflow models serve -m
 ```
 
 After the server is deployed successfully, you will see a result similar to the Figure 3 where your training model is deployed and ready to serve the prediction.
 
-![Figure 3 - The training model is deployed and ready to be used for doing prediction](./images/training-model.png)
+>TODO: figure
 
 But maybe it is a good practice to test if the deployed model is actually working correctly? You can do prediction for your testing data using the deployed model such as follows:
 
 ```bash
 
-   $curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
+   $curl -X POST -H  http://127.0.0.1:1234/invocations
 
-[4.3112116648803545]
 
 ```
 ### Monitoring ML services and link the service monitoring data to ML Experiments
@@ -240,13 +191,16 @@ Now the model is deployed and running as a service. You can use monitoring techn
 
 
 
-## References
-The tutorial is built upon MLflow official documents. The main references are:
+## References and additional links
+Part of the tutorial is built upon MLflow official documents. The main references are:
 * https://www.mlflow.org/docs/latest/index.html
 * https://www.mlflow.org/docs/latest/models.html#models
 * https://mlflow.org/docs/latest/tutorials-and-examples/index.html
 * https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
 
+Accompanying Slides and Video for running MLflow with the Wine prediction
+* [Slides](ML_ProjectManagement_2020.pdf)
+* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
 
 ## Open Questions
 1. What would you do to improve the tutorial to manage thousands of experiments?
