@@ -1,6 +1,6 @@
 # End-to-End ML Experiment Management
 
-The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiment includes many steps, not just running experiments for the ML models.
+The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiment includes many steps, **not just running experiments for the ML models**.
 
 >Currently we are working on the tutorial. Material will be updated soon.
 
@@ -208,4 +208,3 @@ Accompanying Slides and Video for running MLflow with the Wine prediction
 2. Assume that you want to monitor more complex metrics such as cost, peformance of your API functions, what are the suitable solutions?
 
 3. How to evaluate or compare your experiments based on multiple metrics? What would be an appropriate solution?
-4. If you are still want to do more practise with MLflow, you can study more about MLflow with [this example](https://github.com/jeanmidevacc/mlflow-energyforecast)
