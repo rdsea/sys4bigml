@@ -96,6 +96,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.2.1
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
   - [Machine Learning Serving](./tutorials/MLServing)
   - [Edge ML Pipeline](./tutorials/edgemodelop)
+  - [Qualty of Analytics for ML](./tutorials/qoa4ml)
   - [Common tasks with Edge ML](./tutorials/edgemlcommons)
 ### Project ideas presentations
   - Students will propose the project idea. This is an important aspect of *research-oriented course*. If a student cannot propose an idea, the teacher will suggest some concrete ideas for students.

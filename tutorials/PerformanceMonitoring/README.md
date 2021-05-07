@@ -1,61 +1,70 @@
-## 1. Overview
- The goal of this tutorial is to equip the students with basic skills to monitor their real systems and applications. Students will study the provided components to monitor different targets such as a machine or a server, a system process, and an arbitrary application through three examples. Examples include:
-* Monitoring a server: Monitor a server using [Node_Exporter](Node_Exporter/README.md)
+# Monitoring ML systems and application
 
+## Overview
+ The goal of this tutorial is to equip the students with basic skills to monitor their real ML systems and applications. Students will study the provided components to monitor ML services. This will involve the monitoring of different layers and corresponding components, such as the infrastructural layer (e.g., VM), the platform layer (e.g., a middleware), and the application layer (such as ML service).
 
-* Monitoring a Linux process: Monitor a system process using [Pushgateway](Pushgateway/README.md).
+## Basic monitoring tools/frameworks
 
+We will use [Prometheus](https://prometheus.io/) - a very popular open-source monitoring system which is widely used by many companies and organizations for monitoring their applications and infrastructures. Following Prometheus document to study and install main features of Prometheus. Furthermore, we will use [Grafana](https://grafana.com/grafana/download) for performance visualization.
 
-* Monitoring an application: Monitor an arbitrary application using [Client library](ClientLibrary/README.md).
-
-## 2.Prometheus
-Prometheus is an open-source metrics-based monitoring system which is widely used by many companies and organizations for monitoring their applications and infrastructures. Mainly, Prometheus provides the following components:
-
-- Prometheus server - used to scrape and store data from client systems and applications.
-- Exporters - used in exporting existing metrics from third-party systems as Prometheus metrics.
-- Pushgateway - used to handle push information from targets
-- The client libraries - used for instrumenting application codes
-
-## 3. Prequesites
-* `docker`
-* `docker-compose`
-* `prometheus`
+Following the following links to setup Prometheus and Grafana:
+* https://prometheus.io/docs/prometheus/latest/getting_started/
 * Node Exporter [Download](https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz)
 * Grafana (used in Node Exporter example) [Download](https://dl.grafana.com/oss/release/grafana-6.6.0.linux-amd64.tar.gz)
-* Pushgateway (used in Pushgateway example) [Download](https://github.com/prometheus/pushgateway/releases/download/v1.1.0/pushgateway-1.1.0.linux-amd64.tar.gz
-)
-## 4.Installation
+* [Configurate Grafana with Prometheus](https://prometheus.io/docs/visualization/grafana/)
+* https://dzone.com/articles/monitoring-with-prometheus
 
-### 4.1. Create Prometheus system group
+## Preparing an ML service
 
-```bash
-    $ sudo groupadd --system prometheus
-    $ grep prometheus /etc/group
-    prometheus:x:999:
+>TODO: to be written
+
+Before practicing the monitoring for a machine learning service, we will deploy a simple REST-based machine learning service. We will
+* use a [BTS Prediction model]()
+* make a simple REST ML service, use [the template and a local version](MLService/)
+
+## Instrumenting ML Service with Prometheus Client Library
+>TODO: to be written
+
+Check the [sample service](MLService/) and the [Client Library](). You can practice to add many metrics as you want.
+
+* test if the ML service work
 ```
-
-### 4.2. Create Prometheus system user
-
-```bash
-    $ sudo useradd -s /sbin/nologin -r -g prometheus prometheus
-    $ id prometheus
-    uid=999(prometheus) gid=998(prometheus) groups=998(prometheus)
+$python MySimpleMLService.py
 ```
-## 4.3 Set up Prometheus, add Exporter and install Grafana
+and
+```
+$curl -X GET http://localhost:8001
+$curl -X GET http://localhost:8000
+```
+if you see the ML service work and the metrics are outputed, then [configure Promethesus to pull metrics](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) from your Prometheus endpoint in your ML service.
 
-* Create prometheus.yml
-* Create `docker-compose.yaml` file
+```
+static_configs:
+  - targets: ['your_ip_address:8000']
+```
+Then check the metrics of your ML service in Prometheus/Grafana:
+>TODO: to be written
 
-      - Configure prometheus
-      - Add exporter
-      - Add visualization with Grafana
+Also see our [ML serving tutorial](../MLServing/)
 
-  The information of this installation is at this blog [link](https://dzone.com/articles/monitoring-with-prometheus) 
+## Monitoring the infrastructure
+>TODO: to be written
 
+It is not enough to monitor the ML service without monitoring the underlying infrastructure (e.g., VM, networks, etc.). You can use [Prometheus Exporters](https://prometheus.io/docs/instrumenting/exporters/) and [Push Gateway](https://prometheus.io/docs/instrumenting/pushing/) to do so.
 
+Capture machine information:
+>To be written
+
+Capture middleware information:
+> To be written
+
+Check monitoring data of machines, middleware and your ML service.
+ > To be written
 
 ## References
 
+* https://github.com/prometheus/client_python
+* https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
 * https://dzone.com/articles/monitoring-with-prometheus
 * https://devconnected.com/complete-node-exporter-mastery-with-prometheus
 * https://devconnected.com/monitoring-linux-processes-using-prometheus-and-grafana
