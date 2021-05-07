@@ -1,19 +1,21 @@
 # End-to-End ML Experiment Management
 
-The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiment includes many steps, **not just running experiments for the ML models**.
-
+The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many steps, **not just running experiments for the ML models**. 
+<!-- should i use the word experiments or lifecycle -->
 >Currently we are working on the tutorial. Material will be updated soon.
 
 ## Motivation and study goal
 >To be revised to follow the end-to-end view
 
-Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. For instance, choosing the best value for a paremeter alpha is not obvious. How do you keep record of the model peformance with different parameters and compare them to get the best result?
+Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. How can you move from having a dataset to a functioning prediction models?
+
+<!-- For instance, choosing the best value for a paremeter alpha is not obvious. How do you keep record of the model peformance with different parameters and compare them to get the best result?
 
 After choosing the best parameter, you might want to share your model to either your teammates or other stakeholder who need to examine your models etc. This process might take a lot of time an effort, and does not guarantee that they would be able to reproduce your best result. This means the model should be packaged in a reusable, and reproducable form.
 
 The ultimate goal of most machine learning model is to be served to end users ideally in a variety of downstream tools - for example real time through REST API or batch inference on Apache Spark. This can be a very time consuming process if you do not have the right tool to deploy your model.
 
-Last but not least, after all mentioned concerns, it would be a big bonus point in your machine learning project management if you can govern the full life cycle of an model, including diferent versions, stage transitions, and annotations.
+Last but not least, after all mentioned concerns, it would be a big bonus point in your machine learning project management if you can govern the full life cycle of an model, including diferent versions, stage transitions, and annotations. -->
 
 ## Data for Model development and Managing Metadata about data
 
@@ -25,20 +27,77 @@ You start building an ML model based on data. Key steps in preparing data
 
 ### Data to be used
 
-We use the BTS data:
+We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
 
 ### Create metadata
 
 *To be written about metadata model and how to capture metadata*
 
 ### Improve data
+The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the file `group_data.py`.
 
-*to be written*
+```python
+import pandas as pd 
+import os, fnmatch
 
+bts_df = pd.DataFrame()
+listOfFiles = os.listdir('./raw_data')
+pattern = "*.csv"
+
+for files in listOfFiles:
+    if fnmatch.fnmatch(files, pattern):
+        cur_df = pd.read_csv("./raw_data/{}".format(files))
+        bts_df = bts_df.append(cur_df)
+
+bts_df["unix_timestamp"] = pd.to_datetime(bts_df["reading_time"]).astype(int)
+mean_time = bts_df["unix_timestamp"].mean()
+min_time = bts_df["unix_timestamp"].min()
+bts_df["norm_time"] = (bts_df["unix_timestamp"]-mean_time)/(3600*1000000000)
+bts_df = bts_df.sort_values(by=['norm_time'])
+bts_df.drop(["reading_time"], axis='columns', inplace=True)
+
+bts_df_grouped = bts_df.groupby(["station_id","parameter_id"])
+for key,item in bts_df_grouped:
+    sub_data = bts_df_grouped.get_group(key)
+    mean_val = sub_data['value'].mean()
+    sub_data['norm_value'] = sub_data['value']-mean_val
+    max_val = sub_data['norm_value'].max()
+    sub_data['norm_value'] = sub_data['norm_value']/max_val
+    sub_data.sort_values(by=['norm_time']).to_csv("./data_grouped/{}_{}_.csv".format(key[0],key[1]), index=False)
+    print("Finish: {}".format(key))
+```
+After grouping the data, we need to do some further pre-processing to turn our data into serial data, and normalize the data. You can use the following code, or open the file `Model.ipynb` and test the code directly.
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+
+from tensorflow import keras
+from tensorflow.keras import layers
+from tensorflow.keras.layers.experimental import preprocessing
+import mlflow
+raw_dataset = pd.read_csv("./data_grouped/1161114002_122.csv")
+raw_dataset = raw_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
+dataset = raw_dataset.copy()
+dataset = dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
+dataset_full = dataset.sort_values(by=['norm_time'])
+dataset = dataset_full[0:300]
+
+serial_data = dataset.drop(['value','norm_time'], axis=1)
+serial_data['norm_1'] = serial_data['norm_value'].shift(1)
+serial_data['norm_2'] = serial_data['norm_value'].shift(2)
+serial_data['norm_3'] = serial_data['norm_value'].shift(3)
+serial_data['norm_4'] = serial_data['norm_value'].shift(4)
+serial_data['norm_5'] = serial_data['norm_value'].shift(5)
+serial_data['norm_6'] = serial_data['norm_value'].shift(6)
+serial_data = serial_data[6:]
+```
+You could do the same to process the test dataset.
 ## Developing ML model
-
 We assume that you follow existing techniques to develop suitable models.
->To be written
+
+LSTM
 
 
 ## Training and ML model experiments
@@ -81,13 +140,53 @@ For executing some examples of this tutorials, you need to install scikit-learn
 You would need to have a machine learning model to test out MLflow, you can use any model that you have already developed, or develop one if you feel like.
 The model is described at the beginning of this tutorial.
 
-We use the model from https://github.com/rdsea/IoTCloudSamples/tree/master/MLUnits/BTSPrediction
+We use a BTS model developed by Tri, the code can be found in the file `model.py` or here.
+<!-- https://github.com/rdsea/IoTCloudSamples/tree/master/MLUnits/BTSPrediction -->
 >To be updated
 
 ```python
 
 
+train_dataset = serial_data
+test_dataset = test_serial_data
+train_features = np.array(train_dataset.drop(['norm_value'], axis=1))
+train_features = np.array(train_features)[:,:,np.newaxis]
+train_labels = np.array(train_dataset.drop(['norm_6'], axis=1))
+train_labels = train_labels.reshape(train_labels.shape[0],train_labels.shape[1],1)
+test_features = np.array(test_dataset.drop(['norm_value'], axis=1))
+test_features = test_features.reshape(test_features.shape[0],test_features.shape[1],1)
+test_labels = np.array(test_dataset.drop(['norm_6'], axis=1))
+test_labels = test_labels.reshape(test_labels.shape[0],test_labels.shape[1],1)
 
+with mlflow.start_run():
+    model = keras.Sequential()
+    model.add(layers.LSTM(32, return_sequences=True))
+    model.add(layers.LSTM(32, return_sequences=True))
+    model.add(layers.TimeDistributed(layers.Dense(1)))
+    model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
+    model.fit(train_features, train_labels, epochs=200, batch_size=4, verbose=2)
+    
+    result = model.predict(test_features, batch_size=1, verbose=0)
+    x=pd.DataFrame(test_labels.reshape(test_labels.shape[0],test_labels.shape[1]))
+    y=pd.DataFrame(result.reshape(result.shape[0],result.shape[1]))
+    y_true = np.array(x[0])
+    y_pred = np.array(y[0])
+    
+    mse = mean_squared_error(y_true, y_pred)
+    print("MSE", mse)
+    # Log metric, and params to MLflow
+    mlflow.log_metric("MSE",mse)
+    mlflow.log_param("test line from ", '{} {}'.format(start_line, end_line))
+    mlflow.log_param("Test file", test_file_name)
+    plt.plot(x.index, x[0], label='Data')
+    plt.plot(y.index, y[0], color='k', label='Predictions')
+    plt.xlabel('index')
+    plt.ylabel('norm_value')
+    plt.legend()
+    plt.savefig("BTS_resultGraph.png")
+    mlflow.log_artifact("BTS_resultGraph.png")
+    plt.show()
+    plt.close()
 ```
 
 
@@ -98,17 +197,21 @@ We use the model from https://github.com/rdsea/IoTCloudSamples/tree/master/MLUni
 ```bash
     $python
 ```
-You should write a simple script to run the above example many times.
+You could write a simple script to run the above example many times. 
 ```bash
     $./script_of_experiments.sh
 ```
+You could also modify different parameters, such as the loss function, batch_size, epochs, or the test data file etc, and record them using `mlflow.log_param`, or record the figure using: 
+```
+plt.savefig("BTS_resultGraph.png")
+mlflow.log_artifact("BTS_resultGraph.png")```
 
 * After running the examples repeatedly, you might be interested in comparing the performance of ran experiments. Open a terminal in the current working directory and call MLflow user interface using the below command:
 ```bash
     $mlflow ui
 ```
 
->TODO figure
+![image info](./images/MLflow_ui.png "Figure 1: MLflow run statistic")
 
 * The results are illustrated in the Figure 1 where you can see all the logging parameters and metrics as well as different runs of your experiment. You can also see that the parameters and metrics are separate in the top row since they are logged with different MLflow api (log_param and log_metric.).
 
