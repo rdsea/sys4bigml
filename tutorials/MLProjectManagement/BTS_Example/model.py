@@ -9,14 +9,14 @@ from sklearn.metrics import mean_squared_error
 import mlflow
 
 # Read dataset from file
-raw_dataset = pd.read_csv("./data_grouped/1160622000_111_.csv")
+raw_dataset = pd.read_csv("./data_grouped/1161114002_122_.csv")
 raw_dataset = raw_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
 dataset = raw_dataset.copy()
 dataset = dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
 dataset_full = dataset.sort_values(by=['norm_time'])
 dataset = dataset_full[0:300]
 # Read test dataset from a different file
-test_file_name = "./data_grouped/1160622000_115_.csv"
+test_file_name = "./data_grouped/1161114004_122_.csv"
 test_raw_dataset = pd.read_csv(test_file_name)
 test_raw_dataset = test_raw_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
 test_dataset = test_raw_dataset.copy()
