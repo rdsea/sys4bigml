@@ -1,0 +1,10 @@
+name: tutorial
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      start_line: {type: int, default: 40}
+      end_line: {type: int, default: 100}
+    command: "python model.py {start_line} {end_line}"

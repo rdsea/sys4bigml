@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/nguyenlinh/Research/cs-e4660/tutorials/MLProjectManagement/BTS_Example/mlruns/0/636c98b8b35c4b6191ca585814ec259f/artifacts
+end_time: 1627031015052
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 636c98b8b35c4b6191ca585814ec259f
+run_uuid: 636c98b8b35c4b6191ca585814ec259f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1627030995377
+status: 3
+tags: []
+user_id: nguyenlinh
