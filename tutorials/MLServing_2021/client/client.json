@@ -1,0 +1,17 @@
+{
+    "client_info": {
+        "id": "user2",
+        "roles": "ml_user"
+    },
+    "broker_service":{
+        "broker": "MQTT",
+        "url": "35.228.104.53",
+        "port": 1883,
+        "keepalive": 60
+    },
+    "queue_info":{
+        "in_queue": "inqueue/lstm",
+        "out_queue": "outqueue/lstm",
+        "roles": "client"
+    }
+}
