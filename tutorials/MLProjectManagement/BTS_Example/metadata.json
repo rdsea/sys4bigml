@@ -1,112 +1,113 @@
-[
-    {
-        "Dataset_id": "bts1",
-        "Name": "bts_param",
-        "Created_time": "",
-        "Last_modified_time": "05/31/2021, 14:07:25",
-        "Version": "1.0",
-        "URL": "examples/BTS_Data/raw_data",
-        "Provider": "BachPhu",
-        "Description": "",
-        "Size": {
-            "value": "194,5",
-            "unit": "MB"
-        },
-        "Data_type": [
-            "Time Series"
-        ],
-        "Dataset_dependency": {},
-        "Quality_of_data": {
-            "completeness": {
-                "Value": "0.9"
-            },
-            "label_ratio": {
-                "Value": "0.9"
-            }
-        }
-    },
-    {
-        "Dataset_id": "bts2",
-        "Name": "bts_param",
-        "Created_time": "",
-        "Last_modified_time": "05/31/2021, 14:07:25",
-        "Version": "1.0",
-        "URL": "examples/BTS_Data/data_grouped",
-        "Provider": "BachPhu",
-        "Description": "",
-        "Size": {
-            "value": "213",
-            "unit": "KB"
-        },
-        "Data_type": [
-            "Time Series"
-        ],
-        "Dataset_dependency": {
-            "bts01": {
-                "Type_of_relationship": "input"
-            }
-        },
-        "Quality_of_data": {
-            "completeness": {
-                "Value": "0.9"
-            },
-            "label_ratio": {
-                "Value": "0.9"
-            }
-        }
-    }
-]
 {
-    "Model_id": "md1",
-    "Name": "BTS_LSTM",
-    "Status": [
-        "ready to use"
-    ],
-    "Version": "1.0",
-    "Description": "",
-    "Time_created": "",
-    "Artefact": {
-        "Url": "",
-        "Format": "raw code",
-        "License": "000"
-    },
-    "Quality_of_model": {
-        "Accuracy": {
-            "operators": [
-                "min",
-                "max"
-            ],
-            "unit": "percentage",
-            "value": "value",
-            "class": [
-                "Accuracy"
-            ]
-        },
-        "MSE": {
-            "operators": [
-                "min",
-                "max"
-            ],
-            "unit": "percentage",
-            "value": "value",
-            "class": [
-                "Accuracy"
-            ]
-        }
-    },
-    "Dataset_dependecy": {
-        "bts02": {
-            "type_of_relationship": "input"
-        }
-    },
-    "Model_dependency": {},
-    "Package_dependency": {
-        "numpy": {
-            "version": "1.19.5",
-            "source": ""
-        },
-        "pandas": {
-            "version": "1.2.4"
-        }
-    }
+	"Dataset": [{
+			"Dataset_id": "bts1",
+			"Name": "bts_param",
+			"Created_time": "",
+			"Last_modified_time": "05/31/2021, 14:07:25",
+			"Version": "1.0",
+			"URL": "examples/BTS_Data/raw_data",
+			"Provider": "BachPhu",
+			"Description": "",
+			"Size": {
+				"value": "194,5",
+				"unit": "MB"
+			},
+			"Data_type": [
+				"Time Series"
+			],
+			"Dataset_dependency": {},
+			"Quality_of_data": {
+				"completeness": {
+					"Value": "0.9"
+				},
+				"label_ratio": {
+					"Value": "0.9"
+				}
+			}
+		},
+		{
+			"Dataset_id": "bts2",
+			"Name": "bts_param",
+			"Created_time": "",
+			"Last_modified_time": "05/31/2021, 14:07:25",
+			"Version": "1.0",
+			"URL": "examples/BTS_Data/data_grouped",
+			"Provider": "BachPhu",
+			"Description": "",
+			"Size": {
+				"value": "213",
+				"unit": "KB"
+			},
+			"Data_type": [
+				"Time Series"
+			],
+			"Dataset_dependency": {
+				"bts01": {
+					"Type_of_relationship": "input"
+				}
+			},
+			"Quality_of_data": {
+				"completeness": {
+					"Value": "0.9"
+				},
+				"label_ratio": {
+					"Value": "0.9"
+				}
+			}
+		}
+	],
+	"Model": {
+		"Model_id": "md1",
+		"Name": "BTS_LSTM",
+		"Status": [
+			"ready to use"
+		],
+		"Version": "1.0",
+		"Description": "",
+		"Time_created": "",
+		"Artefact": {
+			"Url": "",
+			"Format": "raw code",
+			"License": "000"
+		},
+		"Quality_of_model": {
+			"Accuracy": {
+				"operators": [
+					"min",
+					"max"
+				],
+				"unit": "percentage",
+				"value": "value",
+				"class": [
+					"Accuracy"
+				]
+			},
+			"MSE": {
+				"operators": [
+					"min",
+					"max"
+				],
+				"unit": "percentage",
+				"value": "value",
+				"class": [
+					"Accuracy"
+				]
+			}
+		},
+		"Dataset_dependecy": {
+			"bts02": {
+				"type_of_relationship": "input"
+			}
+		},
+		"Model_dependency": {},
+		"Package_dependency": {
+			"numpy": {
+				"version": "1.19.5",
+				"source": ""
+			},
+			"pandas": {
+				"version": "1.2.4"
+			}
+		}
+	}
 }
