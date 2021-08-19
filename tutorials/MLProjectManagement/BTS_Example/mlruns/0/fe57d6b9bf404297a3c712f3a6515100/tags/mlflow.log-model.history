@@ -1,1 +1,0 @@
-[{"run_id": "fe57d6b9bf404297a3c712f3a6515100", "artifact_path": "LSTM_model", "utc_time_created": "2021-07-23 10:08:12.883047", "flavors": {"keras": {"keras_module": "tensorflow.keras", "keras_version": "2.4.0", "save_format": "tf", "data": "data"}, "python_function": {"loader_module": "mlflow.keras", "python_version": "3.8.3", "data": "data", "env": "conda.yaml"}}}]
