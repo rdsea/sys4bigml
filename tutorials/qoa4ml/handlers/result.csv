@@ -1,0 +1,64 @@
+1621680424.6471941,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680424.676466,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680424.893823,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680424.921161,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680425.5537548,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680425.702572,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680426.3162072,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680426.370684,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680426.792633,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680426.8200781,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680427.7838552,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680427.8117492,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680428.115812,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680428.155883,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680428.447613,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680428.478614,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680695.191744,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680695.219883,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680695.6215801,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621680695.6589298,{'code': 'invalid_parameter', 'message': "body contains malformed input document: invalid character 'i' looking for beginning of value"}
+1621681908.10583,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681908.135217,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681908.884515,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681908.91384,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681909.448298,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681909.489973,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681910.123057,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681910.159623,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681910.905428,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681910.935337,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681911.6220741,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681911.6615748,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681912.533568,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681912.572865,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681912.816064,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681912.845967,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681913.784739,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681913.815001,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681914.3298712,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681914.365448,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681915.2674098,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681915.296961,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681915.744642,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681915.788658,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681916.7210088,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681916.750848,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681917.673989,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681917.7082508,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681918.3970041,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681918.425348,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681918.828201,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681918.858166,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681919.1251998,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681919.1531892,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681919.5760598,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681919.604529,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681919.804937,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681919.8465102,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681920.613747,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681920.651656,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681921.011095,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681921.0508318,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681921.291861,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
+1621681921.321093,{'result': [[{'id': 'user2', 'roles': 'ml_user'}, 'Accuracy violation on small resource machine']]}
