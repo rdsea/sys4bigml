@@ -16,6 +16,7 @@ Last but not least, after all mentioned concerns, it would be a big bonus point 
 
 ## Requirements, Data for Model development, and Managing Metadata about data
 
+### Import questions
 You start building an ML model based on data. Key steps in preparing data
 
 * identify the data you have for model development
@@ -23,7 +24,8 @@ You start building an ML model based on data. Key steps in preparing data
 * create suitable metadata for the data to be used
 * checking quality of data, improving data and updating metadata
 
-### Data to be used
+### Practice
+We will carry out a case study of ML development for predictive maintenance in BTS.
 
 We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
 
@@ -42,12 +44,12 @@ For example, read [our initial work on requirements for explainability in an end
 
 ### Data Transformation, Enrichment and Featuring
 
-#### Some important questions:
+### Important questions:
 - do we need to transform the data?
 - should we enrich the data?
 - which features should we select for ML models and why?
 
-#### Practice
+### Practice
 
 The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the file `group_data.py`.
 
@@ -114,19 +116,22 @@ You could do the same to process the test dataset.
 
 ### ML methods
 
-#### Questions
+#### Important questions
 - Which ML methods should we choose? why?
 
 #### Practice
 
-We assume that you follow existing techniques to develop suitable models.
-
-LSTM
-
+We assume that you follow existing techniques to develop suitable models. In this case, we will use LSTM
+>Note: link to LSTM
 
 ### Training and ML model experiments
 
-After having the model, we will do the training and model experiments. We will need to record performance metrics, machine information, etc. and associate them with the data to be used (and the metadata) so that we can have all information is linked for an end-to-end ML experiment.
+#### Important questions
+After having the model selection and suitable methods:
+- How will you do the training and model experiments?
+- How will we record performance metrics, machine information, etc. and associate them with the data to be used (and the metadata) so that we can have all information is linked for an end-to-end ML experiment.
+- How would we manage thousands of experiments?
+- How to evaluate or compare your experiments based on multiple metrics? What would be an appropriate solution?
 
 #### Tools for experimenting ML models
 
@@ -234,18 +239,24 @@ mlflow.log_artifact("BTS_resultGraph.png")```
 
 * The results are illustrated in the Figure 1 where you can see all the logging parameters and metrics as well as different runs of your experiment. You can also see that the parameters and metrics are separate in the top row since they are logged with different MLflow api (log_param and log_metric.).
 
-### Examine data and model experiments
+#### Examine data and model experiments
 
 Now you have the metadata about data used, models and model experiments, you can check and link all the data together.
 >Here will be example of all metrics, metadata, etc. associated with the model in an end-to-end view to explain the relationship between data, model and metrics obtained from model experiment, all together are part of ML experiments.
 
-### Model Serving /ML Service
+## Model Serving /ML Service
+
+### Important questions
+- How to pack and move code to serving platforms
+- Which service platforms should we use?
+- How to deploy and manage ML services?
+### Packing the model code
 Given the model experimented, we can package and perform the model serving.
 > You can check [our serving tutorial](../MLServing).
 
 In the following explain basic steps to package models and record them.
 
-#### Packing the model code
+
 >Note: this example is based on the model mentioned in the previous section
 
 Now, after discovering the best combination of alpha and l1_ratio, you want to share your ml code with other data scientist in a reusable, and reproducible form. You can packing the code in a virtual environment such as conda so that the code can be executed everywhere.
@@ -272,12 +283,13 @@ Notably, the directory ml_experiments is where your MLProject and conda.yaml are
 
 >TODO figure
 
-#### Link Packaged models with ML experiments
+### Link Packaged models with ML experiments
 
 >TODO: how do we link the package models with models, data, etc. that we have before. After this step, we can query all related information, including packaged models.
 
 
-####  Serving Models
+
+###  Serving Models
 Given the packaged models, you can select suitable one and deploy as a service.
 
 In the following we show to do this using MLflow:
@@ -306,25 +318,18 @@ But maybe it is a good practice to test if the deployed model is actually workin
    $curl -X POST -H  http://127.0.0.1:1234/invocations
  ```
 
-### Monitoring ML services and link the service monitoring data to ML Experiments
+## Monitoring ML services and Linking the service monitoring data to ML Experiments
 
-#### Questions
-- Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service .
+### Questions
+- Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service. Assume that you want to monitor more complex metrics such as cost, peformance of your API functions, what are the suitable solutions?
 - Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
 
-#### Practice
+### Further tutorials
 
 We will do ML service monitoring using other tutorials
 - [Performance Monitoring](../PerformanceMonitoring/)
 - [Quality of Analytics for ML](../qoa4ml)
 
-
-## Open Questions
-1. What would you do to improve the tutorial to manage thousands of experiments?
-
-2. Assume that you want to monitor more complex metrics such as cost, peformance of your API functions, what are the suitable solutions?
-
-3. How to evaluate or compare your experiments based on multiple metrics? What would be an appropriate solution?
 
 ## References and additional links
 Part of the tutorial is built upon MLflow official documents. The main references are:
