@@ -1,4 +1,6 @@
-# ML Serving tutorial
+# ML Serving tutorial - Discontinued
+
+>Note: the material in this tutorial is discontinued. We keep it here for learning purposes. Check the new material in [../MLServing/]
 
 ## Study goal
 The purpose of this tutorial is to create a simple end-to-end pipeline providing Machine Learning (ML) as a service using [PredicitonIO](https://predictionio.apache.org/). This will consist of collecting and preparing data, and developing, training as well as deploying your ML model on PredictionIO server. Given many useful APIs, we can import existing data and send streaming data to the model-as-a-service using a lightweight client application. After deploying the model, we can also re-train or replace the model on run time without interrupting the ML service.
