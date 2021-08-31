@@ -1,13 +1,10 @@
 # End-to-End ML Experiment Management
 
-The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many steps, **not just running experiments for the ML models**. 
-<!-- should i use the word experiments or lifecycle -->
->Currently we are working on the tutorial. Material will be updated soon.
+The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many steps, **not just running experiments for the ML models**.
 
-## Motivation and study goal
->To be revised to follow the end-to-end view
+## Study goal
 
-Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. How can you move from having a dataset to a functioning prediction models?
+Not only developing a machine model is not an easy task, but building a machine learning system is very challenging and it is much more than dealing with machine learning model. The goal of this tutorial is to learn how to manage a machine learning project in an end-to-end manner. Such a project is also very complicated and envolving. How can you move from having a dataset to a functioning prediction models deployed?
 
 <!-- For instance, choosing the best value for a paremeter alpha is not obvious. How do you keep record of the model peformance with different parameters and compare them to get the best result?
 
@@ -17,11 +14,12 @@ The ultimate goal of most machine learning model is to be served to end users id
 
 Last but not least, after all mentioned concerns, it would be a big bonus point in your machine learning project management if you can govern the full life cycle of an model, including diferent versions, stage transitions, and annotations. -->
 
-## Data for Model development and Managing Metadata about data
+## Requirements, Data for Model development, and Managing Metadata about data
 
 You start building an ML model based on data. Key steps in preparing data
 
 * identify the data you have for model development
+* capture requirements for your ML model/service
 * create suitable metadata for the data to be used
 * checking quality of data, improving data and updating metadata
 
@@ -29,15 +27,23 @@ You start building an ML model based on data. Key steps in preparing data
 
 We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
 
-### Create metadata
+### Data Characterization and Requirements
 
-*To be written about metadata model and how to capture metadata*
+Given the data, you will face the following question:
+
+* Do you understand the data?
+* Is the current form of data good for us to start? What does it mean good?
+* Which fields of data are important that can be used for ML?
+* Who actually could help you to understand the data and its business?
+* If you make some decisions, can you document and use the document to explain your decision to relevant stakeholder later on?
+
+For example, read [our initial work on requirements for explainability in an end-to-end ML development](https://research.aalto.fi/en/publications/holistic-explainability-requirements-for-end-to-end-machine-learn) and work on some selected questions.
 
 ### Improve data
 The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the file `group_data.py`.
 
 ```python
-import pandas as pd 
+import pandas as pd
 import os, fnmatch
 
 bts_df = pd.DataFrame()
@@ -165,13 +171,13 @@ with mlflow.start_run():
     model.add(layers.TimeDistributed(layers.Dense(1)))
     model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
     model.fit(train_features, train_labels, epochs=200, batch_size=4, verbose=2)
-    
+
     result = model.predict(test_features, batch_size=1, verbose=0)
     x=pd.DataFrame(test_labels.reshape(test_labels.shape[0],test_labels.shape[1]))
     y=pd.DataFrame(result.reshape(result.shape[0],result.shape[1]))
     y_true = np.array(x[0])
     y_pred = np.array(y[0])
-    
+
     mse = mean_squared_error(y_true, y_pred)
     print("MSE", mse)
     # Log metric, and params to MLflow
@@ -197,11 +203,11 @@ with mlflow.start_run():
 ```bash
     $python
 ```
-You could write a simple script to run the above example many times. 
+You could write a simple script to run the above example many times.
 ```bash
     $./script_of_experiments.sh
 ```
-You could also modify different parameters, such as the loss function, batch_size, epochs, or the test data file etc, and record them using `mlflow.log_param`, or record the figure using: 
+You could also modify different parameters, such as the loss function, batch_size, epochs, or the test data file etc, and record them using `mlflow.log_param`, or record the figure using:
 ```
 plt.savefig("BTS_resultGraph.png")
 mlflow.log_artifact("BTS_resultGraph.png")```
@@ -294,16 +300,6 @@ Now the model is deployed and running as a service. You can use monitoring techn
 
 
 
-## References and additional links
-Part of the tutorial is built upon MLflow official documents. The main references are:
-* https://www.mlflow.org/docs/latest/index.html
-* https://www.mlflow.org/docs/latest/models.html#models
-* https://mlflow.org/docs/latest/tutorials-and-examples/index.html
-* https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
-
-Accompanying Slides and Video for running MLflow with the Wine prediction
-* [Slides](ML_ProjectManagement_2020.pdf)
-* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
 
 ## Open Questions
 1. What would you do to improve the tutorial to manage thousands of experiments?
@@ -311,3 +307,14 @@ Accompanying Slides and Video for running MLflow with the Wine prediction
 2. Assume that you want to monitor more complex metrics such as cost, peformance of your API functions, what are the suitable solutions?
 
 3. How to evaluate or compare your experiments based on multiple metrics? What would be an appropriate solution?
+
+## References and additional links
+Part of the tutorial is built upon MLflow official documents. The main references are:
+* https://www.mlflow.org/docs/latest/index.html
+* https://www.mlflow.org/docs/latest/models.html#models
+* https://mlflow.org/docs/latest/tutorials-and-examples/index.html
+* https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
+
+Some old slides and video for running MLflow with the Wine prediction
+* [Slides](ML_ProjectManagement_2020.pdf)
+* [A hands-on video](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
