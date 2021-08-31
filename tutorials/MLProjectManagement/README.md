@@ -1,6 +1,6 @@
-# End-to-End ML Experiment Management
+# End-to-End ML Systems Development
 
-The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many steps, **not just running experiments for the ML models**.
+The goal of this tutorial is to practice managing end-to-end ML systems development. An end-to-end ML systems development includes many steps, **not just running and managing experiments for the ML models**.
 
 ## Study goal
 
@@ -27,9 +27,9 @@ You start building an ML model based on data. Key steps in preparing data
 
 We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
 
-### Data Characterization and Requirements
+### Data Understanding and characterization and development requirements
 
-Given the data, you will face the following question:
+#### Important questions
 
 * Do you understand the data?
 * Is the current form of data good for us to start? What does it mean good?
@@ -37,9 +37,18 @@ Given the data, you will face the following question:
 * Who actually could help you to understand the data and its business?
 * If you make some decisions, can you document and use the document to explain your decision to relevant stakeholder later on?
 
+#### Practice
 For example, read [our initial work on requirements for explainability in an end-to-end ML development](https://research.aalto.fi/en/publications/holistic-explainability-requirements-for-end-to-end-machine-learn) and work on some selected questions.
 
-### Improve data
+### Data Transformation, Enrichment and Featuring
+
+#### Some important questions:
+- do we need to transform the data?
+- should we enrich the data?
+- which features should we select for ML models and why?
+
+#### Practice
+
 The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the file `group_data.py`.
 
 ```python
@@ -100,30 +109,38 @@ serial_data['norm_6'] = serial_data['norm_value'].shift(6)
 serial_data = serial_data[6:]
 ```
 You could do the same to process the test dataset.
-## Developing ML model
+
+## Developing ML models
+
+### ML methods
+
+#### Questions
+- Which ML methods should we choose? why?
+
+#### Practice
+
 We assume that you follow existing techniques to develop suitable models.
 
 LSTM
 
 
-## Training and ML model experiments
+### Training and ML model experiments
 
 After having the model, we will do the training and model experiments. We will need to record performance metrics, machine information, etc. and associate them with the data to be used (and the metadata) so that we can have all information is linked for an end-to-end ML experiment.
 
-### Tools for experimenting ML models
+#### Tools for experimenting ML models
 
-There are many tools.
-If one of these issues have been your challenges on managing ML models, [MLflow](https://mlflow.org/) might be a good tool to help you stay on top of what is going on. Using MLFlow,  we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics.
+There are many tools. [MLflow](https://mlflow.org/) might be a good tool to help you stay on top of what is going on. Using MLFlow,  we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics.
+____
+> MLflow introduction and installation: MLFlow is a popular python package for machine learning life cycle. It provides many functions such as follows:
+> - Tracking: track experiments to store parameters and results.
+>- Packaging: package the project code in reproducible form in order to share or transfer to production.
+>- Deploying: manage and deploy models from a variety of machine learning libraries.
+_____
 
-#### MLflow introduction and installation
->Note: to be simplified, reducing the text
-MLFlow is a popular python package for machine learning life cycle. It provides many functions such as follows:
-
-- Tracking: track experiments to store parameters and results.
-- Packaging: package the project code in reproducible form in order to share or transfer to production.
-- Deploying: manage and deploy models from a variety of machine learning libraries.
-
-You can practice basic functionalities of MLflow such as mentioned above. MLflow allows us to collect experimental data for your machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
+MLflow allows us to collect experimental data for your machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
+>Other tools for storing experiments are:
+> - https://www.verta.ai/
 
 To get you ready for the tutorial, please don't forget to install MLflow and scikit-learn first. It is recommended that you install Anaconda for simplifying package management and deployment. You can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
 
@@ -140,15 +157,12 @@ For executing some examples of this tutorials, you need to install scikit-learn
 ```
 >At this point, we recommend you to take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>.
 
-### Running experiments for ML models
+#### Running experiments for ML models
 
-#### The model to be experimented
 You would need to have a machine learning model to test out MLflow, you can use any model that you have already developed, or develop one if you feel like.
 The model is described at the beginning of this tutorial.
 
-We use a BTS model developed by Tri, the code can be found in the file `model.py` or here.
-<!-- https://github.com/rdsea/IoTCloudSamples/tree/master/MLUnits/BTSPrediction -->
->To be updated
+We use a BTS model whose code can be found in the file `model.py` or [here](https://github.com/rdsea/IoTCloudSamples/tree/master/MLUnits/BTSPrediction)
 
 ```python
 
@@ -195,7 +209,6 @@ with mlflow.start_run():
     plt.close()
 ```
 
-
 #### Running model experiments
 
 * TODO:
@@ -226,44 +239,45 @@ mlflow.log_artifact("BTS_resultGraph.png")```
 Now you have the metadata about data used, models and model experiments, you can check and link all the data together.
 >Here will be example of all metrics, metadata, etc. associated with the model in an end-to-end view to explain the relationship between data, model and metrics obtained from model experiment, all together are part of ML experiments.
 
-## Model Serving /ML Service
+### Model Serving /ML Service
 Given the model experimented, we can package and perform the model serving.
->Pls. check our serving tutorial.
+> You can check [our serving tutorial](../MLServing).
 
 In the following explain basic steps to package models and record them.
 
-### Packing the model code
+#### Packing the model code
 >Note: this example is based on the model mentioned in the previous section
 
 Now, after discovering the best combination of alpha and l1_ratio, you want to share your ml code with other data scientist in a reusable, and reproducible form. You can packing the code in a virtual environment such as conda so that the code can be executed everywhere.
 In order to package the code using MLflow, you have to create MLProject and description files which define the requirements for executing the code. The below files are an example for packaging the code at <https://github.com/mlflow/mlflow-example> and execute it in the conda environment.
 
 Create MLProject file
-```yaml
 
-```
+```yaml
+  TODO
+ ```
 Create conda.yaml to define all requirements for the python program
-```yaml
 
-```
+ ```yaml
+TODO
+ ```
 
 After defining the MLProject and conda.yaml files. You can run your code in another conda environment using the following command:
 
-```bash
+ ```bash
     $ mlflow run
-
-```
+ ```
 
 Notably, the directory ml_experiments is where your MLProject and conda.yaml are located. It can have any name that you have created for your project. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with the id 'mlflow-f175708099db6c37e65aca9c773737a0ff03ecbc' and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
 
 >TODO figure
 
-### Link Packaged models with ML experiments
+#### Link Packaged models with ML experiments
 
 >TODO: how do we link the package models with models, data, etc. that we have before. After this step, we can query all related information, including packaged models.
 
 
-###  Serving Models
+####  Serving Models
 Given the packaged models, you can select suitable one and deploy as a service.
 
 In the following we show to do this using MLflow:
@@ -272,33 +286,37 @@ MLflow Model has a standard format for packaging machine learning models that ca
 For example, the model can be used to serve as a service through a REST API.
 
 Student can go to the UI to check the saving model:
-```bash
+ ```bash
     $mlflow ui
-```
+ ```
 <!-- FIX ME: CHANGE THIS TO SOMETHING ELSE -->
 Deploy the server using the saving model:
-```bash
-   $mlflow models serve -m
-```
 
+ ```bash
+   $mlflow models serve -m
+ ```
 After the server is deployed successfully, you will see a result similar to the Figure 3 where your training model is deployed and ready to serve the prediction.
 
 >TODO: figure
 
 But maybe it is a good practice to test if the deployed model is actually working correctly? You can do prediction for your testing data using the deployed model such as follows:
 
-```bash
+ ```bash
 
    $curl -X POST -H  http://127.0.0.1:1234/invocations
+ ```
 
-
-```
 ### Monitoring ML services and link the service monitoring data to ML Experiments
 
-Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service (see other tutorials).
->Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
+#### Questions
+- Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service .
+- Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
 
+#### Practice
 
+We will do ML service monitoring using other tutorials
+- [Performance Monitoring](../PerformanceMonitoring/)
+- [Quality of Analytics for ML](../qoa4ml)
 
 
 ## Open Questions

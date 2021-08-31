@@ -92,7 +92,7 @@ Big Data and Machine Learning Systems](slides/)
 *If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
 
 ### Hands-on tutorials
-  - [Machine Learning experiment management](./tutorials/MLProjectManagement/)
+  - [End-to-end ML systems development](./tutorials/MLProjectManagement/)
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
   - [Machine Learning Serving](./tutorials/MLServing)
   - [Qualty of Analytics for ML](./tutorials/qoa4ml)
