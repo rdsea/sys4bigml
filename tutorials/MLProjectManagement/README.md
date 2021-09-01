@@ -114,14 +114,14 @@ You could do the same to process the test dataset.
 
 ## Developing ML models
 
-### ML methods
+### ML Algorithms
 
 #### Important questions
-- Which ML methods should we choose? why?
+- Which ML algorithms should we choose in order to create suitable ML models? why?
 
 #### Practice
 
-We assume that you follow existing techniques to develop suitable models. In this case, we will use LSTM
+We assume that you follow existing methods to select ML algorithms to create suitable models. In this practice, we will use LSTM.
 >Note: link to LSTM
 
 ### Training and ML model experiments
@@ -332,6 +332,10 @@ We will do ML service monitoring using other tutorials
 
 
 ## References and additional links
+
+Interesting resources about ML engineering:
+* [Best Practices for ML Engineering by Martin Zinkevic](https://developers.google.com/machine-learning/guides/rules-of-ml)
+
 Part of the tutorial is built upon MLflow official documents. The main references are:
 * https://www.mlflow.org/docs/latest/index.html
 * https://www.mlflow.org/docs/latest/models.html#models
