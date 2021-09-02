@@ -16,7 +16,7 @@ Following the following links to setup Prometheus and Grafana:
 
 ## Preparing an ML service
 
->TODO: to be written
+In this tutorial, we would use the BTS ML service that we developed for the ML Project Management tutorial.
 
 Before practicing the monitoring for a machine learning service, we will deploy a simple REST-based machine learning service. We will
 * use a [BTS Prediction model]()
@@ -28,20 +28,33 @@ Before practicing the monitoring for a machine learning service, we will deploy 
 Check the [sample service](MLService/) and the [Client Library](). You can practice to add many metrics as you want.
 
 * test if the ML service work
-```
-$python MySimpleMLService.py
+```bash
+$mlflow models serve -m mlruns/0/a5a15becc3b44060915d2e06496cff47/artifacts/LSTM_model -p 8888
 ```
 and
+```bash
+python client.py
 ```
-$curl -X GET http://localhost:8001
-$curl -X GET http://localhost:8000
+
+### Configure prometheus to monitor the ML Service
+* Create prometheus.yml
+* Create `docker-compose.yaml` file
+<!--   docker run -p 9090:9090 -v /Users/nguyenlinh/Research/cs-e4660/tutorials/PerformanceMonitoring/MLService/prometheus.yml prom/prometheus
+ -->
+Inside the prometheus.yml file, perform the modifications such as follows:
+```properties
+
+scrape_configs:
+    - targets: ['localhost:8888']
+
+```  
+or if you run Prometheus through docker:
+```static_configs:
+  - targets: ['your_ip_address:8888']
 ```
+
 if you see the ML service work and the metrics are outputed, then [configure Promethesus to pull metrics](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) from your Prometheus endpoint in your ML service.
 
-```
-static_configs:
-  - targets: ['your_ip_address:8000']
-```
 Then check the metrics of your ML service in Prometheus/Grafana:
 >TODO: to be written
 
