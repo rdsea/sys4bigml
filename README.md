@@ -58,7 +58,7 @@ As an advanced and research-oriented course, it does not make sense to grade the
 ## Fall 2021 - Schedule and Content
 
 * Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
-* Other teachers/Assistants: [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
+* Other teachers/assistants: [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
 
 ### Lectures
 - Lecture 1:
@@ -92,11 +92,11 @@ Big Data and Machine Learning Systems](slides/)
 *If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
 
 ### Hands-on tutorials
-  - [Machine Learning experiment management](./tutorials/MLProjectManagement/)
+  - [End-to-end ML systems development](./tutorials/MLProjectManagement/)
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
   - [Machine Learning Serving](./tutorials/MLServing)
-  - [Edge ML Pipeline](./tutorials/edgemodelop)
   - [Qualty of Analytics for ML](./tutorials/qoa4ml)
+  - [Edge ML Pipeline](./tutorials/edgemodelop)
   - [Common tasks with Edge ML](./tutorials/edgemlcommons)
 ### Project ideas presentations
   - Students will propose the project idea. This is an important aspect of *research-oriented course*. If a student cannot propose an idea, the teacher will suggest some concrete ideas for students.
