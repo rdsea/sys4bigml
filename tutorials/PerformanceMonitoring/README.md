@@ -14,6 +14,12 @@ Following the following links to setup Prometheus and Grafana:
 * [Configurate Grafana with Prometheus](https://prometheus.io/docs/visualization/grafana/)
 * https://dzone.com/articles/monitoring-with-prometheus
 
+## Identifying the goal of monitoring/observability
+
+What is the goal of monitoring? Given an ML service, what would you like to monitor? Can you define high-level metrics that can be determined from low-level monitoring information?
+
+Goal of monitoring/observability must be done together with ML service design, not an after-thought.
+
 ## Preparing an ML service
 
 In this tutorial, we would use the BTS ML service that we developed for the ML Project Management tutorial.
@@ -21,6 +27,10 @@ In this tutorial, we would use the BTS ML service that we developed for the ML P
 Before practicing the monitoring for a machine learning service, we will deploy a simple REST-based machine learning service. We will
 * use a [BTS Prediction model]()
 * make a simple REST ML service, use [the template and a local version](MLService/)
+
+## Working on low-level monitoring features
+
+In this step, you should work on the list of low-level metrics/data, probes
 
 ## Instrumenting ML Service with Prometheus Client Library
 >TODO: to be written
@@ -47,7 +57,7 @@ Inside the prometheus.yml file, perform the modifications such as follows:
 scrape_configs:
     - targets: ['localhost:8888']
 
-```  
+```
 or if you run Prometheus through docker:
 ```static_configs:
   - targets: ['your_ip_address:8888']
@@ -60,7 +70,7 @@ Then check the metrics of your ML service in Prometheus/Grafana:
 
 Also see our [ML serving tutorial](../MLServing/)
 
-## Monitoring the infrastructure
+## Monitoring computing infrastructures/ML platforms
 >TODO: to be written
 
 It is not enough to monitor the ML service without monitoring the underlying infrastructure (e.g., VM, networks, etc.). You can use [Prometheus Exporters](https://prometheus.io/docs/instrumenting/exporters/) and [Push Gateway](https://prometheus.io/docs/instrumenting/pushing/) to do so.
@@ -70,6 +80,8 @@ Capture machine information:
 
 Capture middleware information:
 > To be written
+
+## Observing monitoring data, working on high-leve metrics, visualization
 
 Check monitoring data of machines, middleware and your ML service.
  > To be written

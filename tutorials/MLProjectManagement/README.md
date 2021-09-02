@@ -1,8 +1,6 @@
 # End-to-End ML Systems Development
 
 The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many phases, such as data collection, data pre-processing, **not just running experiments for the ML models**.
-<!-- should i use the word experiments or lifecycle -->
-<!-- >Currently we are working on the tutorial. Material will be updated soon. -->
 
 ## Motivation and study goal
 <!-- >To be revised to follow the end-to-end view -->
@@ -17,7 +15,7 @@ Last but not least, after all mentioned concerns, it would be a big bonus point 
 
 ## Requirements, Data for Model development, and Managing Metadata about data
 
-### Import questions
+### Important questions
 You start building an ML model based on data. Key steps in preparing data
 
 * identify the data you have for model development
@@ -42,7 +40,9 @@ We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `
 * If you make some decisions, can you document and use the document to explain your decision to relevant stakeholder later on?
 
 #### Practice
-For example, read [our initial work on requirements for explainability in an end-to-end ML development](https://research.aalto.fi/en/publications/holistic-explainability-requirements-for-end-to-end-machine-learn) and work on some selected questions.
+- Check BTS data and discuss data fields
+
+- Requirements: for example, read [our initial work on requirements for explainability in an end-to-end ML development](https://research.aalto.fi/en/publications/holistic-explainability-requirements-for-end-to-end-machine-learn) and work on some selected questions.
 
 ### Data Transformation, Enrichment and Featuring
 
@@ -53,7 +53,7 @@ For example, read [our initial work on requirements for explainability in an end
 
 #### Practice
 
-The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the file `group_data.py`.
+The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the **file `group_data.py`**.
 
 ```python
 import pandas as pd
@@ -85,7 +85,7 @@ for key,item in bts_df_grouped:
     sub_data.sort_values(by=['norm_time']).to_csv("./data_grouped/{}_{}_.csv".format(key[0],key[1]), index=False)
     print("Finish: {}".format(key))
 ```
-After grouping the data, we need to do some further pre-processing to turn our data into serial data, and normalize the data. You can use the following code, or open the file `Model.ipynb` and test the code directly.
+After grouping the data, we need to do some further pre-processing to turn our data into serial data, and normalize the data. You can use the following code, or **open the file `Model.ipynb`** and test the code directly.
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -130,12 +130,12 @@ end_line = int(sys.argv[2]) if len(sys.argv) > 2 else 100
 test_data = test_dataset_full[start_line:end_line]
 ```
 
-### Create metadata
+### Metadata about data
 
 #### Important questions
 
 #### Practice
->TODO: current issues with tools for managing metadata?
+>TODO: current issues with tools for managing metadata? Google CloudDataResource,Atlas
 
 Metadata of the dataset can be used to manage information of the datasets. Metadata object should include different aspects of the dataset, such as data management aspect (Name, version, url, size, created_time, last_modified_time, provider, description), dataset_dependency, and quality of data (completeness, label_ratio, etc).
 Following json is an example of the metadata for dataset used in this example:
@@ -352,12 +352,14 @@ Now you have the metadata about data used, models and model experiments, you can
 }
 ```
 This metadata of the model capture the model in an end-to-end view to explain the relationship between data, model and metrics obtained from model experiment, all together are part of ML experiments.
+
 ## Model Serving /ML Service
 
 ### Important questions
 - How to pack and move code to serving platforms
 - Which service platforms should we use?
 - How to deploy and manage ML services?
+-
 ### Packing the model code
 Given the model experimented, we can package and perform the model serving.
 > You can check [our serving tutorial](../MLServing).
@@ -452,7 +454,7 @@ End point:
     http://127.0.0.1:8888/invocations
 
 ```
-You can also use the following simple client code in client.py to send request to the api endpoint.
+You can also use the following simple client code in **[client.py]** to send request to the api endpoint.
 ```python
 # importing the requests library
 import requests
@@ -471,10 +473,10 @@ result = response.json()
 print(result[0][0])
 ```
 
-## Further important aspect and tutorials
+## Further important aspects and tutorials
 
 ### Questions
-- Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service. Assume that you want to monitor more complex metrics such as cost, peformance of your API functions, what are the suitable solutions?
+- Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service. Assume that you want to monitor more complex metrics such as cost, performance of your API functions, what are the suitable solutions?
 - Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
 
 ### Further tutorials
