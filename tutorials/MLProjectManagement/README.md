@@ -1,13 +1,13 @@
 # End-to-End ML Systems Development
 
-The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many phases, such as data collection, data pre-processing, **not just running experiments for the ML models**. 
+The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many phases, such as data collection, data pre-processing, **not just running experiments for the ML models**.
 <!-- should i use the word experiments or lifecycle -->
 <!-- >Currently we are working on the tutorial. Material will be updated soon. -->
 
 ## Motivation and study goal
 <!-- >To be revised to follow the end-to-end view -->
 
-Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. How can you manage the end-to-end process from having a dataset to a functioning prediction models? 
+Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. How can you manage the end-to-end process from having a dataset to a functioning prediction models?
 
 <!--This end-to-end process starts from managing the metadata of your data collection, chosing best data pre-processing method. During the training phase, we need to keep track of the hyperparamenter tuning.
 
@@ -46,12 +46,12 @@ For example, read [our initial work on requirements for explainability in an end
 
 ### Data Transformation, Enrichment and Featuring
 
-### Important questions:
+#### Important questions:
 - do we need to transform the data?
 - should we enrich the data?
 - which features should we select for ML models and why?
 
-### Practice
+#### Practice
 
 The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the file `group_data.py`.
 
@@ -129,7 +129,13 @@ start_line = int(sys.argv[1]) if len(sys.argv) > 1 else 40
 end_line = int(sys.argv[2]) if len(sys.argv) > 2 else 100
 test_data = test_dataset_full[start_line:end_line]
 ```
+
 ### Create metadata
+
+#### Important questions
+
+#### Practice
+>TODO: current issues with tools for managing metadata?
 
 Metadata of the dataset can be used to manage information of the datasets. Metadata object should include different aspects of the dataset, such as data management aspect (Name, version, url, size, created_time, last_modified_time, provider, description), dataset_dependency, and quality of data (completeness, label_ratio, etc).
 Following json is an example of the metadata for dataset used in this example:
@@ -167,9 +173,6 @@ Following json is an example of the metadata for dataset used in this example:
     }
 ]
 ```
-## Developing ML model
-The model is developed using LSTM.
-You could do the same to process the test dataset.
 
 ## Developing ML models
 
@@ -248,7 +251,7 @@ with mlflow.start_run():
     model.add(layers.LSTM(32, return_sequences=True))
     model.add(layers.TimeDistributed(layers.Dense(1)))
     model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
-    
+
     model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
 
     signature = infer_signature(test_features, model.predict(test_features))
@@ -256,12 +259,12 @@ with mlflow.start_run():
     print(signature)
     mlflow.log_param("test line from ", '{} {}'.format(start_line, end_line))
     mlflow.log_param("Test file", test_file_name)
-    
+
     model_dir_path = "./saved_model"
-    
+
     # Create an input example to store in the MLflow model registry
     input_example = np.expand_dims(train_features[0], axis=0)
-    
+
     # Let's log the model in the MLflow model registry
     model_name = 'LSTM_model'
     mlflow.keras.log_model(model, model_name, signature=signature, input_example=input_example)
@@ -440,7 +443,7 @@ Testing data:
     [
       [ 0.074], [-0.003], [-0.08] ,[ -0.157], [-0.235], [-0.312]]
     ]
-  
+
 }
 ```
 End point:
@@ -453,20 +456,22 @@ You can also use the following simple client code in client.py to send request t
 ```python
 # importing the requests library
 import requests
-# defining the api-endpoint 
+# defining the api-endpoint
 API_ENDPOINT = "http://127.0.0.1:8888/invocations"
 
 # data to be sent to api
 param = {
   "inputs": [[[ 0.074], [-0.003], [-0.08] ,[ -0.157], [-0.235], [-0.312]]]
 }
- 
+
 # sending post request and saving response as a json object
 response = requests.post(url = API_ENDPOINT, json = param)
 result = response.json()
 # extracting result
 print(result[0][0])
 ```
+
+## Further important aspect and tutorials
 
 ### Questions
 - Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service. Assume that you want to monitor more complex metrics such as cost, peformance of your API functions, what are the suitable solutions?
