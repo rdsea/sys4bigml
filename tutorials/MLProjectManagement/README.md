@@ -3,15 +3,8 @@
 The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many phases, such as data collection, data pre-processing, **not just running experiments for the ML models**.
 
 ## Motivation and study goal
-<!-- >To be revised to follow the end-to-end view -->
 
 Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. How can you manage the end-to-end process from having a dataset to a functioning prediction models?
-
-<!--This end-to-end process starts from managing the metadata of your data collection, chosing best data pre-processing method. During the training phase, we need to keep track of the hyperparamenter tuning.
-
-The ultimate goal of most machine learning model is to be served to end users ideally in a variety of downstream tools - for example real time through REST API or batch inference on Apache Spark. This can be a very time consuming process if you do not have the right tool to deploy your model.
-
-Last but not least, after all mentioned concerns, it would be a big bonus point in your machine learning project management if you can govern the full life cycle of an model, including diferent versions, stage transitions, and annotations. -->
 
 ## Requirements, Data for Model development, and Managing Metadata about data
 
@@ -56,7 +49,7 @@ We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `
 The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the **file `group_data.py`**.
 
 ```python
-import pandas as pd
+import pandas as pd 
 import os, fnmatch
 
 bts_df = pd.DataFrame()
@@ -128,14 +121,25 @@ test_dataset_full = test_dataset.sort_values(by=['norm_time'])
 start_line = int(sys.argv[1]) if len(sys.argv) > 1 else 40
 end_line = int(sys.argv[2]) if len(sys.argv) > 2 else 100
 test_data = test_dataset_full[start_line:end_line]
+
+test_serial_data = test_data.drop(['value','norm_time'], axis=1)
+test_serial_data['norm_1'] = test_serial_data['norm_value'].shift(1)
+test_serial_data['norm_2'] = test_serial_data['norm_value'].shift(2)
+test_serial_data['norm_3'] = test_serial_data['norm_value'].shift(3)
+test_serial_data['norm_4'] = test_serial_data['norm_value'].shift(4)
+test_serial_data['norm_5'] = test_serial_data['norm_value'].shift(5)
+test_serial_data['norm_6'] = test_serial_data['norm_value'].shift(6)
+test_serial_data = test_serial_data[6:]
 ```
+
 
 ### Metadata about data
 
 #### Important questions
 
 #### Practice
->TODO: current issues with tools for managing metadata? Google CloudDataResource,Atlas
+>TODO: Currently, there are existing tools to store metadata of the dataset, e.g BigQuery, Atlas, and to manage and discovery data such as Google Cloud Data Catalog and IBM Knowledge Catalog, etc. However, there is a lack of framework for capturing complex relationships between the datasets and different entities (e.g: other dataset, ML model) in a ML solution.
+
 
 Metadata of the dataset can be used to manage information of the datasets. Metadata object should include different aspects of the dataset, such as data management aspect (Name, version, url, size, created_time, last_modified_time, provider, description), dataset_dependency, and quality of data (completeness, label_ratio, etc).
 Following json is an example of the metadata for dataset used in this example:
@@ -223,7 +227,6 @@ For executing some examples of this tutorials, you need to install scikit-learn
 ```bash
 $pip install scikit-learn
 ```
-<!-- >At this point, we recommend you to take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>. -->
 
 #### Running experiments for ML models
 
@@ -276,10 +279,6 @@ We can log the input example for the model using `mlflow.keras.log_mode` with `i
 
 ```bash
 $python model.py
-```
-You could write a simple script to run the above example many times.
-```bash
-$./script_of_experiments.sh
 ```
 You could also modify different parameters, such as the loss function, batch_size, epochs, or the test data file etc, and record them using `mlflow.log_param`.
 
@@ -359,7 +358,7 @@ This metadata of the model capture the model in an end-to-end view to explain th
 - How to pack and move code to serving platforms
 - Which service platforms should we use?
 - How to deploy and manage ML services?
--
+
 ### Packing the model code
 Given the model experimented, we can package and perform the model serving.
 > You can check [our serving tutorial](../MLServing).
@@ -409,13 +408,6 @@ Notably, the directory ml_experiments is where your MLProject and conda.yaml are
 
 ![image info](./images/MLflow_ui.png "Figure 2: MLflow finished packing the code in virtual enviroment")
 
-
-<!-- ### Link Packaged models with ML experiments
-
->TODO: how do we link the package models with models, data, etc. that we have before. After this step, we can query all related information, including packaged models. -->
-
-
-
 ###  Serving Models
 Given the packaged models, you can select suitable one and deploy as a service.
 
@@ -451,7 +443,7 @@ Testing data:
 End point:
 ```bash
 
-    http://127.0.0.1:8888/invocations
+http://127.0.0.1:8888/invocations
 
 ```
 You can also use the following simple client code in **[client.py]** to send request to the api endpoint.
