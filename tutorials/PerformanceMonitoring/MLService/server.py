@@ -2,14 +2,13 @@ from flask import Flask, request
 import tflite_runtime.interpreter as tflite
 import numpy as np
 import json
-import json
-from prometheus_flask_exporter import PrometheusMetrics
+import psutil
+
 app = Flask(__name__)
-metrics = PrometheusMetrics(app)
 buffer = [[0, 0, 0, 0, 0, 0]] * 50
 pointer = 0
 covariance_matrix = []
-input_variance = []
+input_variance = 0
 def update_buffer(new_val):
 	global buffer
 	global pointer
@@ -54,6 +53,9 @@ def prediction():
 @app.route("/metrics")
 def log_metric_prometheus():
     metric = 'input_variance {}\n'.format(input_variance)
+    metric += 'cpu_percent {}\n'.format(psutil.cpu_percent())
+    metric += 'virtual_memory_free {}\n'.format(psutil.virtual_memory()[4])
+    metric += 'virtual_memory_percent {}\n'.format(psutil.virtual_memory()[2])
     return metric
 
 if __name__ == '__main__':
