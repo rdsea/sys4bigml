@@ -42,7 +42,6 @@ Advanced Topics in Systems for Big Data and ML will focus on the following areas
 *  Test, debug, monitoring, and configuration management (with also engineering work)
 *  Dataflows and Orchestration Frameworks for Big Data/ML (with also engineering work)
 *  Edge systems and edge-cloud continuum for Big Data/ML (with also engineering work)
-*  New hardware architectures and quantum systems for Big Data/ML (more on the concepts and state-of-the-art)
 
 ## Course Plan and Teaching methods
 We define the generic plan of the course as follows:
@@ -52,7 +51,7 @@ We define the generic plan of the course as follows:
 * Topic implementation and demonstration: [students will implement the topic and demonstrate the project](demos.md)
 * Students will make public material about the topic project available in Git spaces (e.g., in Aalto, Github, Gitlab, ...)
 
-As an advanced and research-oriented course, it does not make sense to grade the success of the students based on the numeric grade. We will use the pass/fail as a way to evaluate students. Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
+As an advanced and research-oriented course, we will use the pass/fail as a way to evaluate students. Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
 
 
 ## Fall 2021 - Schedule and Content
@@ -65,6 +64,8 @@ As an advanced and research-oriented course, it does not make sense to grade the
   - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/)
   - Key reading 1: [R3E -An Approach to Robustness, Reliability, Resilience and Elasticity Engineering for End-to-End Machine Learning Systems](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
   - Key reading 2: [The New Frontier of Machine Learning Systems](https://arxiv.org/pdf/1904.03257.pdf)
+  - Key reading 3: [Hidden Technical Debt in Machine Learning Systems](https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html)
+  - Key reading 4: [Declarative Machine Learning Systems](https://queue.acm.org/detail.cfm?id=3479315)
 - Lecture 2
   - Slides: [Benchmarking, Monitoring, Validation and Experimenting for
 Big Data and Machine Learning Systems](slides/)
@@ -72,8 +73,9 @@ Big Data and Machine Learning Systems](slides/)
   - Key reading 2: [MLPERF Training Benchmark](https://arxiv.org/pdf/1910.01500.pdf)
   - Key reading 3: [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
   - Key reading 4: [Developments in MLflow: A System to Accelerate the Machine Learning Lifecycle](https://dl.acm.org/doi/abs/10.1145/3399579.3399867) and [ModelDB: a system for machine learning model management](https://dl.acm.org/doi/10.1145/2939502.2939516)
-  - Key reading 5: [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847)
+  - Key reading 5:[Machine Learning Testing: Survey, Landscapes and Horizons](https://ieeexplore.ieee.org/document/9000651)
   - Site 1: [AI Matrix](https://aimatrix.ai/en-us/index.html)
+  - The collection of [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847) is also useful
 - Lecture 3
   - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/)
   - Key reading 1: [Cirrus: a Serverless Framework for End-to-end ML Workflows](https://doi.org/10.1145/3357223.3362711)
