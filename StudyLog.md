@@ -4,7 +4,7 @@ In the course, students will have to write some study/learning logs, after lectu
 
 In CS-E4660, we interpret: *a study (learning) log is used to analyze what has been learned and to discuss relevant issues and thoughts identified through the study*
 
-Therefore, we expect you to analyze important aspects and raise critical points that you think we should discuss and tackle. Writing a simple activities or listing topics you have learned are not a good indicator for this course.
+Therefore, we expect you to analyze important aspects and raise critical points that you think we should discuss and tackle, based on the study materials in connection with your individual interests/works. Writing a simple activities or listing topics you have learned are not a good indicator for this course.
 
 ## Expectation and Evaluation
 
