@@ -1,0 +1,47 @@
+{
+    "qoa_service": {
+        "url": "http://195.148.22.62:8181/v1/data/qoa4ml/bts/alarm/violation",
+        "queue_info":{
+            "exchange_name": "qoa_topic",
+            "exchange_type": "topic",
+            "in_queue": "in_qoa",
+            "out_queue": "out_qoa_aaltosea1",
+            "in_routing_key": "qoa.report.aaltosea1",
+            "out_routing_key": "qoa.response.aaltosea1",
+            "roles": "client"
+        },
+        "client_info": {
+            "id": "aaltosea1",
+            "roles": "ml_provider"
+        },
+        "service_info": {
+            "id": "request",
+            "machinetypes": "small",
+            "metric": [
+                "Accuracy",
+                "ResponseTime"
+            ]
+        },
+        "metric": {
+            "Accuracy": 100.0,
+            "ResponseTime": 0.0
+        }
+    },
+    "broker_service":{
+        "broker": "AMQP",
+        "url": "195.148.22.62"
+    },
+    "ml_service":{
+        "exchange_name": "lstm_bts",
+        "exchange_type": "topic",
+        "in_queue": "in_request_lstm",
+        "out_queue": "out_queue_lstm",
+        "in_routing_key": "lstm.request.#",
+        "out_routing_key": "lstm.request.#",
+        "roles": "server"
+    },
+    "model": {
+        "name": "LSTM",
+        "path": "../exported_models/tflite_model/LSTM_single_series.tflite"
+    }
+}

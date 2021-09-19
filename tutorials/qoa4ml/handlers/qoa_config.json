@@ -1,0 +1,15 @@
+{
+    "broker_info":{
+        "broker": "AMQP",
+        "url": "195.148.22.62"
+    },
+    "queue_info": {
+        "exchange_name": "qoa_topic",
+        "exchange_type": "topic",
+        "in_queue": "in_request_qoa",
+        "out_queue": "out_qoa_aaltosea1",
+        "in_routing_key": "qoa.report.#",
+        "out_routing_key": "qoa.response.#",
+        "roles": "server"
+    }
+}
