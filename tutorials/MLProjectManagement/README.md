@@ -138,7 +138,7 @@ test_serial_data = test_serial_data[6:]
 #### Important questions
 
 #### Practice
->TODO: Currently, there are existing tools to store metadata of the dataset, e.g BigQuery, Atlas, and to manage and discovery data such as Google Cloud Data Catalog and IBM Knowledge Catalog, etc. However, there is a lack of framework for capturing complex relationships between the datasets and different entities (e.g: other dataset, ML model) in a ML solution.
+Currently, there are existing tools to store metadata of the dataset, e.g BigQuery, Atlas, and to manage and discovery data such as Google Cloud Data Catalog and IBM Knowledge Catalog, etc. However, there is a lack of framework for capturing complex relationships between the datasets and different entities (e.g: other dataset, ML model) in a ML solution.
 
 
 Metadata of the dataset can be used to manage information of the datasets. Metadata object should include different aspects of the dataset, such as data management aspect (Name, version, url, size, created_time, last_modified_time, provider, description), dataset_dependency, and quality of data (completeness, label_ratio, etc).
@@ -205,7 +205,7 @@ After having the model selection and suitable methods:
 There are many tools. [MLflow](https://mlflow.org/) might be a good tool to help you stay on top of what is going on. Using MLFlow,  we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics.
 ____
 > MLflow introduction and installation: MLFlow is a popular python package for machine learning life cycle. It provides many functions such as follows:
-> - Tracking: track experiments to store parameters and results.
+>- Tracking: track experiments to store parameters and results.
 >- Packaging: package the project code in reproducible form in order to share or transfer to production.
 >- Deploying: manage and deploy models from a variety of machine learning libraries.
 _____
