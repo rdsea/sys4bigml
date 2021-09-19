@@ -1,9 +1,9 @@
 # ML Serving tutorial
 
 ## Study goal
-The purpose of this tutorial is to create a simple end-to-end pipeline providing Machine Learning (ML) as a service using [PredicitonIO](https://predictionio.apache.org/). This will consist of collecting and preparing data, and developing, training as well as deploying your ML model on PredictionIO server. Given many useful APIs, we can import existing data and send streaming data to the model-as-a-service using a lightweight client application. After deploying the model, we can also re-train or replace the model on run time without interrupting the ML service.
+The purpose of this tutorial is to create a simple end-to-end pipeline providing Machine Learning (ML) service using Python and [Kubernetes](https://kubernetes.io/)(K8s). This covers all  basic steps making a serving pipeline including preparing data, developing, training ML model, and deploying ML models on K8s server. After deploying models, we can re-train or replace the model on run time without interrupting the ML service.
 
-Apache PredictionIO is an open-source for serving ML dynamically, allowing us deploy ML applications on top of state-of-the-art Apache software stacks, such as Hadoop, Spark, and HBase. Thus with PredictionIO, we can study  scalability, elasticity, and reliability of end-to-end ML pipelines using Apache software stacks. Here, we will practice ML serving using some basic functionalities of PredictionIO including creating a simple ML cluster, collecting data, developing, providing ML service as well as tuning, retraining or even replacing model at the runtime as it's a part of elasticity while providing ML service.
+Kubernetes is an open-source for automating deployment, allowing us deploy containerized applications on top of several container runtimes, for example: Docker, containerd, CRI-O. With Kubernetes, we can deploy scalable, elastic, and reliable ML pipelines without much human effort. Here, we practice ML serving by building your own ML application, containerizing the application and deploying it to a pre-setup K8s server on Google Cloud. Thereafter, we have to re-configure the application to serve multi-tenants as well as scale the ML service.
 
 
 It is recommended that you use linux environment.
@@ -14,296 +14,170 @@ It is recommended that you use linux environment.
 
 ## Prerequisite
 
-* [Docker Desktop](https://www.docker.com/get-started)
-* [Docker PredictionIO](http://predictionio.apache.org/install/install-docker/)
-* [PredictionIO library](https://pypi.org/project/PredictionIO/)
+* [Paho-Mqtt](https://pypi.org/project/paho-mqtt/), [Pandas](https://pandas.pydata.org/), [numpy](https://numpy.org/)
+* [TensorFlow](https://www.tensorflow.org/install), [TensorFlow Lite Runtime](https://www.tensorflow.org/lite/guide/python)
 
+## **ML Model & Data**
 ## Machine Learning Models under Testing
-Within this tutorial, we introduce 2 ML linear [models](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/tri_tutorial/tutorials/MLServing) which are Linear regression, one uses stochastic gradient descent (SGD) and the other uses the BFGS algorithm. Both mentioned models are used to predict the time that the next alarm happens at the specific station based on the previous alarm events.
+Within this tutorial, we introduce 2 ML [models](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/tri_tutorial/tutorials/MLServing) which predict the future values of a single time series based on historical data. The first model uses [LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory) as the core neural network while the other only adopt a simple [fully-connected ANN](https://en.wikipedia.org/wiki/Artificial_neural_network)
 
-Both models are built based on Apache's template under the [Apache Software Foundation version 2](http://www.apache.org/licenses/LICENSE-2.0) as they must follow the predefined protocol to be deployed in PredicionIO server. [Here](http://predictionio.apache.org/gallery/template-gallery/), you can find more useful templates and instructions.
+Both models are implemented in TensorFlow and converted into tflite so that we can deploy them on diverse hardware architectures. 
 
-Our models currently are applied to a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640).
+The models currently predict the Load Power Grid on a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640). 
 
 Sample data:
-| index | old_idx | station_id | datapoint_id | alarm_id | event_time | value | valueThreshold | isActive |
-|-------|---------|------------|--------------|----------|------------|-------|----------------|----------|
-| 0     | 983     | 1160629000 | 121          | 308      | 1487441883 | 231   | 230            | TRUE     |
-| 1     | 984     | 1160629000 | 121          | 308      | 1487442194 | 231   | 230            | TRUE     |
-| 2     | 985     | 1160629000 | 121          | 308      | 1487442922 | 231   | 230            | TRUE     |
-| 3     | 986     | 1160629000 | 121          | 308      | 1487442929 | 231   | 230            | TRUE     |
-| 4     | 987     | 1160629000 | 121          | 308      | 1487442933 | 231   | 230            | TRUE     |
+| index | station_id | parameter_id | reading_time | value |
+|-------|---------|------------|--------------|----------|
+| 0     | 1161114002 | 122          | 1487441883 | 221   |  
+| 1     | 1161114002 | 122          | 1487442194 | 223   | 
+| 2     | 1161114002 | 122          | 1487442922 | 186   | 
+| 3     | 1161114002 | 122          | 1487442929 | 120   | 
+| 4     | 1161114002 | 122          | 1487442933 | 53   | 
 
-As we're trying to predict the next alarm event for a specific alarm at one station, basically, we only use `index` and `event_time` for our experiments.
+The normalized data sample:
+| index | station_id | parameter_id | reading_time | value |
+|-------|---------|------------|--------------|----------|
+| 0     | 1161114002 | 122          | -11.891749028408888 | -0.31175913823410106   |  
+| 1     | 1161114002 | 122          | -11.891471250631112 | -0.23459683598503628   | 
+| 2     | 1161114002 | 122          | -11.891193472853333 | -0.08027223148690674   | 
+| 3     | 1161114002 | 122          | -11.890915695075556 | -0.003109929237841972   | 
+| 4     | 1161114002 | 122          | -11.889249028408889 | 0.07405237301122279   | 
 
-Note: Inside the sample test, the `event_time` has been converted to Unix timestamp.
 
-At first, we will deploy the first model using SGD to see how well the performance that we got while tuning and update the model's parameters at the runtime. Then we train the second model which slightly improves accuracy and maybe more efficient for low-end resources.
+Note: Inside the sample test, the `reading_time` has been converted to Unix timestamp.
 
-## Setup PredictionIO cluster
-We first start a cluster containing a PredictionIO server, a Spark master, a Spark worker, and an Elasticsearch service.
+## **ML Service**
+In this tutorial, all the ML requests/responses are sent via an MQTT Broker deployed on cloud.
+## Training ML model
+* The ML model is prepared in the folder `ml_training`. You can simply run it using python 3 and the prerequisite libaries mentioned above.
+* To change the model, modify the source code between the commented lines inside `model.py` and train the model again.
+
+Note: Make sure the dimensions of input and output of the model is unchanged.
+* After training, the model is saved in 2 formats (Tensor and tflite-runtime). You can change the file path and use it to load the model in the later experiments.
+## ML application
+* The ML application is defined in `server_app.py`, it simply reads the configuration from `server.json` and starts an instance for serving ML request from clients
+
+* Inside `server.json`, you can modify the user id, broker service, the message queue, and the model information, which will be used for loading the ML model or connecting to MQTT broker.
+
+***Note***: you have to specify your own in/out queue names so that your application send request and receive response from different queues from other students.
+
+
+## Deploying ML Service on cloud
+* First, connect to server using ssh with provided username and password:
 
 ```bash
-    $ docker-compose -f docker-compose.yml \
-      -f docker-compose.spark.yml \
-      -f elasticsearch/docker-compose.base.yml \
-      -f elasticsearch/docker-compose.meta.yml \
-      -f elasticsearch/docker-compose.event.yml \
-      -f localfs/docker-compose.model.yml \
-      up
+$ ssh <username>@<serverip>
 ```
-
-After pulling the images, the script will start Elasticsearch, Apache PredictionIO, and Apache Spark. The event server should be ready at port 7070, and you should see these logs in the command line interface.
-```
-    ...
-    pio_1       | [INFO] [Management$] Your system is all ready to go.
-    pio_1       | [INFO] [Management$] Creating Event Server at 0.0.0.0:7070
-    pio_1       | [INFO] [HttpListener] Bound to /0.0.0.0:7070
-    pio_1       | [INFO] [EventServerActor] Bound received. EventServer is ready.
-```
-
-Now we can check the server status using `pio-docker`
+* Copy the source code to server
 ```bash
-    $ pio-docker status
+$ scp -r <path_to_your_source_code> <username>@<serverip>:/home/<username>
+```
+
+### Build a containerized application
+* Take a look at the `server/server.py` and other related `class` to understand how to load the model from exported file.
+* The python application is prepared in `server/server_app.py` with the pre-configuration saved in `server/server.json`
+* In this turorial, we use docker to build a container for our ML service:
+    - The `Dockerfile` provides step by step to build our desired image from an Ubuntu core running on `amd64` architecture. That requires pre-download the `ubuntu-groovy-core-cloudimg-amd64-root.tar.gz` and save it in `unbuntu_image` folder. You can find the image [here](https://partner-images.canonical.com/core/groovy/current/ubuntu-groovy-core-cloudimg-amd64-root.tar.gz)
+* Build the docker image by running `build.sh` (You may need to change the file permission using `chmod`):
+    * Change the name tag and version of the image you're going to build:
+```bash
+$ docker build -t server_<username>/server_ml_<username>:<version> -f ./Dockerfile .
+```
+
+* Archive the recently built image and import it to K8s system (read `build.sh` for more details).
+
+***Note***: You can download the ubuntu image on remote server using `wget` or use other images but you have to change the file name and file path in `Dockerfile`
+```bash
+$ wget <image_link>
+``` 
+```dockerfile
+ADD ./ubuntu_image/ubuntu-groovy-core-cloudimg-amd64-root.tar.gz /
+```
+You can also build your docker image locally then push it into [Dockerhub](https://hub.docker.com/) so that you don't have to import the image to K8s as it automatically find the image from Dockerhub if it's not available at local.
+
+## K8s Deployment
+* A simple deployment of K8s is provided in `deployment/ml_deployment.yaml`. Inside the deployment file, we should specify the name of the deployment
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-deployment
+  labels:
+    app: ml
+```
+* We also have to specify the desired image so that K8s cand start a container using the image that we build above (use the name tag that you use in the previous step).
+```yaml
+spec:
+    containers:
+    - image: server_<username>/server_ml_<username>:<version>
+    name: ml
+```
+* Start the deployment using the following command:
+```bash
+$ microk8s kubectl apply -f <path_to_deployment_file>
+```
+
+Now we can check if the deployment started
+
+```bash
+    $ microk8s kubectl get all
 ```
 Returned result
 ```
-    [INFO] [Management$] Inspecting PredictionIO...
-    [INFO] [Management$] PredictionIO 0.13.0 is installed at /usr/share/predictionio
-    [INFO] [Management$] Inspecting Apache Spark...
-    [INFO] [Management$] Apache Spark is installed at /usr/share/spark-2.2.3-bin-hadoop2.7
-    [INFO] [Management$] Apache Spark 2.2.3 detected (meets minimum requirement of 1.6.3)
-    [INFO] [Management$] Inspecting storage backend connections...
-    [INFO] [Storage$] Verifying Meta Data Backend (Source: ELASTICSEARCH)...
-    [INFO] [Storage$] Verifying Model Data Backend (Source: LOCALFS)...
-    [INFO] [Storage$] Verifying Event Data Backend (Source: ELASTICSEARCH)...
-    [INFO] [Storage$] Test writing to Event Store (App Id 0)...
-    [INFO] [Management$] Your system is all ready to go.
+NAME                                 READY   STATUS    RESTARTS   AGE
+pod/ml-deployment-77df7888fd-wr2wg   1/1     Running   11         4d
+
+NAME                 TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.152.183.1   <none>        443/TCP   6d1h
+
+NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/ml-deployment   1/1     1            1           4d
+
+NAME                                       DESIRED   CURRENT   READY   AGE
+replicaset.apps/ml-deployment-77df7888fd   1         1         1       4d
 ```
-
-Make sure your cluster is up:
-```bash
-    $ docker ps
-```
-```
-    CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                                                                    NAMES
-    e989883b63e9        bde2020/spark-worker:2.2.2-hadoop2.7                  "/bin/bash /worker.sh"   2 weeks ago         Up 40 seconds       0.0.0.0:8081->8081/tcp                                                   spark-worker-1
-    ef824e448270        predictionio/pio:latest                               "sh /usr/bin/pio_run"    2 weeks ago         Up 40 seconds       0.0.0.0:7070->7070/tcp, 0.0.0.0:8000->8000/tcp, 0.0.0.0:8080->8080/tcp   docker_pio_1
-    e2257ec95006        bde2020/spark-master:2.2.2-hadoop2.7                  "/bin/bash /master.sh"   2 weeks ago         Up 41 seconds       6066/tcp, 0.0.0.0:7077->7077/tcp, 0.0.0.0:8090->8080/tcp                 spark-master
-    f6d312588d29        docker.elastic.co/elasticsearch/elasticsearch:5.6.4   "/bin/bash bin/es-do…"   3 months ago        Up 41 seconds       9200/tcp, 9300/tcp                                                       docker_elasticsearch_1
-```
-
-You may want to run other options that are introduced at <https://github.com/apache/predictionio/blob/develop/docker/README.md#run-predictionio-with-selectable-docker-compose-files>.
-
-Or you may want to expose some service from your virtual cluster to your real machine for monitoring, you can modify the dockerfiles
-
-For example:
-```yml
-    services:
-      spark-master:
-        image: bde2020/spark-master:2.2.2-hadoop2.7
-        container_name: spark-master
-        ports:
-          - "8090:8080"
-          - "7077:7077"
-```
-
-Now your server is ready to deploy ML applications
-
-### Deploy the SGD model for serving
-- Declare your application (the ML service): At first, we must register our application on the server so that we can deploy our models on it.
+You can see the status is "Running" and the READY tab is "1/1" so that it has been started successfully.
+If it not show as above, you can export the logs by the following command for debugging:
 
 ```bash
-    $ pio-docker app new YOUR_APPLICATION_NAME
+$ microk8s kubectl logs <instance_name>
 ```
-Example result with application name: demo_linear_regression
-```
-    [INFO] [App$] Initialized Event Store for this app ID: 2.
-    [INFO] [App$] Created new app:
-    [INFO] [App$]       Name: demo_linear_regression
-    [INFO] [App$]         ID: 2
-    [INFO] [App$] Access Key: ayA5BT7mhFLsAokkIEu5TBvVHhPnK_CDhAjXTXMmDoWf8YmYk4gPUmzm31Ix9rBY
-```
-The server will return the application `ID` and the `Access Key` that are required to specify your application while collecting data as well as deploying and providing ML service.
-
-You can also check your application list:
+## **Send ML Request from Client Application**
+We provide a simple client application within the `client` folder. You can just simply run the python application by the following command:
 ```bash
-    $ pio-docker app list
+$ python3 client_app.py
 ```
-```
-    [INFO] [Pio$]                 Name |   ID |                                                       Access Key | Allowed Event(s)
-    [INFO] [Pio$]                LRapp |    1 | 3vQpvZ4NX6AGSve59HyG7ohz3JaddMW6n39yKfI-ErhC_r7PY_Sor_MT8LvZxtnA | (all)
-    [INFO] [Pio$]  demo_linear_regression |    2 | ayA5BT7mhFLsAokkIEu5TBvVHhPnK_CDhAjXTXMmDoWf8YmYk4gPUmzm31Ix9rBY | (all)
-    [INFO] [Pio$] Finished listing 2 app(s).
-```
+The client application will automatically read the configuration file (`client.json`) then init a connection to MQTT broker to send ML request as well as receive the response. 
 
-Inside the LR_SGD directory, you can find the ML model is implemented in the `src` folder while other things are to help you build and deploy the model right the way.
-The `source code` is implemented in Scala and it's using `predictionio` library to utilize pre-modified ML algorithms.
+***Note***: specify the queue name as the previous step to make sure you send/receive messages to/from the right queues
 
-Under the directory, you should find an engine.json file; this is where you specify parameters for deploying your application as well as some required parameters in your model. You have to modify the app name the same as the one you registered on your server.
-
-```json
-      ...
-      "datasource": {
-        "params" : {
-          "appName": "demo_linear_regression"
-        }
-      },
-  ...
-```
-- Import existing data to your server
-
-In this experiment, we are using sample data in the [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts). The data is ready at `1160629000_121_308_test.csv` and `1160629000_121_308_train.csv`.
-
-To import data, you may want to use some supported [APIs](http://predictionio.apache.org/datacollection/eventapi/). Here, a python application is provided in `import_data.py` but you should give the `ACCESS_KEY` when running the command.
-
+The terminal should return the prediction result as below:
 ```bash
-    $ python ./data/import_eventserver.py --access_key $ACCESS_KEY
-```
-At the end, you should see the following output:
-
-```
-    Importing data...
-    799 events are imported.
-```
-
-- Build your model
-
-Start with building your first Model the SGD algorithm. Run the following command
-```bash
-    $ cd LR_SGD
-    $ pio-docker build --verbose
+Data sent
+message topic= outqueue/lstm
+Returned Results: {"LSTM": -0.13547556102275848}
+Data sent
+message topic= outqueue/lstm
+Returned Results: {"LSTM": -0.22059251368045807}
 ```
 
-Upon a successful build, you should see a console message similar to the following.
-```
-    [INFO] [Console$] Your engine is ready for training.
-```
+## Your Excercise
+- Change the ML serving model without causing interuption (Hint: develop new model, modify the model information, build a new image, and re-deploy the service). 
+- The current ML application only serve single tenant, your responsibility is to make it serve multi-tenants. You can run multiple client applications from multiple terminal windows with differents configurations (client.json). Also, you have to scale the deployment up and down based on the workload. (Hint: modify the server, client application, mqtt client, and deployment profile (yaml file)).
 
-- Train your model
-```bash
-    $ pio-docker train
-```
-When your model is trained successfully, you should see a console message similar to the following.
-
-```
-    [INFO] [CoreWorkflow$] Training completed successfully.
-```
-
-- Deploy your model
-
-The model is now ready to deploy, run:
-```bash
-    $ pio-docker deploy
-```
-
-When the model is deployed successfully and running, you should see a console message similar to the following:
-```
-    [INFO] [HttpListener] Bound to /0.0.0.0:8000
-    [INFO] [MasterActor] Engine is deployed and running. Engine API is live at http://0.0.0.0:8000.
-```
-
-By default, the deployed model binds to <http://localhost:8000>. You can visit that page in your web browser to check its status.
-
-![localhost](./img/model_server.png)
-
-- Make prediction
-
-There are some APIs that you can use to send requests for making predictions. Here, an example in python is prepared at `evaluate.py` where queries are made using data from the CSV file `1160629000_121_308_test.csv` to evaluate our models.
-```bash
-    $ cd ./data
-    $ python ./evaluate.py
-```
-
-After running the `evaluate`, you would see a `CSV` file appear in the evaluation directory, visualizing the result, we can see that with the default parameters, the first model shows not really good predictions.
-
-![localhost](./img/first_evaluate.png)
-
-To improve the prediction, we can modify the parameters in `engine.json` as follow:
-```json
-      ...
-      "name": "algo",
-      "params": {
-        "intercept" : 1,
-        "weight" : 200.0,
-        "event_mean": 1487508915.0,
-        "index_mean": 500.0,
-        "index_scale": 100.0
-      }
-  ...
-```
-
-Then re-train the model using `pio-docker train` and `deploy` the updated model into the server. The old model will automatically stop serving, and again, we check the result using `evaluation.py`. We can see that the prediction is improved significantly:
-
-![localhost](./img/second_evaluate.png)
-
-### Model replacement
-
-Given the IoT concept, the data may come from many different sources and its characteristics or distributions would change unpredictably, it is of great importance to monitor the whole system then we would know when we should refresh our models or when our models can not fit the data anymore so that we can replace them to ensure the quality of service.
-Hence, an elastic ML platform must be able to provide flexible services base on user's requirements about the accuracy, underlying resource, and so on, then it allows users to update, retrain or event replace ML model for different purposes.
-
-With a low dimensional model in our experience, the linear regression may apply the BFGS algorithm for more efficiency and lower memory requirements. Hence we can replace the current model with the one implemented in the folder: LR_BFGS. Again, we can build, train, and deploy a new model without interrupting the current service.
-
-```bash
-    $ cd ../LR_BFGS
-    $ pio-docker build --verbose
-    $ pio-docker train
-    $ pio-docker deploy
-```
-This time we evaluate the new model using `evaluate.py` inside folder `LR_BFGS/data`:
-
-![localhost](./img/third_evaluate.png)
-
-- Streaming data (Optional)
-
-Since the server is running, you can send data to it in real-time using the same APIs mentioned before.
-
-An example is prepared in `stream_data.py`, and the data for streaming is in `1160629000_121_308_train.csv`
-
-```bash
-    $ python ./data/stream_eventserver.py
-```
-
-You should see the following output:
-
-```
-    Namespace(access_key='ayA5BT7mhFLsAokkIEu5TBvVHhPnK_CDhAjXTXMmDoWf8YmYk4gPUmzm31Ix9rBY', file='./data/1160629000_121_308_train.csv', url='http://localhost:7070')
-    Sending data...
-    Sent data: 0
-    Sent data: 1
-    Sent data: 2
-    Sent data: 3
-    ...
-```
-
-## Open questions for studies
+## Open questions
 - What is the role of observability for Elastic ML serving? Can you setup an observability system for this ML serving example?
 - How do we know the current model is outdated then when we should update the serving model or deploy the new one?
 - Should we deploy multiple models for one service (e.g: different requests might be served by different models)?
 - What would happen if any service container is down? how to backup and recover?
 
-## Issues you may encounter during the tutorial
-
-#### Docker build problem due to broken maven repo
-Replace the link by: <https://repo1.maven.org/maven2/org/postgresql/postgresql/$PGSQL_VERSION/postgresql-$PGSQL_VERSION.jar>
-
-
-#### Broken link for sbt-launcher while traing ML model
-Access the predictionIO server using `docker exec`
-```bash
-    $ docker exec -it name_container /bin/bash
-```
-Download then place the sbt-launcher at the required directory (don't forget to rename the downloaded file) using `wget`
-
-For example:
-```bash
-    $ wget https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch/1.2.8/sbt-launch-1.2.8.jar
-```
 
 ## References
-The tutorial is built upon PredictionIO documents. The main references is:
+The tutorial is built upon Kubernetes documents. The main references is:
 
-* http://predictionio.apache.org/gallery/template-gallery/
+* https://microk8s.io/
+* https://kubernetes.io/
+* https://hub.docker.com/
 
 ## Contributions
 

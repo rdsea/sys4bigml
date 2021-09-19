@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+  - job_name: 'BTS_model'
+    honor_labels: true
+    static_configs:
+      - targets: ["10.100.13.138:8000", "10.100.13.138:8080"]
+  - job_name: 'Resource_monitoring'
+    scrape_interval: 15
+    static_configs:
+      - targets: ["10.100.13.138:8888"]
+

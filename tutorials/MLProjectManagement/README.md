@@ -1,40 +1,52 @@
-# End-to-End ML Experiment Management
+# End-to-End ML Systems Development
 
-The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many steps, **not just running experiments for the ML models**. 
-<!-- should i use the word experiments or lifecycle -->
->Currently we are working on the tutorial. Material will be updated soon.
+The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many phases, such as data collection, data pre-processing, **not just running experiments for the ML models**.
 
 ## Motivation and study goal
->To be revised to follow the end-to-end view
 
-Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. How can you move from having a dataset to a functioning prediction models?
+Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. How can you manage the end-to-end process from having a dataset to a functioning prediction models?
 
-<!-- For instance, choosing the best value for a paremeter alpha is not obvious. How do you keep record of the model peformance with different parameters and compare them to get the best result?
+## Requirements, Data for Model development, and Managing Metadata about data
 
-After choosing the best parameter, you might want to share your model to either your teammates or other stakeholder who need to examine your models etc. This process might take a lot of time an effort, and does not guarantee that they would be able to reproduce your best result. This means the model should be packaged in a reusable, and reproducable form.
-
-The ultimate goal of most machine learning model is to be served to end users ideally in a variety of downstream tools - for example real time through REST API or batch inference on Apache Spark. This can be a very time consuming process if you do not have the right tool to deploy your model.
-
-Last but not least, after all mentioned concerns, it would be a big bonus point in your machine learning project management if you can govern the full life cycle of an model, including diferent versions, stage transitions, and annotations. -->
-
-## Data for Model development and Managing Metadata about data
-
+### Important questions
 You start building an ML model based on data. Key steps in preparing data
 
 * identify the data you have for model development
+* capture requirements for your ML model/service
 * create suitable metadata for the data to be used
 * checking quality of data, improving data and updating metadata
 
-### Data to be used
+### Practice
+We will carry out a case study of ML development for predictive maintenance in BTS.
 
 We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
+(currently the raw data is not uploaded because I am still figuring out a way to not have to upload the whole day of data, contact Linh Nguyen if you need raw data at the moment)
 
-### Create metadata
+### Data Understanding and characterization and development requirements
 
-*To be written about metadata model and how to capture metadata*
+#### Important questions
 
-### Improve data
-The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the file `group_data.py`.
+* Do you understand the data?
+* Is the current form of data good for us to start? What does it mean good?
+* Which fields of data are important that can be used for ML?
+* Who actually could help you to understand the data and its business?
+* If you make some decisions, can you document and use the document to explain your decision to relevant stakeholder later on?
+
+#### Practice
+- Check BTS data and discuss data fields
+
+- Requirements: for example, read [our initial work on requirements for explainability in an end-to-end ML development](https://research.aalto.fi/en/publications/holistic-explainability-requirements-for-end-to-end-machine-learn) and work on some selected questions.
+
+### Data Transformation, Enrichment and Featuring
+
+#### Important questions:
+- do we need to transform the data?
+- should we enrich the data?
+- which features should we select for ML models and why?
+
+#### Practice
+
+The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the **file `group_data.py`**.
 
 ```python
 import pandas as pd 
@@ -66,7 +78,7 @@ for key,item in bts_df_grouped:
     sub_data.sort_values(by=['norm_time']).to_csv("./data_grouped/{}_{}_.csv".format(key[0],key[1]), index=False)
     print("Finish: {}".format(key))
 ```
-After grouping the data, we need to do some further pre-processing to turn our data into serial data, and normalize the data. You can use the following code, or open the file `Model.ipynb` and test the code directly.
+After grouping the data, we need to do some further pre-processing to turn our data into serial data, and normalize the data. You can use the following code, or **open the file `Model.ipynb`** and test the code directly.
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -77,12 +89,13 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 import mlflow
-raw_dataset = pd.read_csv("./data_grouped/1161114002_122.csv")
+raw_dataset = pd.read_csv("./data_grouped/1161114002_122_.csv")
 raw_dataset = raw_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
 dataset = raw_dataset.copy()
 dataset = dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
 dataset_full = dataset.sort_values(by=['norm_time'])
-dataset = dataset_full[0:300]
+dataset = dataset_full
+
 
 serial_data = dataset.drop(['value','norm_time'], axis=1)
 serial_data['norm_1'] = serial_data['norm_value'].shift(1)
@@ -93,60 +106,135 @@ serial_data['norm_5'] = serial_data['norm_value'].shift(5)
 serial_data['norm_6'] = serial_data['norm_value'].shift(6)
 serial_data = serial_data[6:]
 ```
-You could do the same to process the test dataset.
-## Developing ML model
-We assume that you follow existing techniques to develop suitable models.
+You could do extract data from another power grid data file to test the model. We could also assign the starting line and ending line of the data that we use to test the model from the command line.
+The testing data should be pre-processed in the same way as the training data
 
-LSTM
+```python
+# Read test dataset from a different file
+test_file_name = "./data_grouped/1161114004_122_.csv"
+test_raw_dataset = pd.read_csv(test_file_name)
+test_raw_dataset = test_raw_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
+test_dataset = test_raw_dataset.copy()
+test_dataset = test_dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
+test_dataset_full = test_dataset.sort_values(by=['norm_time'])
+# Choose a small part of the data to test the model
+start_line = int(sys.argv[1]) if len(sys.argv) > 1 else 40
+end_line = int(sys.argv[2]) if len(sys.argv) > 2 else 100
+test_data = test_dataset_full[start_line:end_line]
+
+test_serial_data = test_data.drop(['value','norm_time'], axis=1)
+test_serial_data['norm_1'] = test_serial_data['norm_value'].shift(1)
+test_serial_data['norm_2'] = test_serial_data['norm_value'].shift(2)
+test_serial_data['norm_3'] = test_serial_data['norm_value'].shift(3)
+test_serial_data['norm_4'] = test_serial_data['norm_value'].shift(4)
+test_serial_data['norm_5'] = test_serial_data['norm_value'].shift(5)
+test_serial_data['norm_6'] = test_serial_data['norm_value'].shift(6)
+test_serial_data = test_serial_data[6:]
+```
 
 
-## Training and ML model experiments
+### Metadata about data
 
-After having the model, we will do the training and model experiments. We will need to record performance metrics, machine information, etc. and associate them with the data to be used (and the metadata) so that we can have all information is linked for an end-to-end ML experiment.
+#### Important questions
 
-### Tools for experimenting ML models
+#### Practice
+>TODO: Currently, there are existing tools to store metadata of the dataset, e.g BigQuery, Atlas, and to manage and discovery data such as Google Cloud Data Catalog and IBM Knowledge Catalog, etc. However, there is a lack of framework for capturing complex relationships between the datasets and different entities (e.g: other dataset, ML model) in a ML solution.
 
-There are many tools.
-If one of these issues have been your challenges on managing ML models, [MLflow](https://mlflow.org/) might be a good tool to help you stay on top of what is going on. Using MLFlow,  we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics.
 
-#### MLflow introduction and installation
->Note: to be simplified, reducing the text
-MLFlow is a popular python package for machine learning life cycle. It provides many functions such as follows:
+Metadata of the dataset can be used to manage information of the datasets. Metadata object should include different aspects of the dataset, such as data management aspect (Name, version, url, size, created_time, last_modified_time, provider, description), dataset_dependency, and quality of data (completeness, label_ratio, etc).
+Following json is an example of the metadata for dataset used in this example:
+```json
+[
+    {
+        "Dataset_id": "bts1",
+        "Name": "bts_param",
+        "Created_time": "",
+        "Last_modified_time": "05/31/2021, 14:07:25",
+        "Version": "1.0",
+        "URL": "examples/BTS_Data/raw_data",
+        "Provider": "BachPhu",
+        "Description": "",
+        "Size": {
+            "value": "194,5",
+            "unit": "MB"
+        },
+        "Data_type": [
+            "Time Series"
+        ],
+        "Dataset_dependency": {
+            "bts02": {
+                "Type_of_relationship": "output"
+            }
+        },
+        "Quality_of_data": {
+            "completeness": {
+                "Value": "0.9"
+            },
+            "label_ratio": {
+                "Value": "0.9"
+            }
+        }
+    }
+]
+```
 
-- Tracking: track experiments to store parameters and results.
-- Packaging: package the project code in reproducible form in order to share or transfer to production.
-- Deploying: manage and deploy models from a variety of machine learning libraries.
+## Developing ML models
 
-You can practice basic functionalities of MLflow such as mentioned above. MLflow allows us to collect experimental data for your machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
+### ML Algorithms
+
+#### Important questions
+- Which ML algorithms should we choose in order to create suitable ML models? why?
+
+#### Practice
+
+Next steps are model training and model experiments. We will need to record performance metrics, machine information, etc. and associate them with the data to be used (and the metadata) so that we can have all information is linked for an end-to-end ML experiment.
+We assume that you follow existing methods to select ML algorithms to create suitable models. In this practice, we will use LSTM.
+>Note: link to LSTM
+
+### Training and ML model experiments
+
+#### Important questions
+After having the model selection and suitable methods:
+- How will you do the training and model experiments?
+- How will we record performance metrics, machine information, etc. and associate them with the data to be used (and the metadata) so that we can have all information is linked for an end-to-end ML experiment.
+- How would we manage thousands of experiments?
+- How to evaluate or compare your experiments based on multiple metrics? What would be an appropriate solution?
+
+#### Tools for experimenting ML models
+
+There are many tools. [MLflow](https://mlflow.org/) might be a good tool to help you stay on top of what is going on. Using MLFlow,  we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics.
+____
+> MLflow introduction and installation: MLFlow is a popular python package for machine learning life cycle. It provides many functions such as follows:
+> - Tracking: track experiments to store parameters and results.
+>- Packaging: package the project code in reproducible form in order to share or transfer to production.
+>- Deploying: manage and deploy models from a variety of machine learning libraries.
+_____
+
+MLflow allows us to collect experimental data for your machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
+>Other tools for storing experiments are:
+> - https://www.verta.ai/
 
 To get you ready for the tutorial, please don't forget to install MLflow and scikit-learn first. It is recommended that you install Anaconda for simplifying package management and deployment. You can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install mlflow.
 
 ```bash
-    $pip install mlflow
+$pip install mlflow
 ```
 
 For executing some examples of this tutorials, you need to install scikit-learn
 
 ```bash
-    $pip install scikit-learn
+$pip install scikit-learn
 ```
->At this point, we recommend you to take a walk through the official tutorial of MLflow for an overview of how MLflow works with some simple examples: <https://www.mlflow.org/docs/latest/tutorials-and-examples/tutorial.html>.
 
-### Running experiments for ML models
+#### Running experiments for ML models
 
-#### The model to be experimented
 You would need to have a machine learning model to test out MLflow, you can use any model that you have already developed, or develop one if you feel like.
-The model is described at the beginning of this tutorial.
 
-We use a BTS model developed by Tri, the code can be found in the file `model.py` or here.
-<!-- https://github.com/rdsea/IoTCloudSamples/tree/master/MLUnits/BTSPrediction -->
->To be updated
+We use a BTS model whose code can be found in the file `model.py` or [here](https://github.com/rdsea/IoTCloudSamples/tree/master/MLUnits/BTSPrediction)
 
 ```python
-
-
 train_dataset = serial_data
 test_dataset = test_serial_data
 train_features = np.array(train_dataset.drop(['norm_value'], axis=1))
@@ -158,104 +246,167 @@ test_features = test_features.reshape(test_features.shape[0],test_features.shape
 test_labels = np.array(test_dataset.drop(['norm_6'], axis=1))
 test_labels = test_labels.reshape(test_labels.shape[0],test_labels.shape[1],1)
 
+
 with mlflow.start_run():
+
     model = keras.Sequential()
     model.add(layers.LSTM(32, return_sequences=True))
     model.add(layers.LSTM(32, return_sequences=True))
     model.add(layers.TimeDistributed(layers.Dense(1)))
     model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
-    model.fit(train_features, train_labels, epochs=200, batch_size=4, verbose=2)
-    
-    result = model.predict(test_features, batch_size=1, verbose=0)
-    x=pd.DataFrame(test_labels.reshape(test_labels.shape[0],test_labels.shape[1]))
-    y=pd.DataFrame(result.reshape(result.shape[0],result.shape[1]))
-    y_true = np.array(x[0])
-    y_pred = np.array(y[0])
-    
-    mse = mean_squared_error(y_true, y_pred)
-    print("MSE", mse)
-    # Log metric, and params to MLflow
-    mlflow.log_metric("MSE",mse)
+
+    model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
+
+    signature = infer_signature(test_features, model.predict(test_features))
+    # Let's check out how it looks
+    print(signature)
     mlflow.log_param("test line from ", '{} {}'.format(start_line, end_line))
     mlflow.log_param("Test file", test_file_name)
-    plt.plot(x.index, x[0], label='Data')
-    plt.plot(y.index, y[0], color='k', label='Predictions')
-    plt.xlabel('index')
-    plt.ylabel('norm_value')
-    plt.legend()
-    plt.savefig("BTS_resultGraph.png")
-    mlflow.log_artifact("BTS_resultGraph.png")
-    plt.show()
-    plt.close()
-```
 
+    model_dir_path = "./saved_model"
+
+    # Create an input example to store in the MLflow model registry
+    input_example = np.expand_dims(train_features[0], axis=0)
+
+    # Let's log the model in the MLflow model registry
+    model_name = 'LSTM_model'
+    mlflow.keras.log_model(model, model_name, signature=signature, input_example=input_example)
+```
+We can log the input example for the model using `mlflow.keras.log_mode` with `input_example`.
 
 #### Running model experiments
 
-* TODO:
 
 ```bash
-    $python
+$python model.py
 ```
-You could write a simple script to run the above example many times. 
-```bash
-    $./script_of_experiments.sh
-```
-You could also modify different parameters, such as the loss function, batch_size, epochs, or the test data file etc, and record them using `mlflow.log_param`, or record the figure using: 
-```
-plt.savefig("BTS_resultGraph.png")
-mlflow.log_artifact("BTS_resultGraph.png")```
+You could also modify different parameters, such as the loss function, batch_size, epochs, or the test data file etc, and record them using `mlflow.log_param`.
 
 * After running the examples repeatedly, you might be interested in comparing the performance of ran experiments. Open a terminal in the current working directory and call MLflow user interface using the below command:
 ```bash
-    $mlflow ui
+$mlflow ui
 ```
 
 ![image info](./images/MLflow_ui.png "Figure 1: MLflow run statistic")
 
 * The results are illustrated in the Figure 1 where you can see all the logging parameters and metrics as well as different runs of your experiment. You can also see that the parameters and metrics are separate in the top row since they are logged with different MLflow api (log_param and log_metric.).
 
-### Examine data and model experiments
+#### Examine data and model experiments
 
-Now you have the metadata about data used, models and model experiments, you can check and link all the data together.
->Here will be example of all metrics, metadata, etc. associated with the model in an end-to-end view to explain the relationship between data, model and metrics obtained from model experiment, all together are part of ML experiments.
+Now you have the metadata about data used, models and model experiments, you can check and link all the data together. For example:
+```json
+{
+    "Model_id": "md1",
+    "Name": "BTS_LSTM",
+    "Status": [
+        "ready to use"
+    ],
+    "Version": "1.0",
+    "Description": "",
+    "Time_created": "",
+    "Artefact": {
+        "Url": "",
+        "Format": "raw code",
+        "License": "000"
+    },
+    "Quality_of_model": {
+        "Accuracy": {
+            "operators": [
+                "min",
+                "max"
+            ],
+            "unit": "percentage",
+            "value": "value",
+            "class": [
+                "Accuracy"
+            ]
+        },
+        "MSE": {
+            "operators": [
+                "min",
+                "max"
+            ],
+            "unit": "percentage",
+            "value": "value",
+            "class": [
+                "Accuracy"
+            ]
+        }
+    },
+    "Dataset_dependecy": {
+        "bts02": {
+            "type_of_relationship": "input"
+        }
+    },
+    "Model_dependency": {},
+    "Package_dependency": {
+        "numpy": {
+            "version": "1.19.5",
+            "source": ""
+        },
+        "pandas": {
+            "version": "1.2.4"
+        }
+    }
+}
+```
+This metadata of the model capture the model in an end-to-end view to explain the relationship between data, model and metrics obtained from model experiment, all together are part of ML experiments.
 
 ## Model Serving /ML Service
+
+### Important questions
+- How to pack and move code to serving platforms
+- Which service platforms should we use?
+- How to deploy and manage ML services?
+
+### Packing the model code
 Given the model experimented, we can package and perform the model serving.
->Pls. check our serving tutorial.
+> You can check [our serving tutorial](../MLServing).
 
 In the following explain basic steps to package models and record them.
 
-### Packing the model code
 >Note: this example is based on the model mentioned in the previous section
 
-Now, after discovering the best combination of alpha and l1_ratio, you want to share your ml code with other data scientist in a reusable, and reproducible form. You can packing the code in a virtual environment such as conda so that the code can be executed everywhere.
+Now, you want to share your ml code with other data scientist in a reusable, and reproducible form. You can packing the code in a virtual environment such as conda so that the code can be executed everywhere.
 In order to package the code using MLflow, you have to create MLProject and description files which define the requirements for executing the code. The below files are an example for packaging the code at <https://github.com/mlflow/mlflow-example> and execute it in the conda environment.
 
 Create MLProject file
-```yaml
+```
+name: tutorial
 
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      start_line: int
+      end_line: int
+    command: "python model.py {start_line} {end_line}"
 ```
 Create conda.yaml to define all requirements for the python program
 ```yaml
-
+name: tutorial
+channels:
+  - defaults
+dependencies:
+  - numpy>=1.14.3
+  - pandas>=1.0.0
+  - scikit-learn=0.19.1
+  - matplotlib
+  - pip
+  - pip:
+    - mlflow
 ```
 
-After defining the MLProject and conda.yaml files. You can run your code in another conda environment using the following command:
+After defining the MLProject and conda.yaml files. You can run your code in another conda environment using the following command from the parent directory:
 
 ```bash
-    $ mlflow run
-
+$ mlflow run BTS_Example -P start_line=40 -P end_line=100
 ```
 
-Notably, the directory ml_experiments is where your MLProject and conda.yaml are located. It can have any name that you have created for your project. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with the id 'mlflow-f175708099db6c37e65aca9c773737a0ff03ecbc' and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
+Notably, the directory ml_experiments is where your MLProject and conda.yaml are located. It can have any name that you have created for your project. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with the id `a5a15becc3b44060915d2e06496cff47` and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
 
->TODO figure
-
-### Link Packaged models with ML experiments
-
->TODO: how do we link the package models with models, data, etc. that we have before. After this step, we can query all related information, including packaged models.
-
+![image info](./images/MLflow_ui.png "Figure 2: MLflow finished packing the code in virtual enviroment")
 
 ###  Serving Models
 Given the packaged models, you can select suitable one and deploy as a service.
@@ -267,47 +418,77 @@ For example, the model can be used to serve as a service through a REST API.
 
 Student can go to the UI to check the saving model:
 ```bash
-    $mlflow ui
+$mlflow ui
 ```
-<!-- FIX ME: CHANGE THIS TO SOMETHING ELSE -->
-Deploy the server using the saving model:
+Deploy the server using the saved model:
 ```bash
-   $mlflow models serve -m
+$mlflow models serve -m mlruns/0/a5a15becc3b44060915d2e06496cff47/artifacts/LSTM_model -p 8888
 ```
-
 After the server is deployed successfully, you will see a result similar to the Figure 3 where your training model is deployed and ready to serve the prediction.
 
->TODO: figure
 
-But maybe it is a good practice to test if the deployed model is actually working correctly? You can do prediction for your testing data using the deployed model such as follows:
+![image info](./images/deployment.png "Figure 3: Successful deployment message")
 
+To test if the deployment works correctly, you can do prediction for your testing data using the deployed model such as follows:
+Testing data:
+```JSON
+{
+  "inputs": [
+    [
+      [ 0.074], [-0.003], [-0.08] ,[ -0.157], [-0.235], [-0.312]]
+    ]
+
+}
+```
+End point:
 ```bash
 
-   $curl -X POST -H  http://127.0.0.1:1234/invocations
-
+http://127.0.0.1:8888/invocations
 
 ```
-### Monitoring ML services and link the service monitoring data to ML Experiments
+You can also use the following simple client code in **[client.py]** to send request to the api endpoint.
+```python
+# importing the requests library
+import requests
+# defining the api-endpoint
+API_ENDPOINT = "http://127.0.0.1:8888/invocations"
 
-Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service (see other tutorials).
->Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
+# data to be sent to api
+param = {
+  "inputs": [[[ 0.074], [-0.003], [-0.08] ,[ -0.157], [-0.235], [-0.312]]]
+}
 
+# sending post request and saving response as a json object
+response = requests.post(url = API_ENDPOINT, json = param)
+result = response.json()
+# extracting result
+print(result[0][0])
+```
+
+## Further important aspects and tutorials
+
+### Questions
+- Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service. Assume that you want to monitor more complex metrics such as cost, performance of your API functions, what are the suitable solutions?
+- Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
+
+### Further tutorials
+
+We will do ML service monitoring using other tutorials
+- [Performance Monitoring](../PerformanceMonitoring/)
+- [Quality of Analytics for ML](../qoa4ml)
 
 
 ## References and additional links
+
+Interesting resources about ML engineering:
+* [Best Practices for ML Engineering by Martin Zinkevic](https://developers.google.com/machine-learning/guides/rules-of-ml)
+
 Part of the tutorial is built upon MLflow official documents. The main references are:
 * https://www.mlflow.org/docs/latest/index.html
 * https://www.mlflow.org/docs/latest/models.html#models
 * https://mlflow.org/docs/latest/tutorials-and-examples/index.html
 * https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
 
-Accompanying Slides and Video for running MLflow with the Wine prediction
+Some old slides and video for running MLflow with the Wine prediction
 * [Slides](ML_ProjectManagement_2020.pdf)
-* [A hands-on video as part of this tutorial](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
-
-## Open Questions
-1. What would you do to improve the tutorial to manage thousands of experiments?
-
-2. Assume that you want to monitor more complex metrics such as cost, peformance of your API functions, what are the suitable solutions?
-
-3. How to evaluate or compare your experiments based on multiple metrics? What would be an appropriate solution?
+* [A hands-on video](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
