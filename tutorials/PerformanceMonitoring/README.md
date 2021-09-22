@@ -36,7 +36,6 @@ In this step, you should work on the list of low-level metrics/data, probes:
 * how does the monitoring, observability affect your ML service design?
 
 ## Instrumenting ML Service
-<!-- >TODO: to be written -->
 In this tutorial, we would monitor the [MLService](MLService/) that has been developed in the [MLProjectManagement tutorial](../MLProjectManagement/).
 Check the [sample service](MLService/). You can practice to add many metrics as you want.
 
@@ -120,8 +119,6 @@ services:
       - monitor-net
 ```
 
-
-
 Then check the metrics of your ML service in Prometheus/Grafana:
 You can do that by searching for the metric on the [Prometheus UI](http://localhost:9090/). This is an example of `input_variance` metric result: 
 ![image info](./images/input_variance_metric.png "Figure 1: Checking metric through Prometheus UI")
@@ -135,25 +132,36 @@ It is not enough to monitor the ML service without monitoring the underlying inf
 ```bash
 pip install psutil
 ```
-Example of using `psutil` to monitor `cpu_percent` and `memory` on server:
+In `resource_management.py`, create an observer using `psutil` to monitor `cpu_percent` and `memory` on server:
 ```python
+from flask import Flask, request
+import psutil
+app = Flask(__name__)
+
 @app.route("/metrics")
 def log_metric_prometheus():
-  metric = 'cpu_percent {}\n'.format(psutil.cpu_percent())
-  metric += 'virtual_memory_total {}\n'.format(psutil.virtual_memory()[0])
-  metric += 'virtual_memory_percent {}\n'.format(psutil.virtual_memory()[2])
-  return metric
-``` 
+    metric = 'cpu_percent {}\n'.format(psutil.cpu_percent())
+    metric += 'virtual_memory_free {}\n'.format(psutil.virtual_memory()[4])
+    metric += 'virtual_memory_percent {}\n'.format(psutil.virtual_memory()[2])
+    return metric
 
-Capture middleware information:
-> To be written
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8888, debug=True)
+``` 
+Update the `prometheus.yml` to scrape the observer every 5 minutes:
+```yml
+  - job_name: 'Resource_monitoring'
+    scrape_interval: 5m
+    static_configs:
+      - targets: ["your_ip_address:8888"]
+```
+Check for the new metrics on the [Prometheus UI](http://localhost:9090/), by searching for the name of the metric, eg: `virtual_memory_free`
 
 ## Observing monitoring data, working on high-level metrics, visualization
 
 Check monitoring data of machines, middleware and your ML service.
 ### Important questions:
 * how do you want your monitoring data is visualized?
-* 
 In this example, we use `Grafana` to visualize our monitoring. In order to config `Grafana`, you can update your `docker-compose.yml`:
 ```yml
   grafana:

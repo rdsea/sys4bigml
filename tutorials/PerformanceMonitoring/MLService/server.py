@@ -2,7 +2,6 @@ from flask import Flask, request
 import tflite_runtime.interpreter as tflite
 import numpy as np
 import json
-import psutil
 
 app = Flask(__name__)
 buffer = [[0, 0, 0, 0, 0, 0]] * 50
@@ -53,10 +52,10 @@ def prediction():
 @app.route("/metrics")
 def log_metric_prometheus():
     metric = 'input_variance {}\n'.format(input_variance)
-    metric += 'cpu_percent {}\n'.format(psutil.cpu_percent())
-    metric += 'virtual_memory_free {}\n'.format(psutil.virtual_memory()[4])
-    metric += 'virtual_memory_percent {}\n'.format(psutil.virtual_memory()[2])
     return metric
+@app.route("/health")
+def health_check():
+    return "live"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

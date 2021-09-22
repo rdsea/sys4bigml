@@ -1,0 +1,44 @@
+{
+    "qoa_service": {
+        "service_name": "bts",
+        "url": "http://195.148.22.62:8181/v1/data/qoa4ml/bts/alarm/violation",
+        "queue_info":{
+            "exchange_name": "qoa_topic",
+            "exchange_type": "topic",
+            "in_queue": "in_qoa",
+            "out_queue": "out_qoa_user2",
+            "in_routing_key": "qoa.response.user2",
+            "out_routing_key": "qoa.report.user2",
+            "roles": "client"
+        },
+        "client_info": {
+            "id": "user2",
+            "roles": "ml_user"
+        },
+        "service_info": {
+            "service": "request",
+            "machinetypes": "small",
+            "metric": [
+                "Accuracy",
+                "ResponseTime"
+            ]
+        },
+        "metric": {
+            "Accuracy": 100.0,
+            "ResponseTime": 0.0
+        }
+    },
+    "broker_service":{
+        "broker": "AMQP",
+        "url": "195.148.22.62"
+    },
+    "ml_service":{
+        "exchange_name": "lstm_bts",
+        "exchange_type": "topic",
+        "in_queue": "out_lstm",
+        "out_queue": "in_lstm",
+        "in_routing_key": "lstm.response.user2",
+        "out_routing_key": "lstm.request.user2",
+        "roles": "client"
+    }
+}

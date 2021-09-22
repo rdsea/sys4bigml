@@ -138,7 +138,7 @@ test_serial_data = test_serial_data[6:]
 #### Important questions
 
 #### Practice
->TODO: Currently, there are existing tools to store metadata of the dataset, e.g BigQuery, Atlas, and to manage and discovery data such as Google Cloud Data Catalog and IBM Knowledge Catalog, etc. However, there is a lack of framework for capturing complex relationships between the datasets and different entities (e.g: other dataset, ML model) in a ML solution.
+Currently, there are existing tools to store metadata of the dataset, e.g BigQuery, Atlas, and to manage and discovery data such as Google Cloud Data Catalog and IBM Knowledge Catalog, etc. However, there is a lack of framework for capturing complex relationships between the datasets and different entities (e.g: other dataset, ML model) in a ML solution.
 
 
 Metadata of the dataset can be used to manage information of the datasets. Metadata object should include different aspects of the dataset, such as data management aspect (Name, version, url, size, created_time, last_modified_time, provider, description), dataset_dependency, and quality of data (completeness, label_ratio, etc).
@@ -205,7 +205,7 @@ After having the model selection and suitable methods:
 There are many tools. [MLflow](https://mlflow.org/) might be a good tool to help you stay on top of what is going on. Using MLFlow,  we study how to capture the relationships among configurable parameters, machine learning code, the input data, output result, and performance metrics.
 ____
 > MLflow introduction and installation: MLFlow is a popular python package for machine learning life cycle. It provides many functions such as follows:
-> - Tracking: track experiments to store parameters and results.
+>- Tracking: track experiments to store parameters and results.
 >- Packaging: package the project code in reproducible form in order to share or transfer to production.
 >- Deploying: manage and deploy models from a variety of machine learning libraries.
 _____
@@ -368,9 +368,9 @@ In the following explain basic steps to package models and record them.
 >Note: this example is based on the model mentioned in the previous section
 
 Now, you want to share your ml code with other data scientist in a reusable, and reproducible form. You can packing the code in a virtual environment such as conda so that the code can be executed everywhere.
-In order to package the code using MLflow, you have to create MLProject and description files which define the requirements for executing the code. The below files are an example for packaging the code at <https://github.com/mlflow/mlflow-example> and execute it in the conda environment.
+In order to package the code using MLflow, you have to create MLproject and description files which define the requirements for executing the code. The below files are an example for packaging the code at <https://github.com/mlflow/mlflow-example> and execute it in the conda environment.
 
-Create MLProject file
+Create MLproject file
 ```
 name: tutorial
 
@@ -398,13 +398,13 @@ dependencies:
     - mlflow
 ```
 
-After defining the MLProject and conda.yaml files. You can run your code in another conda environment using the following command from the parent directory:
+After defining the MLproject and conda.yaml files. You can run your code in another conda environment using the following command from the parent directory:
 
 ```bash
 $ mlflow run BTS_Example -P start_line=40 -P end_line=100
 ```
 
-Notably, the directory ml_experiments is where your MLProject and conda.yaml are located. It can have any name that you have created for your project. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with the id `a5a15becc3b44060915d2e06496cff47` and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
+Notably, the directory ml_experiments is where your MLproject and conda.yaml are located. It can have any name that you have created for your project. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with the id `a5a15becc3b44060915d2e06496cff47` and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
 
 ![image info](./images/MLflow_ui.png "Figure 2: MLflow finished packing the code in virtual enviroment")
 

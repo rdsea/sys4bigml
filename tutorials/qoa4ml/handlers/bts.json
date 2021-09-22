@@ -1,0 +1,18 @@
+{
+    "client_info": {
+        "id": "user3",
+        "roles": "ml_user"
+    },
+    "service_info": {
+        "id": "request", 
+        "machinetypes": "small", 
+        "metric": ["Accuracy", "ResponseTime"]
+    },
+    "metric": {
+        
+    },
+    "mandatory":{
+        "client_info":["id", "roles"],
+        "service_info":["machinetypes"]
+    }
+}
