@@ -67,14 +67,14 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
   - Key reading 3: [Hidden Technical Debt in Machine Learning Systems](https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html)
   - Key reading 4: [Declarative Machine Learning Systems](https://queue.acm.org/detail.cfm?id=3479315)
 - Lecture 2
-  - Slides: [Benchmarking, Monitoring, Validation and Experimenting for
-Big Data and Machine Learning Systems](slides/)
+  - Slides: [Benchmarking, Monitoring, Observability and Experimenting for
+Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.3.pdf)
   - Key reading 1: [Benchmarking big data systems: A survey](https://www.sciencedirect.com/science/article/pii/S0140366419312344)
   - Key reading 2: [MLPERF Training Benchmark](https://arxiv.org/pdf/1910.01500.pdf)
   - Key reading 3: [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
   - Key reading 4: [Developments in MLflow: A System to Accelerate the Machine Learning Lifecycle](https://dl.acm.org/doi/abs/10.1145/3399579.3399867) and [ModelDB: a system for machine learning model management](https://dl.acm.org/doi/10.1145/2939502.2939516)
   - Key reading 5:[Machine Learning Testing: Survey, Landscapes and Horizons](https://ieeexplore.ieee.org/document/9000651)
-  - Site 1: [AI Matrix](https://aimatrix.ai/en-us/index.html)
+  - Site 1: [MLCommons](https://mlcommons.org/en/)
   - The collection of [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847) is also useful
 - Lecture 3
   - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/)
