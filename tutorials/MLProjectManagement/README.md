@@ -389,13 +389,20 @@ name: tutorial
 channels:
   - defaults
 dependencies:
-  - numpy>=1.14.3
+  - python=3.8.11
+  - numpy==1.18.5
   - pandas>=1.0.0
-  - scikit-learn=0.19.1
+  - scikit-learn
   - matplotlib
   - pip
   - pip:
     - mlflow
+    - cffi==1.14.6
+    - pandas==1.2.4
+    - pillow==8.3.1
+    - pyyaml==5.4.1
+    - scipy==1.6.2
+    - tensorflow==2.4.1
 ```
 
 After defining the MLproject and conda.yaml files. You can run your code in another conda environment using the following command from the parent directory:

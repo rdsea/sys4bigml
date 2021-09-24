@@ -2,11 +2,20 @@ name: tutorial
 channels:
   - defaults
 dependencies:
-  - numpy
+  - python=3.8.11
+  - numpy==1.18.5
   - pandas>=1.0.0
   - scikit-learn
   - matplotlib
-  - tensorflow
   - pip
   - pip:
     - mlflow
+    - cffi==1.14.6
+    - pandas==1.2.4
+    - pillow==8.3.1
+    - pyyaml==5.4.1
+    - scipy==1.6.2
+    - tensorflow==2.4.1
+
+
+

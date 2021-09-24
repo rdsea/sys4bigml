@@ -28,8 +28,8 @@ def main():
     test_dataset = test_dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
     test_dataset_full = test_dataset.sort_values(by=['norm_time'])
     # Choose a small part of the data to test the model
-    start_line = int(sys.argv[1]) if len(sys.argv) > 1 else 0
-    end_line = int(sys.argv[2]) if len(sys.argv) > 2 else 40
+    start_line = 0
+    end_line = 100
     test_data = test_dataset_full[start_line:end_line]
 
     # pre-processing data 
@@ -67,28 +67,35 @@ def main():
     with mlflow.start_run():
 
         model = keras.Sequential()
-        model.add(layers.LSTM(32, return_sequences=True))
-        model.add(layers.LSTM(32, return_sequences=True))
+        n = sys.argv[1] if len(sys.argv) > 1 else 2
+
+        node_param = [] 
+        file_name = sys.argv[2] if len(sys.argv) > 2 else "conf.txt"
+        with open(file_name, 'r') as f:
+            content = f.read()
+            node_param = content.split(",")
+        for i in range(int(n)):
+            model.add(layers.LSTM(int(node_param[i]), return_sequences=True))
         model.add(layers.TimeDistributed(layers.Dense(1)))
         model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
         
-        model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
-
+        fitted_model = model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
         signature = infer_signature(test_features, model.predict(test_features))
         # Let's check out how it looks
-        print(signature)
-        mlflow.log_param("test line from ", '{} {}'.format(start_line, end_line))
-        mlflow.log_param("Test file", test_file_name)
+        mlflow.log_param("number of layer", n)
+        mlflow.log_param("number of node each layer", node_param)
+        fit_history = fitted_model.history
+        for key in fit_history:
+            mlflow.log_metric(key, fit_history[key][-1])
         
         model_dir_path = "./saved_model"
-        # mlflow.keras.save_model(model, model_dir_path)
         
         # Create an input example to store in the MLflow model registry
         input_example = np.expand_dims(train_features[0], axis=0)
         
         # Let's log the model in the MLflow model registry
         model_name = 'LSTM_model'
-        mlflow.keras.log_model(model, model_name, signature=signature, input_example=input_example)
+        mlflow.keras.log_model(model,"LSTM_model", signature=signature, input_example=input_example)
 
 if __name__ == "__main__":
     main()
