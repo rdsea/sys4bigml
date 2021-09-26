@@ -21,7 +21,10 @@ We will carry out a case study of ML development for predictive maintenance in B
 
 We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
 (currently the raw data is not uploaded because I am still figuring out a way to not have to upload the whole day of data, contact Linh Nguyen if you need raw data at the moment)
-
+### Prerequisite 
+* [Pandas](https://pandas.pydata.org/), [numpy](https://numpy.org/)
+* [TensorFlow](https://www.tensorflow.org/install)
+* [MLflow](https://www.mlflow.org/docs/latest/quickstart.html)
 ### Data Understanding and characterization and development requirements
 
 #### Important questions
@@ -118,8 +121,9 @@ test_dataset = test_raw_dataset.copy()
 test_dataset = test_dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
 test_dataset_full = test_dataset.sort_values(by=['norm_time'])
 # Choose a small part of the data to test the model
-start_line = int(sys.argv[1]) if len(sys.argv) > 1 else 40
-end_line = int(sys.argv[2]) if len(sys.argv) > 2 else 100
+start_line = 0
+end_line = 100
+test_data = test_dataset_full[start_line:end_line]
 test_data = test_dataset_full[start_line:end_line]
 
 test_serial_data = test_data.drop(['value','norm_time'], axis=1)
@@ -131,7 +135,6 @@ test_serial_data['norm_5'] = test_serial_data['norm_value'].shift(5)
 test_serial_data['norm_6'] = test_serial_data['norm_value'].shift(6)
 test_serial_data = test_serial_data[6:]
 ```
-
 
 ### Metadata about data
 
@@ -188,8 +191,8 @@ Following json is an example of the metadata for dataset used in this example:
 #### Practice
 
 Next steps are model training and model experiments. We will need to record performance metrics, machine information, etc. and associate them with the data to be used (and the metadata) so that we can have all information is linked for an end-to-end ML experiment.
-We assume that you follow existing methods to select ML algorithms to create suitable models. In this practice, we will use LSTM.
->Note: link to LSTM
+We assume that you follow existing methods to select ML algorithms to create suitable models. In this practice, we will use [LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory).
+
 
 ### Training and ML model experiments
 
@@ -250,29 +253,36 @@ test_labels = test_labels.reshape(test_labels.shape[0],test_labels.shape[1],1)
 with mlflow.start_run():
 
     model = keras.Sequential()
-    model.add(layers.LSTM(32, return_sequences=True))
-    model.add(layers.LSTM(32, return_sequences=True))
+    n = sys.argv[1] if len(sys.argv) > 1 else 2
+    node_param = [] 
+    file_name = sys.argv[2] if len(sys.argv) > 2 else "conf.txt"
+    with open(file_name, 'r') as f:
+        content = f.read()
+        node_param = content.split(",")
+    for i in range(int(n)):
+        model.add(layers.LSTM(int(node_param[i]), return_sequences=True))
     model.add(layers.TimeDistributed(layers.Dense(1)))
     model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
-
-    model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
-
+    
+    fitted_model = model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
     signature = infer_signature(test_features, model.predict(test_features))
     # Let's check out how it looks
-    print(signature)
-    mlflow.log_param("test line from ", '{} {}'.format(start_line, end_line))
-    mlflow.log_param("Test file", test_file_name)
-
+    mlflow.log_param("number of layer", n)
+    mlflow.log_param("number of node each layer", node_param)
+    fit_history = fitted_model.history
+    for key in fit_history:
+        mlflow.log_metric(key, fit_history[key][-1])
+    
     model_dir_path = "./saved_model"
-
+    
     # Create an input example to store in the MLflow model registry
     input_example = np.expand_dims(train_features[0], axis=0)
-
+    
     # Let's log the model in the MLflow model registry
     model_name = 'LSTM_model'
-    mlflow.keras.log_model(model, model_name, signature=signature, input_example=input_example)
+    mlflow.keras.log_model(model,"LSTM_model", signature=signature, input_example=input_example)
 ```
-We can log the input example for the model using `mlflow.keras.log_mode` with `input_example`.
+We can log the input example for the model using `mlflow.keras.log_model` with `input_example`.
 
 #### Running model experiments
 
@@ -289,7 +299,7 @@ $mlflow ui
 
 ![image info](./images/MLflow_ui.png "Figure 1: MLflow run statistic")
 
-* The results are illustrated in the Figure 1 where you can see all the logging parameters and metrics as well as different runs of your experiment. You can also see that the parameters and metrics are separate in the top row since they are logged with different MLflow api (log_param and log_metric.).
+* The results are illustrated in the Figure 1 where you can see all the logging parameters and metrics as well as different runs of your experiment. You can also see that the parameters and metrics are separate in the top row since they are logged with different MLflow api (log_param and log_metric.). In this example, we train the model with different set of layers and nodes for each layer, which is passed through the command line, and log by log_param, and the metric collected is the loss of the last epoch. 
 
 #### Examine data and model experiments
 
@@ -379,9 +389,9 @@ conda_env: conda.yaml
 entry_points:
   main:
     parameters:
-      start_line: int
-      end_line: int
-    command: "python model.py {start_line} {end_line}"
+      n_layer: {type: int, default: 2}
+      configuration_file: {type: string, default: "conf.txt"}
+    command: "python model.py {n_layer} {configuration_file}"
 ```
 Create conda.yaml to define all requirements for the python program
 ```yaml
@@ -408,12 +418,15 @@ dependencies:
 After defining the MLproject and conda.yaml files. You can run your code in another conda environment using the following command from the parent directory:
 
 ```bash
-$ mlflow run BTS_Example -P start_line=40 -P end_line=100
+$ mlflow run BTS_Example
 ```
+or run it with custom parameters:
+```bash
+$ mlflow run BTS_Example/ -P n_layer=3 -P configuration_file="conf.txt"
+```
+Notably, the directory ml_experiments is where your MLproject and conda.yaml are located. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with a run id and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
 
-Notably, the directory ml_experiments is where your MLproject and conda.yaml are located. It can have any name that you have created for your project. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with the id `a5a15becc3b44060915d2e06496cff47` and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
-
-![image info](./images/MLflow_ui.png "Figure 2: MLflow finished packing the code in virtual enviroment")
+![image info](./images/MLflow_complete.png "Figure 2: MLflow finished packing the code in virtual enviroment")
 
 ###  Serving Models
 Given the packaged models, you can select suitable one and deploy as a service.
@@ -425,11 +438,15 @@ For example, the model can be used to serve as a service through a REST API.
 
 Student can go to the UI to check the saving model:
 ```bash
-$mlflow ui
+$ mlflow ui
+```
+or with the mlflow server:
+```bash
+$ mlflow server -h 0.0.0.0
 ```
 Deploy the server using the saved model:
 ```bash
-$mlflow models serve -m mlruns/0/a5a15becc3b44060915d2e06496cff47/artifacts/LSTM_model -p 8888
+$mlflow models serve -m mlruns/0/project_id/artifacts/LSTM_model -p 8888
 ```
 After the server is deployed successfully, you will see a result similar to the Figure 3 where your training model is deployed and ready to serve the prediction.
 
@@ -458,7 +475,7 @@ You can also use the following simple client code in **[client.py]** to send req
 # importing the requests library
 import requests
 # defining the api-endpoint
-API_ENDPOINT = "http://127.0.0.1:8888/invocations"
+API_ENDPOINT = "http://0.0.0.0:8888/invocations"
 
 # data to be sent to api
 param = {
