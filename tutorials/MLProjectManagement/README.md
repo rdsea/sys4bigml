@@ -4,24 +4,23 @@ The goal of this tutorial is to practice managing end-to-end ML experiments. An 
 
 ## Motivation and study goal
 
-Not only developing a machine model is not an easy task, but managing a machine learning project is also very complicated and envolving. How can you manage the end-to-end process from having a dataset to a functioning prediction models?
+Managing a machine learning project is a very complicated process involving a huge manual effort. How can you effectively manage the end-to-end process from having a dataset to a functioning prediction models?
 
 ## Requirements, Data for Model development, and Managing Metadata about data
 
 ### Important questions
 You start building an ML model based on data. Key steps in preparing data
 
-* identify the data you have for model development
-* capture requirements for your ML model/service
-* create suitable metadata for the data to be used
-* checking quality of data, improving data and updating metadata
+* Investigate the data you have for model development
+* Identify requirements for your ML model/service
+* Define suitable metadata for the data to be used
+* Checking quality of data, improving data and updating metadata
 
 ### Practice
-We will carry out a case study of ML development for predictive maintenance in BTS.
-
-We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
-(currently the raw data is not uploaded because I am still figuring out a way to not have to upload the whole day of data, contact Linh Nguyen if you need raw data at the moment)
+We will carry out a case study of ML development for predictive maintenance in BTS (Base Transceiver Stations). The raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
+(currently the raw data is not uploaded because we are still figuring out a way to not have to upload the whole day of data, contact Linh Nguyen (linh.nguyen@aalto.fi) if you need raw data at the moment)
 ### Prerequisite 
+* [Anaconda](https://www.anaconda.com/)
 * [Pandas](https://pandas.pydata.org/), [numpy](https://numpy.org/)
 * [TensorFlow](https://www.tensorflow.org/install)
 * [MLflow](https://www.mlflow.org/docs/latest/quickstart.html)
@@ -43,9 +42,9 @@ We use the BTS (Base Transceiver Stations), the raw data can be accessed from: `
 ### Data Transformation, Enrichment and Featuring
 
 #### Important questions:
-- do we need to transform the data?
-- should we enrich the data?
-- which features should we select for ML models and why?
+- Do we need to transform the data?
+- Should we enrich the data?
+- Which features should we select for ML models and why?
 
 #### Practice
 
