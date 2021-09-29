@@ -35,7 +35,7 @@ In this step, you should work on the list of low-level metrics/data, probes:
 * how do the metrics look like and what do you need to collect for the metrics?
 * how does the monitoring, observability affect your ML service design?
 
-## Instrumenting ML Service
+## Instrumenting ML service
 In this tutorial, we would monitor the [MLService](MLService/) that has been developed in the [MLProjectManagement tutorial](../MLProjectManagement/).
 Check the [sample service](MLService/). You can practice to add many metrics as you want.
 
@@ -48,7 +48,7 @@ and continuously send the request from client
 ```bash
 python client.py
 ```
-In this example, we monitor the input varriance from 50 latest requests sent to the server. In order to achieve that, 50 latest inputs are stored in a buffer, and updated everytime a new request is received on the server. 
+In this example, we monitor the input varriance from 50 latest requests sent to the server. In order to achieve that, 50 latest inputs are stored in a buffer, and updated everytime a new request is received on the server.
 ```python
 buffer = [[0, 0, 0, 0, 0, 0]] * 50
 pointer = 0
@@ -75,7 +75,7 @@ buffer_np = np.array(buffer)
 input_variance = buffer_np.var()
 ```
 
-### Configure prometheus to monitor the ML Service
+### Configure Prometheus to monitor the ML Service
 If you see the ML service work and the metrics are outputed, then [configure Promethesus to pull metrics](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) from your Prometheus endpoint in your ML service.
 
 * Create `prometheus.yml`
@@ -120,7 +120,7 @@ services:
 ```
 
 Then check the metrics of your ML service in Prometheus/Grafana:
-You can do that by searching for the metric on the [Prometheus UI](http://localhost:9090/). This is an example of `input_variance` metric result: 
+You can do that by searching for the metric on the [Prometheus UI](http://localhost:9090/). This is an example of `input_variance` metric result:
 ![image info](./images/input_variance_metric.png "Figure 1: Checking metric through Prometheus UI")
 
 Also see our [ML serving tutorial](../MLServing/)
@@ -147,7 +147,7 @@ def log_metric_prometheus():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8888, debug=True)
-``` 
+```
 Update the `prometheus.yml` to scrape the observer every 5 minutes:
 ```yml
   - job_name: 'Resource_monitoring'
@@ -186,8 +186,9 @@ In this example, we use `Grafana` to visualize our monitoring. In order to confi
 ```
 In order to use `Grafana` to visualize the monitoring data, you need to set the `Prometheus` as a data source. It can be done through **Configuration > Data sources > Add data source**. After that, you can add the visualization through **Create > Dashboard**
 ![image info](./images/BTS_monitoring.png "Figure 2: Using Grafana to visualize cpu_percent metric and virtual_memory_percent metric")
-## References
 
+## References
+The key features of Prometheus and Grafana explained in this tutorial are based on Prometheus and Grafana tutorials/documents:
 * https://github.com/prometheus/client_python
 * https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
 * https://dzone.com/articles/monitoring-with-prometheus
@@ -198,8 +199,8 @@ In order to use `Grafana` to visualize the monitoring data, you need to set the 
 
 ## Open Questions
 
-1. How to monitor a machine learning pipeline with Prometheus?
+1. We show the monitoring of an ML service but how would you monitor the whole ML system in which a ML service may be just a component? For example, the ML service will be behind a load balancer or ML services accept only data sent via a queue or data stored in cloud file systems?
 
-2. How to make an alert for the specific conditions of metrics detected in your machine learning programs or systems with Prometheus?
+2. How to make an alert for the specific conditions of metrics detected in your machine learning systems with Prometheus?
 
-3. How to monitor multiple nodes or a cluster using Prometheus? What is about the monitoring of a Kubernetes cluster?
+3. How to monitor multiple instances of ML services running in  a cluster? For example, we can deploy ML service instances in a Kubernetes cluster. 
