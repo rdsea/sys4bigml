@@ -1,15 +1,15 @@
 # End-to-End ML Systems Development
 
-The goal of this tutorial is to practice managing end-to-end ML experiments. An end-to-end ML experiments includes many phases, such as data collection, data pre-processing, **not just running experiments for the ML models**.
+The goal of this tutorial is to discuss and practice managing end-to-end ML system development. An end-to-end ML system development  includes many phases, such as data collection, data pre-processing, **not just running experiments for the ML models**.
 
 ## Motivation and study goal
 
 Managing a machine learning project is a very complicated process involving a huge manual effort. How can you effectively manage the end-to-end process from having a dataset to a functioning prediction models?
 
-## Requirements, Data for Model development, and Managing Metadata about data
+## Requirements, data for model development, and metadata about data
 
 ### Important questions
-You start building an ML model based on data. Key steps in preparing data
+You start building an ML model based on existing data. Key steps in preparing data
 
 * Investigate the data you have for model development
 * Identify requirements for your ML model/service
@@ -17,14 +17,15 @@ You start building an ML model based on data. Key steps in preparing data
 * Checking quality of data, improving data and updating metadata
 
 ### Practice
-We will carry out a case study of ML development for predictive maintenance in BTS (Base Transceiver Stations). The raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
-(currently the raw data is not uploaded because we are still figuring out a way to not have to upload the whole day of data, contact Linh Nguyen (linh.nguyen@aalto.fi) if you need raw data at the moment)
-### Prerequisite 
+We will carry out a case study of ML development for predictive maintenance in BTS (Base Transceiver Stations). The example raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
+(currently the raw data is not uploaded because we are still figuring out a way to not have to upload the whole day of data, contact [Linh Nguyen](linh.nguyen@aalto.fi) if you need raw data at the moment)
+
+### Prerequisite
 * [Anaconda](https://www.anaconda.com/)
 * [Pandas](https://pandas.pydata.org/), [numpy](https://numpy.org/)
 * [TensorFlow](https://www.tensorflow.org/install)
 * [MLflow](https://www.mlflow.org/docs/latest/quickstart.html)
-### Data Understanding and characterization and development requirements
+### Data understanding and characterization and development requirements
 
 #### Important questions
 
@@ -39,11 +40,11 @@ We will carry out a case study of ML development for predictive maintenance in B
 
 - Requirements: for example, read [our initial work on requirements for explainability in an end-to-end ML development](https://research.aalto.fi/en/publications/holistic-explainability-requirements-for-end-to-end-machine-learn) and work on some selected questions.
 
-### Data Transformation, Enrichment and Featuring
+### Data transformation, enrichment and featuring
 
 #### Important questions:
 - Do we need to transform the data?
-- Should we enrich the data?
+- Should we enrich the data with additional data? where is the additional data?
 - Which features should we select for ML models and why?
 
 #### Practice
@@ -51,7 +52,7 @@ We will carry out a case study of ML development for predictive maintenance in B
 The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the **file `group_data.py`**.
 
 ```python
-import pandas as pd 
+import pandas as pd
 import os, fnmatch
 
 bts_df = pd.DataFrame()
@@ -80,7 +81,9 @@ for key,item in bts_df_grouped:
     sub_data.sort_values(by=['norm_time']).to_csv("./data_grouped/{}_{}_.csv".format(key[0],key[1]), index=False)
     print("Finish: {}".format(key))
 ```
+
 After grouping the data, we need to do some further pre-processing to turn our data into serial data, and normalize the data. You can use the following code, or **open the file `Model.ipynb`** and test the code directly.
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -138,6 +141,8 @@ test_serial_data = test_serial_data[6:]
 ### Metadata about data
 
 #### Important questions
+- why do we need to keep metadata about data?
+- what are types of metadata? how to obtain them?
 
 #### Practice
 Currently, there are existing tools to store metadata of the dataset, e.g BigQuery, Atlas, and to manage and discovery data such as Google Cloud Data Catalog and IBM Knowledge Catalog, etc. However, there is a lack of framework for capturing complex relationships between the datasets and different entities (e.g: other dataset, ML model) in a ML solution.
@@ -215,6 +220,8 @@ _____
 MLflow allows us to collect experimental data for your machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
 >Other tools for storing experiments are:
 > - https://www.verta.ai/
+> - https://neptune.ai/
+> - https://wandb.ai/site
 
 To get you ready for the tutorial, please don't forget to install MLflow and scikit-learn first. It is recommended that you install Anaconda for simplifying package management and deployment. You can download the corresponding version of anaconda [here](https://www.anaconda.com/distribution)
 
@@ -253,7 +260,7 @@ with mlflow.start_run():
 
     model = keras.Sequential()
     n = sys.argv[1] if len(sys.argv) > 1 else 2
-    node_param = [] 
+    node_param = []
     file_name = sys.argv[2] if len(sys.argv) > 2 else "conf.txt"
     with open(file_name, 'r') as f:
         content = f.read()
@@ -262,7 +269,7 @@ with mlflow.start_run():
         model.add(layers.LSTM(int(node_param[i]), return_sequences=True))
     model.add(layers.TimeDistributed(layers.Dense(1)))
     model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
-    
+
     fitted_model = model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
     signature = infer_signature(test_features, model.predict(test_features))
     # Let's check out how it looks
@@ -271,12 +278,12 @@ with mlflow.start_run():
     fit_history = fitted_model.history
     for key in fit_history:
         mlflow.log_metric(key, fit_history[key][-1])
-    
+
     model_dir_path = "./saved_model"
-    
+
     # Create an input example to store in the MLflow model registry
     input_example = np.expand_dims(train_features[0], axis=0)
-    
+
     # Let's log the model in the MLflow model registry
     model_name = 'LSTM_model'
     mlflow.keras.log_model(model,"LSTM_model", signature=signature, input_example=input_example)
@@ -298,7 +305,7 @@ $mlflow ui
 
 ![image info](./images/MLflow_ui.png "Figure 1: MLflow run statistic")
 
-* The results are illustrated in the Figure 1 where you can see all the logging parameters and metrics as well as different runs of your experiment. You can also see that the parameters and metrics are separate in the top row since they are logged with different MLflow api (log_param and log_metric.). In this example, we train the model with different set of layers and nodes for each layer, which is passed through the command line, and log by log_param, and the metric collected is the loss of the last epoch. 
+* The results are illustrated in the Figure 1 where you can see all the logging parameters and metrics as well as different runs of your experiment. You can also see that the parameters and metrics are separate in the top row since they are logged with different MLflow api (log_param and log_metric.). In this example, we train the model with different set of layers and nodes for each layer, which is passed through the command line, and log by log_param, and the metric collected is the loss of the last epoch.
 
 #### Examine data and model experiments
 
@@ -361,7 +368,7 @@ Now you have the metadata about data used, models and model experiments, you can
 ```
 This metadata of the model capture the model in an end-to-end view to explain the relationship between data, model and metrics obtained from model experiment, all together are part of ML experiments.
 
-## Model Serving /ML Service
+## Model serving /ML service
 
 ### Important questions
 - How to pack and move code to serving platforms
@@ -493,6 +500,8 @@ print(result[0][0])
 ### Questions
 - Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service. Assume that you want to monitor more complex metrics such as cost, performance of your API functions, what are the suitable solutions?
 - Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
+### Interesting tools for research
+- [Machine Learning eXchange (MLX)](https://github.com/machine-learning-exchange/mlx)
 
 ### Further tutorials
 
@@ -506,11 +515,10 @@ We will do ML service monitoring using other tutorials
 Interesting resources about ML engineering:
 * [Best Practices for ML Engineering by Martin Zinkevic](https://developers.google.com/machine-learning/guides/rules-of-ml)
 
-Part of the tutorial is built upon MLflow official documents. The main references are:
+Part of the tutorial related to MLflow (experiments, package, serving) is built upon MLflow official documents. The main references are:
 * https://www.mlflow.org/docs/latest/index.html
 * https://www.mlflow.org/docs/latest/models.html#models
 * https://mlflow.org/docs/latest/tutorials-and-examples/index.html
-* https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine
 
 Some old slides and video for running MLflow with the Wine prediction
 * [Slides](ML_ProjectManagement_2020.pdf)
