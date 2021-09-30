@@ -520,6 +520,5 @@ Part of the tutorial related to MLflow (experiments, package, serving) is built 
 * https://www.mlflow.org/docs/latest/models.html#models
 * https://mlflow.org/docs/latest/tutorials-and-examples/index.html
 
-Some old slides and video for running MLflow with the Wine prediction
-* [Slides](ML_ProjectManagement_2020.pdf)
+A old video for running MLflow with the Wine prediction
 * [A hands-on video](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82c1f408-048a-416e-ac73-ac3e00d9d31a)
