@@ -77,11 +77,11 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.3.p
   - Site 1: [MLCommons](https://mlcommons.org/en/)
   - The collection of [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847) is also useful
 - Lecture 3
-  - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/)
+  - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/cs-e4660-lecture3-coordination-serving-v0.3.pdf)
   - Key reading 1: [Cirrus: a Serverless Framework for End-to-end ML Workflows](https://doi.org/10.1145/3357223.3362711)
   - Key reading 2: [Towards ML Engineering: A Brief History Of TensorFlow Extended (TFX)](https://arxiv.org/abs/2010.02013)
   - Key reading 3: [Orchestrating Big Data Analysis Workflows in the Cloud: Research Challenges, Survey, and Future Directions](https://dl.acm.org/doi/fullHtml/10.1145/3332301)
-  - Key reading 4: [KeystoneML: Optimizing Pipelines for Large-ScaleAdvanced Analytics](https://shivaram.org/publications/keystoneml-icde17.pdf)
+  - Key reading 4: [KeystoneML: Optimizing Pipelines for Large-Scale Advanced Analytics](https://shivaram.org/publications/keystoneml-icde17.pdf)
   - Key reading 5: [Jeff Smith. 2018. Machine Learning Systems: Designs that scale (1st. ed.). Manning Publications Co., USA.](https://www.manning.com/books/machine-learning-systems)
   - Key reading 6: [Prediction-Serving Systems](https://queue.acm.org/detail.cfm?id=3210557)
 - Lecture 4
