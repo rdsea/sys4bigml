@@ -5,7 +5,7 @@
     },
     "broker_service":{
         "broker": "MQTT",
-        "url": "35.228.104.53",
+        "url": "34.88.233.130",
         "port": 1883,
         "keepalive": 60
     },

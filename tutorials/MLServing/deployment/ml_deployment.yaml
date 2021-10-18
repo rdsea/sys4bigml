@@ -15,5 +15,5 @@ spec:
         app: ml
     spec:
       containers:
-      - image: server/server_ml:1.0
+      - image: <your_repo>/<image_name>:<version>
         name: ml
