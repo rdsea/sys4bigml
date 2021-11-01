@@ -16,6 +16,7 @@ It is recommended that you use linux environment.
 
 * [Paho-Mqtt](https://pypi.org/project/paho-mqtt/), [Pandas](https://pandas.pydata.org/), [numpy](https://numpy.org/)
 * [TensorFlow](https://www.tensorflow.org/install), [TensorFlow Lite Runtime](https://www.tensorflow.org/lite/guide/python)
+* [Docker](https://docs.docker.com/get-docker/), [Kubernetes](https://kubernetes.io/) or [MicroK8s](https://microk8s.io/)
 
 ## **ML Model & Data**
 ## Machine Learning Models under Testing
@@ -68,9 +69,13 @@ Note: Make sure the dimensions of input and output of the model is unchanged.
 ```bash
 $ ssh <username>@<serverip>
 ```
-* Copy the source code to server
+* Copy the source code to server if you want to push the folder from your local machine
 ```bash
 $ scp -r <path_to_your_source_code> <username>@<serverip>:/home/<username>
+```
+* Or clone the folder from git
+```bash
+$ git clone https://version.aalto.fi/gitlab/sys4bigml/cs-e4660.git
 ```
 
 ### Build a containerized application
@@ -78,10 +83,10 @@ $ scp -r <path_to_your_source_code> <username>@<serverip>:/home/<username>
 * The python application is prepared in `server/server_app.py` with the pre-configuration saved in `server/server.json`
 * In this turorial, we use docker to build a container for our ML service:
     - The `Dockerfile` provides step by step to build our desired image from an Ubuntu core running on `amd64` architecture. That requires pre-download the `ubuntu-groovy-core-cloudimg-amd64-root.tar.gz` and save it in `unbuntu_image` folder. You can find the image [here](https://partner-images.canonical.com/core/groovy/current/ubuntu-groovy-core-cloudimg-amd64-root.tar.gz)
-* Build the docker image by running `build.sh` (You may need to change the file permission using `chmod`):
+* Build the docker image by running `build.sh` (You may need to change the file permission using `chmod`, but you should run line by line in your terminal to understand the process and easier to handle some unexpected errors):
     * Change the name tag and version of the image you're going to build:
 ```bash
-$ docker build -t server_<username>/server_ml_<username>:<version> -f ./Dockerfile .
+$ docker build -t <your_repo>/<image_name>:<version> -f ./Dockerfile .
 ```
 
 * Archive the recently built image and import it to K8s system (read `build.sh` for more details).
@@ -109,7 +114,7 @@ metadata:
 ```yaml
 spec:
     containers:
-    - image: server_<username>/server_ml_<username>:<version>
+    - image: <your_repo>/<image_name>:<version>
     name: ml
 ```
 * Start the deployment using the following command:

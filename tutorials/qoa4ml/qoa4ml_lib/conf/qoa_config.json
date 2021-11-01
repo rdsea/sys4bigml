@@ -1,0 +1,59 @@
+{
+    "broker_info":{
+        "broker": "AMQP",
+        "url": "195.148.22.62"
+    },
+    "queue_info": {
+        "client_id":"user3",
+        "exchange_name": "qoa_topic",
+        "exchange_type": "topic",
+        "in_queue": "in_request_qoa",
+        "out_queue": "out_response_qoa",
+        "in_routing_key": "qoa.report.#",
+        "out_routing_key": "qoa.response.#",
+        "roles": "server"
+    },
+    "report":{
+        "client_info": {
+            "id": "user3",
+            "roles": "ml_user"
+        },
+        "service_info": {
+            "id": "request", 
+            "machinetypes": "small", 
+            "metric": ["Accuracy", "DataAccuracy", "ResponseTime"]
+        },
+        "metric": {
+            "Accuracy":100,
+            "DataAccuracy":100,
+            "ResponseTime":0
+        },
+        "mandatory":{
+            "client_info":["id", "roles"],
+            "service_info":["machinetypes"]
+        }
+    },
+    "prom_info":{
+        "port": 9098,
+        "metric":{
+            "Accuracy": {
+            "Prom_name":"mlservice_accuracy",
+            "Type": "Gauge",
+            "Description": "Accuracy",
+            "Default": 100
+            },
+            "ResponseTime": {
+                "Prom_name":"mlservice_responsetime",
+                "Type": "Gauge",
+                "Description": "Service ResponseTime",
+                "Default": 0
+            },
+            "DataAccuracy": {
+                "Prom_name":"mlservice_data_accuracy",
+                "Type": "Gauge",
+                "Description": "Data accuracy",
+                "Default": 100
+            }
+        }
+    }
+}
