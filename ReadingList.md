@@ -19,7 +19,7 @@
 * https://dl.acm.org/doi/10.1145/3352020.3352024
 
 ### Monitoring:
-* [Towards Observability Data Management at Scale](https://sigmodrecord.org/publications/sigmodRecord/2012/pdfs/05_Vision_Karumuri.pdf) 
+* [Towards Observability Data Management at Scale](https://sigmodrecord.org/publications/sigmodRecord/2012/pdfs/05_Vision_Karumuri.pdf)
 *  https://www.sysml.cc/doc/2019/199.pdf
 * https://monitorml.com/index.html
 * https://dl.acm.org/doi/pdf/10.5555/1251203.1251209
@@ -39,6 +39,8 @@
 * https://dl.acm.org/doi/fullHtml/10.1145/3332301
 * https://docs.microsoft.com/en-us/azure/machine-learning/concept-ml-pipelines
 * https://shivaram.org/publications/keystoneml-icde17.pdf
+* [Demystifying Parallel and Distributed Deep Learning:
+An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 
 ### Reactive ML Systems
 * Jeff Smith. 2018. Machine Learning Systems: Designs that scale (1st. ed.). Manning Publications Co., USA.https://www.manning.com/books/machine-learning-systems
