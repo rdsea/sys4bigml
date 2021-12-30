@@ -22,16 +22,16 @@
 
     "quality": {
         "services": [
-            {"ResponseTime":{"operators":"max","unit":"s","value":0.05,"class": ["performance"], "machinetypes": ["small"]}},
+            {"ResponseTime":{"operators":"max","unit":"s","value":0.04,"class": ["performance"], "machinetypes": ["small"]}},
             {"ResponseTime":{"operators":"max","unit":"s","value":0.05,"class": ["performance"], "machinetypes": ["normal"]}},
             {"Reliability":{"operators":"min","unit":"percentage","value":90, "class": ["performance"], "machinetypes": ["normal"]}}
         ],
         "data":[
-            {"Accuracy":{"operators":"min","unit":"percentage","value":80, "class": ["qualityofdata"]}},
+            {"Accuracy":{"operators":"min","unit":"percentage","value":95, "class": ["qualityofdata"]}},
             {"Completeness":{"operators":"min","unit":"percentage","value":90, "resourceType": ["qualityofdata"]}}
         ],
         "mlmodels": [
-            {"Accuracy":{"operators":"min","unit":"percentage","value":80, "class": ["Accuracy"], "machinetypes": ["small"]}},
+            {"Accuracy":{"operators":"min","unit":"percentage","value":92, "class": ["Accuracy"], "machinetypes": ["small"]}},
             {"Accuracy":{"operators":"min","unit":"percentage","value":80, "class": ["Accuracy"], "machinetypes": ["normal"]}}
         ]
         

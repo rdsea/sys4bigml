@@ -41,8 +41,10 @@ class LSTM_Prediction_Client(object):
         dict_predicted = {
             "LSTM": pre_val
         }
+        true_val = self.denormalize(predict_value["norm_value"])
         # calculate accuracy
-        accuracy =  (1 - abs((predict_value["LSTM"] - float(predict_value["norm_value"]))/float(predict_value["norm_value"])))*100
+        
+        accuracy =  (1 - abs(pre_val - true_val)/true_val)*100
         if accuracy < 0:
             accuracy = 0
         # calculate response time
