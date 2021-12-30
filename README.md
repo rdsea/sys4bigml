@@ -105,6 +105,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.3.p
   - Students will propose the project idea. This is an important aspect of *research-oriented course*. If a student cannot propose an idea, the teacher will suggest some concrete ideas for students.
 ### Final project demonstration
   - The final project demonstration should be organized like an "event" where all students can demonstrate their work and students can discuss experiences in their projects.
+  - [List of the student projects](demos.md)
 
 ### Guides
 * [How to write study/learning logs](./StudyLog.md)
