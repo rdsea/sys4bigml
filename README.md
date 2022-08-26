@@ -54,10 +54,26 @@ We define the generic plan of the course as follows:
 As an advanced and research-oriented course, we will use the pass/fail as a way to evaluate students. Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
 
 
-## Fall 2021 - Schedule and Content
+## Fall 2022 - Schedule and Content
 
 * Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
 * Other teachers/assistants: [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
+### Tentative slots
+
+Data|Content|Lead person
+---|---|---
+07.09.2022| Course overview, lecture 1 discussion | Linh Truong
+14.09.2022 |Lecture 2 discussion | Linh Truong
+21.09.2022 | Hands-on tutorial 1| Tri Nguyen
+28.09.2022 | Lecture 3 discussion   |  Linh Truong
+05.10.2022 | Lecture 4 discussion | Linh Truong
+12.10.2022 | Hands-on tutorial 2| Tri Nguyen
+26.10.2022 | Project topic discussion| Linh Truong, Tri Nguyen
+  flexible | offline discussion about topics   | Individual
+16.11.2022 | Topic progress presentation |  All
+1.12.2022  |prefinal checkpoint of progress| All
+7.12.2022  | final project demonstration| All
+12.2022  | final report/code  |  Individual
 
 ### Lectures
 - Lecture 1:
@@ -95,6 +111,8 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.3.p
 *If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
 
 ### Hands-on tutorials
+We have a few hands-on tutorials for the course that you can carry out for your study. Note that only 1-2 hands-on tutorials will be arranged by the teacher and teaching assistants.
+
   - [End-to-end ML systems development](./tutorials/MLProjectManagement/)
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
   - [Machine Learning Serving](./tutorials/MLServing)
@@ -113,6 +131,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.3.p
 ## Reading list
 * [Interesting and relevant papers and sites](./ReadingList.md)
 ## Previous course versions
+* [Fall 2021](./fall-2021)
 * [Fall 2020](./fall-2020)
 * [Initial seminar in Spring 2020](./spring-2020)
 
