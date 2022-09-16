@@ -1,0 +1,8 @@
+flask
+gunicorn==20.0.4
+eventlet==0.30.2
+flask-restful==0.3.9
+pika==1.2.0
+psutil
+prometheus-client
+paho-mqtt==1.6.1
