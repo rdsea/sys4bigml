@@ -16,9 +16,9 @@ Will be updated later
 
 ## **ML Model & Data**
 ## Machine Learning Models under Testing
-Within this tutorial, we will practice with an ML application that detect some common objects in submitted images. The model uses [Darknet](https://pjreddie.com/darknet/) which implements [YOLOv3](https://arxiv.org/abs/1804.02767) as the core neural network.
+Within this tutorial, we will practice with an ML application that detects some common objects in submitted images. The model uses [Darknet](https://pjreddie.com/darknet/) which implements [YOLOv3](https://arxiv.org/abs/1804.02767) as the core neural network.
 
-The [model implementation](https://github.com/pjreddie/darknet) provides Python interfaces while most parts are writen in C and Cuda so that we can deploy it on diverse hardware architectures. 
+The [model implementation](https://github.com/pjreddie/darknet) provides Python interfaces while most parts are written in C and Cuda so that we can deploy it on diverse hardware architectures. 
 
 The images for this experiment are extracted from the Google Open Image dataset [(V6 - released Feb. 2020)](https://storage.googleapis.com/openimages/web/index.html), containing approximately 9 million images of varying sizes (from 40KB to 1MB) and qualities in over 600 object classes.
 
@@ -54,11 +54,11 @@ $ git clone https://version.aalto.fi/gitlab/sys4bigml/cs-e4660.git
 
 ### Build a containerized application
 
-There are 3 seperate folders for 3 microservices: Web service, Preprocessing service and Inference service.
-Each folder contains a Python application, a Dockerfile, and requirement file (depedencies)
-* In this turorial, we use docker to build a container for our ML service:
-    - The `Dockerfile` provides step by step to build our desired image from `python:3.9` based image running on `amd64` architecture (depending on where you will run the container, you can change the based image that fit the hardware architechture).
-* Build the docker image by running `build.sh` (You may need to change the file permission using `chmod`, but you should run line by line in your terminal to understand the process and easier to handle some unexpected errors):
+There are 3 separate folders for 3 microservices: Web service, Preprocessing service and Inference service.
+Each folder contains a Python application, a Dockerfile, and a requirement file (dependencies)
+* In this tutorial, we use docker to build a container for our ML service:
+    - The `Dockerfile` provides step by step to build our desired image from `python:3.9` based image running on `amd64` architecture (depending on where you will run the container, you can change the based image that fit the hardware architecture).
+* Build the docker image by running `build_docker.sh` (You may need to change the file permission using `chmod`, but you should run it line by line in your terminal to understand the process and easier to handle some unexpected errors):
     * Change the name tag and version of the image you're going to build:
 ```bash
 $ docker build -t <your_repo>/<image_name>:<version> -f ./Dockerfile .
@@ -76,8 +76,8 @@ $ minikube image load <archive_name>.tar
 $ minikube images ls
 ```
 
-***Note***: You can use microk8s instead of minikube (refer to [previous year tutorial](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/master/tutorials/MLServing-2021-discontinued))
-You can also build your docker image locally then push it into [Dockerhub](https://hub.docker.com/) so that you don't have to import the image to K8s as it automatically find the image from Dockerhub if it's not available at local.
+***Note***: You can use microk8s instead of minikube (refer to [previous year's tutorial](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/master/tutorials/MLServing-2021-discontinued))
+You can also build your docker image locally then push it into [Dockerhub](https://hub.docker.com/) so that you don't have to import the image to K8s as it automatically finds the image from Dockerhub if it's not available at local.
 
 ## K8s Deployment
 * The simple deployments of all microservices in K8s are provided in `deployment/<filename>.yaml`. Inside the deployment file, we should specify the name of the deployment
@@ -133,7 +133,7 @@ $ python3 client.py
 ```
 The client application will send a random image from `client/image` folder to the web server that you just start.
 
-***Note***: modify the IP address before running. If there is problem with the network (web service i unable to reach) you can try to deploy the client in K8s also.
+***Note***: modify the IP address before running. If there is a problem with the network (web service is unable to reach) you can try to deploy the client in K8s, access the bash shell of the client deployment then run it with the similar command above.
 
 The terminal should return the prediction result as below:
 
@@ -142,7 +142,7 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 ```
 
 ## Practice
-- Change the ML serving model (e.g., using YOLOv2) without causing interuption (Hint: develop new model, modify the model information, build a new image, and re-deploy the service). 
+- Change the ML serving model (e.g., using YOLOv2) without causing interruption (Hint: develop new models, modify the model information, build a new image, and redeploy the service). 
 
 ## Open questions
 - What is the role of observability for Elastic ML serving? Can you setup an observability system for this ML serving example?
