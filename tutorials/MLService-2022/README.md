@@ -16,7 +16,7 @@ Will be updated later
 
 ## **ML Model & Data**
 ## Machine Learning Models under Testing
-Within this tutorial, we will practice with an ML application that detect some common objects in in submitted images. The model uses [Darknet](https://pjreddie.com/darknet/) which implements [YOLOv3](https://arxiv.org/abs/1804.02767) as the core neural network.
+Within this tutorial, we will practice with an ML application that detect some common objects in submitted images. The model uses [Darknet](https://pjreddie.com/darknet/) which implements [YOLOv3](https://arxiv.org/abs/1804.02767) as the core neural network.
 
 The [model implementation](https://github.com/pjreddie/darknet) provides Python interfaces while most parts are writen in C and Cuda so that we can deploy it on diverse hardware architectures. 
 
@@ -72,11 +72,11 @@ $ docker save <your_repo>/<image_name> > <archive_name>.tar
 # Load image to k8s system
 $ minikube image load <archive_name>.tar
 
-# List all image avialable
+# List all image available
 $ minikube images ls
 ```
 
-***Note***: You can use microk8s instead of minikube (refer to previous year tutorial)
+***Note***: You can use microk8s instead of minikube (refer to [previous year tutorial](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/master/tutorials/MLServing-2021-discontinued))
 You can also build your docker image locally then push it into [Dockerhub](https://hub.docker.com/) so that you don't have to import the image to K8s as it automatically find the image from Dockerhub if it's not available at local.
 
 ## K8s Deployment
