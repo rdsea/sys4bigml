@@ -126,14 +126,14 @@ We have a few hands-on tutorials for the course that you can carry out for your 
   - [List of the student projects](demos.md)
 
 ### Guides
-* [How to write study/learning logs](./StudyLog.md)
+* [How to write study/learning logs](StudyLog.md)
 
 ## Reading list
-* [Interesting and relevant papers and sites](./ReadingList.md)
+* [Interesting and relevant papers and sites](ReadingList.md)
 ## Previous course versions
-* [Fall 2021](./fall-2021)
-* [Fall 2020](./fall-2020)
-* [Initial seminar in Spring 2020](./spring-2020)
+* [Fall 2021](fall-2021/README.md)
+* [Fall 2020](fall-2020/README.md)
+* [Initial seminar in Spring 2020](spring-2020/README.md)
 
 ## Contact
 
