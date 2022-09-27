@@ -20,11 +20,11 @@ It is recommended that you use linux environment.
 
 ## **ML Model & Data**
 ## Machine Learning Models under Testing
-Within this tutorial, we introduce 2 ML [models](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/tri_tutorial/tutorials/MLServing) which predict the future values of a single time series based on historical data. The first model uses [LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory) as the core neural network while the other only adopt a simple [fully-connected ANN](https://en.wikipedia.org/wiki/Artificial_neural_network)
+Within this tutorial, we introduce 2 ML [models](ml_model/) which predict the future values of a single time series based on historical data. The first model uses [LSTM](https://en.wikipedia.org/wiki/Long_short-term_memory) as the core neural network while the other only adopt a simple [fully-connected ANN](https://en.wikipedia.org/wiki/Artificial_neural_network)
 
 Both models are implemented in TensorFlow and converted into tflite so that we can deploy them on diverse hardware architectures. 
 
-The models currently predict the Load Power Grid on a sample data [BTS dataset](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640/-/tree/master/data%2Fbts) introduced in [Big Data Platforms - CS-E4640](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640). 
+The models currently predict the Load Power Grid on a sample data [BTS dataset](https://github.com/rdsea/bigdataplatforms/tree/master/data/bts) introduced in [Big Data Platforms - CS-E4640](https://github.com/rdsea/bigdataplatforms/). 
 
 Sample data:
 | index | station_id | parameter_id | reading_time | value |
