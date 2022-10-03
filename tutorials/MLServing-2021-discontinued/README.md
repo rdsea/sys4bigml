@@ -1,5 +1,7 @@
 # ML Serving tutorial
 
+>Note that the tutorial is possible working but we have stopped to update it. 
+
 ## Study goal
 The purpose of this tutorial is to create a simple end-to-end pipeline providing Machine Learning (ML) service using Python and [Kubernetes](https://kubernetes.io/)(K8s). This covers all  basic steps making a serving pipeline including preparing data, developing, training ML model, and deploying ML models on K8s server. After deploying models, we can re-train or replace the model on run time without interrupting the ML service.
 

@@ -1,17 +1,22 @@
 # Common Tasks in ML in the Edge
+
 ## Introduction
+
 This tutorial shows common tasks in developing ML in edge devices.
 
 ## Model Conversion
+
 Very often, we will take a model developed in a common environment and then convert the model to an edge-specific version. One way to do this is to use [TensorflowLite Coverter](https://www.tensorflow.org/lite/convert/index).
 
 Practice the following things:
 
 * Download existing models, e.g., from (https://github.com/EN10/KerasMNIST)
 * Convert a normal tensorflow model to tensorflow lite
+  
 ```
 $tflite_convert --keras_model_file=models/mnist-model.h5  --output_file=models/mnist-model.tflite
 ```
+
 Then study the conversion by answering the following questions:
 * What is the difference w.r.t. the model size?
 * Using a visualization tool (e.g., [Netron](https://github.com/lutzroeder/netron)) examine the graphs of two models? What differences do you see?
