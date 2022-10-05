@@ -10,7 +10,7 @@ Very often, we will take a model developed in a common environment and then conv
 
 Practice the following things:
 
-* Download existing models, e.g., from (https://tfhub.dev/s?deployment-format=tfjs) or https://github.com/EN10/KerasMNIST)
+* Download existing models, e.g., from (https://tfhub.dev/s?deployment-format=tfjs), [Open Model Zoo](https://github.com/openvinotoolkit/open_model_zoo) or https://github.com/EN10/KerasMNIST)
 * Convert a normal tensorflow model to tensorflow lite
   
 ```
@@ -49,3 +49,4 @@ Carry out the following activities:
 
 * Some sample models: https://github.com/EN10/KerasMNIST
 * https://www.tensorflow.org/lite/convert/index
+* [OpenVINO](https://docs.openvino.ai/latest/openvino_docs_MO_DG_Deep_Learning_Model_Optimizer_DevGuide.html)
