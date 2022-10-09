@@ -1,0 +1,6 @@
+{ 
+    "client_id": "aaltosea3",
+    "application_id": "object detection",
+    "service": "webservice",
+    "interval": 10
+}

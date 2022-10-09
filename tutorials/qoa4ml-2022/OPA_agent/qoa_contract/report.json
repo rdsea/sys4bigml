@@ -1,0 +1,18 @@
+{
+    "client_info": {
+        "id": "empty",
+        "roles": "ml_provider"
+    },
+    "service_info": {
+        "id": "request",
+        "machinetypes": "small",
+        "metric": [
+            "Accuracy",
+            "ResponseTime"
+        ]
+    },
+    "metric": {
+        "Accuracy": 100.0,
+        "ResponseTime": 0.0
+    }
+}
