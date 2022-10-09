@@ -45,7 +45,7 @@ If you see the ML service work and the metrics are outputed, then [configure Pro
 
 * Check `prometheus.yml` in prometheus folder
 
-While the ML service is running, QoA4ML probes integrated inside ML services (sample code below) will push monitored metrics to a message broker. To collect these metrics, you can run the `collector.py` in `OPA_agent`. The application will public the metrics so that Prometheus and Grafana service can visualize them. 
+While the ML service and client from previous tutorial are running, QoA4ML probes integrated inside ML services (sample code below) will push monitored metrics to a message broker. To collect these metrics, you can run the `collector.py` in `OPA_agent`. The application will public the metrics so that Prometheus and Grafana service can visualize them. 
 
 ```python
 #################################################
@@ -74,6 +74,7 @@ qoa_client.report("App-metric")
 ## Practice
 * Add more monitoring metrics by modifying `metrics.json` and `QoA Report` in source code of each service.
 * Modify the OPA policies and contracts to monitor ML services.
+* Monitoring QoA from client
 
 ## References
 The key features of Prometheus and Grafana explained in this tutorial are based on Prometheus and Grafana tutorials/documents:
