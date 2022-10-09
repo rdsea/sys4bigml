@@ -54,37 +54,21 @@ We define the generic plan of the course as follows:
 As an advanced and research-oriented course, we will use the pass/fail as a way to evaluate students. Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
 
 
-## Fall 2022 - Schedule and Content
+## Fall 2021 - Schedule and Content
 
 * Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
 * Other teachers/assistants: [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
-### Tentative slots
-
-Data|Content|Lead person
----|---|---
-07.09.2022| Course overview, lecture 1 discussion | Linh Truong
-14.09.2022 |Lecture 2 discussion | Linh Truong
-21.09.2022 | Hands-on tutorial 1| Tri Nguyen
-28.09.2022 | Lecture 3 discussion   |  Linh Truong
-05.10.2022 | Lecture 4 discussion | Linh Truong
-12.10.2022 | Hands-on tutorial 2| Tri Nguyen
-26.10.2022 | Project topic discussion| Linh Truong, Tri Nguyen
-  flexible | offline discussion about topics   | Individual
-16.11.2022 | Topic progress presentation |  All
-1.12.2022  |prefinal checkpoint of progress| All
-7.12.2022  | final project demonstration| All
-12.2022  | final report/code  |  Individual
 
 ### Lectures
 - Lecture 1:
-  - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/cs-e4660-lecture1-r3e-design-v0.4.pdf)
+  - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/cs-e4660-lecture1-r3e-design-v0.3.pdf)
   - Key reading 1: [R3E -An Approach to Robustness, Reliability, Resilience and Elasticity Engineering for End-to-End Machine Learning Systems](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
   - Key reading 2: [The New Frontier of Machine Learning Systems](https://arxiv.org/pdf/1904.03257.pdf)
   - Key reading 3: [Hidden Technical Debt in Machine Learning Systems](https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html)
   - Key reading 4: [Declarative Machine Learning Systems](https://queue.acm.org/detail.cfm?id=3479315)
 - Lecture 2
   - Slides: [Benchmarking, Monitoring, Observability and Experimenting for
-Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.pdf)
+Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.3.pdf)
   - Key reading 1: [Benchmarking big data systems: A survey](https://www.sciencedirect.com/science/article/pii/S0140366419312344)
   - Key reading 2: [MLPERF Training Benchmark](https://arxiv.org/pdf/1910.01500.pdf)
   - Key reading 3: [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
@@ -93,7 +77,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.p
   - Site 1: [MLCommons](https://mlcommons.org/en/)
   - The collection of [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847) is also useful
 - Lecture 3
-  - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/cs-e4660-lecture3-coordination-serving-v0.4.pdf)
+  - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/cs-e4660-lecture3-coordination-serving-v0.3.pdf)
   - Key reading 1: [Cirrus: a Serverless Framework for End-to-end ML Workflows](https://doi.org/10.1145/3357223.3362711)
   - Key reading 2: [Towards ML Engineering: A Brief History Of TensorFlow Extended (TFX)](https://arxiv.org/abs/2010.02013)
   - Key reading 3: [Orchestrating Big Data Analysis Workflows in the Cloud: Research Challenges, Survey, and Future Directions](https://dl.acm.org/doi/fullHtml/10.1145/3332301)
@@ -101,7 +85,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.p
   - Key reading 5: [Jeff Smith. 2018. Machine Learning Systems: Designs that scale (1st. ed.). Manning Publications Co., USA.](https://www.manning.com/books/machine-learning-systems)
   - Key reading 6: [Prediction-Serving Systems](https://queue.acm.org/detail.cfm?id=3210557)
 - Lecture 4
-  - Slides: [Machine Learning with Edge-centric Systems](slides/cs-e4660-lecture4-edgeml-v0.4.pdf)
+  - Slides: [Machine Learning with Edge-centric Systems](slides/cs-e4660-lecture4-edgeml-v0.3.pdf)
   - Key reading 1: [Serving deep neural networks at the cloud edge for vision applications on mobile platforms](https://dl.acm.org/doi/10.1145/3304109.3306221)
   - Key reading 2:[From the Edge to the Cloud: Model Serving in ML.NET](http://sites.computer.org/debull/A18dec/p46.pdf)
   - Key reading 3: [Machine Learning at Facebook:Understanding Inference at the Edge](https://research.fb.com/wp-content/uploads/2018/12/Machine-Learning-at-Facebook-Understanding-Inference-at-the-Edge.pdf)
@@ -111,11 +95,9 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.p
 *If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
 
 ### Hands-on tutorials
-We have a few hands-on tutorials for the course that you can carry out for your study. Note that only 1-2 hands-on tutorials will be arranged by the teacher and teaching assistants.
-
   - [End-to-end ML systems development](./tutorials/MLProjectManagement/)
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
-  - [Machine Learning Serving](./tutorials/MLService-2022/README.md)
+  - [Machine Learning Serving](./tutorials/MLServing)
   - [Qualty of Analytics for ML](./tutorials/qoa4ml)
   - [Edge ML Pipeline](./tutorials/edgemodelop)
   - [Common tasks with Edge ML](./tutorials/edgemlcommons)
@@ -126,14 +108,13 @@ We have a few hands-on tutorials for the course that you can carry out for your 
   - [List of the student projects](demos.md)
 
 ### Guides
-* [How to write study/learning logs](StudyLog.md)
+* [How to write study/learning logs](./StudyLog.md)
 
 ## Reading list
-* [Interesting and relevant papers and sites](ReadingList.md)
+* [Interesting and relevant papers and sites](./ReadingList.md)
 ## Previous course versions
-* [Fall 2021](fall-2021/README.md)
-* [Fall 2020](fall-2020/README.md)
-* [Initial seminar in Spring 2020](spring-2020/README.md)
+* [Fall 2020](./fall-2020)
+* [Initial seminar in Spring 2020](./spring-2020)
 
 ## Contact
 

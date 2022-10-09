@@ -145,6 +145,7 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 - Change the ML serving model (e.g., using YOLOv2) without causing interruption (Hint: develop new models, modify the model information, build a new image, and redeploy the service). 
 
 ## Open questions
+- What if an ML model requires a lot of resources? Are using Flask and Docker and calling the inference as a blocking function suitable?
 - What is the role of observability for Elastic ML serving? Can you setup an observability system for this ML serving example?
 - How do we know the current model is outdated then when we should update the serving model or deploy the new one?
 - Should we deploy multiple models for one service (e.g: different requests might be served by different models)?
