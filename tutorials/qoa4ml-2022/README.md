@@ -71,10 +71,15 @@ qoa_client.report("App-metric")
 #################################################
 ```
 
+## Notice:
+There would be some possible errors related to the configuration in `conf` folder of the ML and monitoring service. For example: IP addresses need to be changed in prometheus.yml, amqp configuration, etc.
+
 ## Practice
 * Add more monitoring metrics by modifying `metrics.json` and `QoA Report` in source code of each service.
 * Modify the OPA policies and contracts to monitor ML services.
 * Monitoring QoA from client
+
+
 
 ## References
 The key features of Prometheus and Grafana explained in this tutorial are based on Prometheus and Grafana tutorials/documents:
