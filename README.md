@@ -116,7 +116,7 @@ We have a few hands-on tutorials for the course that you can carry out for your 
   - [End-to-end ML systems development](./tutorials/MLProjectManagement/)
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
   - [Machine Learning Serving](./tutorials/MLService-2022/README.md)
-  - [Qualty of Analytics for ML](./tutorials/qoa4ml)
+  - [Qualty of Analytics for ML](./tutorials/qoa4ml-2022)
   - [Edge ML Pipeline](./tutorials/edgemodelop)
   - [Common tasks with Edge ML](./tutorials/edgemlcommons)
 ### Project ideas presentations
