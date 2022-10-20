@@ -507,13 +507,14 @@ print(result[0][0])
 
 We will do ML service monitoring using other tutorials
 - [Performance Monitoring](../PerformanceMonitoring/)
-- [Quality of Analytics for ML](../qoa4ml)
+- [Quality of Analytics for ML](../qoa4ml-2022)
 
 
 ## References and additional links
 
 Interesting resources about ML engineering:
 * [Best Practices for ML Engineering by Martin Zinkevic](https://developers.google.com/machine-learning/guides/rules-of-ml)
+* An interesting work about ["Operationalizing Machine Learning: An Interview Study"](https://arxiv.org/pdf/2209.09125v1.pdf)
 
 Part of the tutorial related to MLflow (experiments, package, serving) is built upon MLflow official documents. The main references are:
 * https://www.mlflow.org/docs/latest/index.html
