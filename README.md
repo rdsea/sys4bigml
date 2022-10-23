@@ -71,7 +71,7 @@ Data|Content|Lead person
 7.12.2022  | final project demonstration| All
 12.2022  | final report/code  |  Individual
 
-### Lectures
+### Lectures/Discussions
 
 - Lecture 1: **Robustness, Reliability, Resilience and Elasticity for Big Data/ML Systems**
   - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/cs-e4660-lecture1-r3e-design-v0.4.pdf)
