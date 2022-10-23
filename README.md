@@ -1,13 +1,9 @@
 
 # Advanced Topics in Software Systems (SYS4BIGML)
 
-Citation (if you use the material):
-Hong-Linh Truong, *Advanced Topics in Software Systems*, https://version.aalto.fi/gitlab/sys4bigml/cs-e4660, 2020 [BIB Entry](site.bib)
-
-**Copyrights/Licences: the lecture slides and course structure/info use [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Individual tutorials have their own licenses ([Apache Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0))**
 ## Overview
 
-The current focus of this course is on **software systems for big data and machine learning**. Complex Big Data and Machine Learning (ML) applications and services and their reliability and robustness are strongly dependent on the underlying systems empowering such applications and services. On the one hand, techniques for supporting performance engineering, configuration management, testing and debugging of Big Data and ML are extremely important. On the other hand, large-scale distributed systems and new computing models  have been evolved with new hardware and infrastructure architectures, such as edge systems, tensor processing units,  and quantum  computing systems. Such systems and computing models are being exploited for advanced Big Data and ML applications and services. Developing and optimizing Big Data and ML applications and services in such systems and models require in-depth understanding of the systems and the roles of systems for Big Data and ML. Currently, we lack courses to deal with the above-mentioned issues, especially in-depth analysis and forward-looking research directions in (software) systems for Big Data and ML.  This course will study advanced topics in systems for big data and ML/AI.
+This is an advanced course for master and PhD students. The current focus of this course is on **software systems for big data and machine learning**. Complex Big Data and Machine Learning (ML) applications and services and their reliability and robustness are strongly dependent on the underlying systems empowering such applications and services. On the one hand, techniques for supporting performance engineering, configuration management, testing and debugging of Big Data and ML are extremely important. On the other hand, large-scale distributed systems and new computing models  have been evolved with new hardware and infrastructure architectures, such as edge systems, tensor processing units,  and quantum  computing systems. Such systems and computing models are being exploited for advanced Big Data and ML applications and services. Developing and optimizing Big Data and ML applications and services in such systems and models require in-depth understanding of the systems and the roles of systems for Big Data and ML. Currently, we lack courses to deal with the above-mentioned issues, especially in-depth analysis and forward-looking research directions in (software) systems for Big Data and ML.  This course will study advanced topics in systems for big data and ML/AI.
 
 
 ## Target Participants/Learners
@@ -76,13 +72,16 @@ Data|Content|Lead person
 12.2022  | final report/code  |  Individual
 
 ### Lectures
-- Lecture 1:
+
+- Lecture 1: **Robustness, Reliability, Resilience and Elasticity for Big Data/ML Systems**
   - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/cs-e4660-lecture1-r3e-design-v0.4.pdf)
   - Key reading 1: [R3E -An Approach to Robustness, Reliability, Resilience and Elasticity Engineering for End-to-End Machine Learning Systems](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
   - Key reading 2: [The New Frontier of Machine Learning Systems](https://arxiv.org/pdf/1904.03257.pdf)
   - Key reading 3: [Hidden Technical Debt in Machine Learning Systems](https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html)
   - Key reading 4: [Declarative Machine Learning Systems](https://queue.acm.org/detail.cfm?id=3479315)
-- Lecture 2
+  - Key reading 5: [Technology readiness levels for machine learning systems](https://www.nature.com/articles/s41467-022-33128-9)
+
+- Lecture 2: **Monitoring and Observability for Big Data and ML Systems**
   - Slides: [Benchmarking, Monitoring, Observability and Experimenting for
 Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.pdf)
   - Key reading 1: [Benchmarking big data systems: A survey](https://www.sciencedirect.com/science/article/pii/S0140366419312344)
@@ -92,7 +91,8 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.p
   - Key reading 5:[Machine Learning Testing: Survey, Landscapes and Horizons](https://ieeexplore.ieee.org/document/9000651)
   - Site 1: [MLCommons](https://mlcommons.org/en/)
   - The collection of [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847) is also useful
-- Lecture 3
+
+- Lecture 3: **Coordination Models and Techniques for Big Data and Machine Learning**
   - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/cs-e4660-lecture3-coordination-serving-v0.4.pdf)
   - Key reading 1: [Cirrus: a Serverless Framework for End-to-end ML Workflows](https://doi.org/10.1145/3357223.3362711)
   - Key reading 2: [Towards ML Engineering: A Brief History Of TensorFlow Extended (TFX)](https://arxiv.org/abs/2010.02013)
@@ -100,7 +100,8 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.p
   - Key reading 4: [KeystoneML: Optimizing Pipelines for Large-Scale Advanced Analytics](https://shivaram.org/publications/keystoneml-icde17.pdf)
   - Key reading 5: [Jeff Smith. 2018. Machine Learning Systems: Designs that scale (1st. ed.). Manning Publications Co., USA.](https://www.manning.com/books/machine-learning-systems)
   - Key reading 6: [Prediction-Serving Systems](https://queue.acm.org/detail.cfm?id=3210557)
-- Lecture 4
+
+- Lecture 4 **Edge Machine Learning**
   - Slides: [Machine Learning with Edge-centric Systems](slides/cs-e4660-lecture4-edgeml-v0.4.pdf)
   - Key reading 1: [Serving deep neural networks at the cloud edge for vision applications on mobile platforms](https://dl.acm.org/doi/10.1145/3304109.3306221)
   - Key reading 2:[From the Edge to the Cloud: Model Serving in ML.NET](http://sites.computer.org/debull/A18dec/p46.pdf)
@@ -134,6 +135,13 @@ We have a few hands-on tutorials for the course that you can carry out for your 
 * [Fall 2021](fall-2021/README.md)
 * [Fall 2020](fall-2020/README.md)
 * [Initial seminar in Spring 2020](spring-2020/README.md)
+
+
+## Citation (if you use the material):
+
+Hong-Linh Truong, *Advanced Topics in Software Systems*, https://version.aalto.fi/gitlab/sys4bigml/cs-e4660, 2020 [BIB Entry](site.bib)
+
+**Copyrights/Licences: the lecture slides and course structure/info use [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Individual tutorials have their own licenses ([Apache Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0))**
 
 ## Contact
 
