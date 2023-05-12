@@ -1,5 +1,29 @@
 # Principles for Engineering ML Systems in the Computing Continuum 
 
+> This is a specialization of the [Advanced Topics in Software Systems course](../README.md) with a focus on *Principles for ML services in the Computing Continuum*.
+
+**Professor**: 
+> [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
+
+**Target students**: 
+> Master and PhD students in CS.
+
+## Introduction
+
+Complex Machine Learning (ML) applications and services and their reliability and robustness are strongly dependent on the underlying systems empowering such applications and services. On the one hand, techniques for supporting performance engineering, configuration management, testing and debugging of ML are extremely important. On the other hand, large-scale distributed systems and new computing models  have evolved into the Computing Continuum in which  new hardware and infrastructure architectures, such as robotic swarms, AI accelerators,  and 5G networks, are blended with IoT, edge systems and cloud infrastructures to provide a continuum capabilities for various emerging application requirements. Such systems and computing models are being exploited for advanced ML applications and services. Developing and optimizing  ML applications and services in the Computing Continuum require in-depth understanding of the systems and the roles of systems for  ML.  This course will study key principles for engineering such ML systems in the Computing Continuum. 
+
+## Objectives
+
+The study is centered around researching new ideas, evaluating existing techniques, optimizing systems and exploring new solutions for engineering service-based ML systems in the Computing Continuum. Students will be able to:
+
+* understand key characteristics of the Computing Continuum
+* classify and explain state of the art of systems requirements for service-based ML systems 
+* analyze and apply key metrics and system designs of service-based ML systems 
+* define and develop reliability and performance monitoring and analysis of service-based ML systems
+* apply and evaluate key programming models and frameworks for service-based ML systems
+* produce and evaluate edge system designs for service-based ML systems
+
+
 ## Schedule
 
 
