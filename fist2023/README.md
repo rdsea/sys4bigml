@@ -3,7 +3,7 @@
 ## Schedule
 
 
-- **ML Systems and Computing Continuum Overview**
+- **ML Systems and Computing Continuum**
 
 - **Methods for ML Project Identification**: we will discuss about methods  for identifying an ML project to be carried out in the course
 
@@ -27,7 +27,7 @@
     - [MLPERF Training Benchmark](https://arxiv.org/pdf/1910.01500.pdf)
     - [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)  
     - [Machine Learning Testing: Survey, Landscapes and Horizons](https://ieeexplore.ieee.org/document/9000651)
-    -[MLCommons](https://mlcommons.org/en/)
+    - [MLCommons](https://mlcommons.org/en/)
     - [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847)
 
 - **Tools and Practices for Observability and Monitoring**
@@ -43,7 +43,7 @@
     - [Prediction-Serving Systems](https://queue.acm.org/detail.cfm?id=3210557)
 
 - **ML Serving**
-
+  - Reading:
   - [Hands-on for Machine Learning Serving](../tutorials/MLService-2022/README.md)
 
 - **Qualty of Analytics for ML**:
