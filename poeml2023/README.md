@@ -1,4 +1,4 @@
-# Principles for Engineering ML Systems in the Computing Continuum 
+# Principles for Engineering ML Systems in the Computing Continuum
 
 > This is a specialization of the [Advanced Topics in Software Systems course](../README.md) with a focus on *Principles for ML services in the Computing Continuum*.
 

@@ -173,6 +173,7 @@ Returned Results: {"LSTM": -0.22059251368045807}
 - The current ML application only serve single tenant, your responsibility is to make it serve multi-tenants. You can run multiple client applications from multiple terminal windows with differents configurations (client.json). Also, you have to scale the deployment up and down based on the workload. (Hint: modify the server, client application, mqtt client, and deployment profile (yaml file)).
 
 ## Open questions
+
 - What is the role of observability for Elastic ML serving? Can you setup an observability system for this ML serving example?
 - How do we know the current model is outdated then when we should update the serving model or deploy the new one?
 - Should we deploy multiple models for one service (e.g: different requests might be served by different models)?

@@ -371,6 +371,7 @@ This metadata of the model capture the model in an end-to-end view to explain th
 ## Model serving /ML service
 
 ### Important questions
+
 - How to pack and move code to serving platforms
 - Which service platforms should we use?
 - How to deploy and manage ML services?

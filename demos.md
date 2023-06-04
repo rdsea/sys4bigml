@@ -1,4 +1,4 @@
-# Student Projects
+# Public Student Projects
 List of student works. The status of the git spaces is not up-to-date.
 - [Monitoring Data Drift for End-to-end Machine Learning Models](https://github.com/thaoducphung/advancedtopicproject)
 - [ML Continuous Training and Testing](https://version.aalto.fi/gitlab/nguyenl21/cs-e4660-project-continuous-servering/-/tree/master/MLService)

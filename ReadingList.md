@@ -1,5 +1,7 @@
 ## Reading List for Advanced Topics in Software Systems for Big Data and ML
+
 ### Robustness, Reliability, Resilience and Elasticity
+
 * [SysML: The New Frontier of Machine Learning Systems](https://arxiv.org/abs/1904.03257)
 * [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
 * [Challenges in Enabling Quality of Analytics in the Cloud](https://users.aalto.fi/~truongh4/publications/2017/truong-jdiq-2017.pdf)

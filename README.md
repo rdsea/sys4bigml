@@ -1,46 +1,43 @@
-
 # Advanced Topics in Software Systems (SYS4BIGML)
+
+>The current focus of this course is on **principles for engineering ML systems in the Computing Continuum**.
 
 ## Overview
 
-This is an advanced course for master and PhD students. The current focus of this course is on **software systems for big data and machine learning**. Complex Big Data and Machine Learning (ML) applications and services and their reliability and robustness are strongly dependent on the underlying systems empowering such applications and services. On the one hand, techniques for supporting performance engineering, configuration management, testing and debugging of Big Data and ML are extremely important. On the other hand, large-scale distributed systems and new computing models  have been evolved with new hardware and infrastructure architectures, such as edge systems, tensor processing units,  and quantum  computing systems. Such systems and computing models are being exploited for advanced Big Data and ML applications and services. Developing and optimizing Big Data and ML applications and services in such systems and models require in-depth understanding of the systems and the roles of systems for Big Data and ML. Currently, we lack courses to deal with the above-mentioned issues, especially in-depth analysis and forward-looking research directions in (software) systems for Big Data and ML.  This course will study advanced topics in systems for big data and ML/AI.
+This is an advanced course for master and PhD students. The current focus of this course is on **principles for engineering ML systems in the Computing Continuum**. Big Data  and Machine Learning (ML) applications and services and their reliability and robustness are strongly dependent on the underlying systems empowering such applications and services. On the one hand, techniques for supporting performance engineering, configuration management, testing and debugging of Big Data and ML are extremely important. On the other hand, large-scale distributed systems and new computing models  have been evolved with new hardware and infrastructure architectures, such as edge systems, tensor processing units,  and quantum  computing systems. This leads to the computing continuum for advanced Big Data and ML applications and services. Developing and optimizing Big Data and ML applications and services in such systems and models require in-depth understanding of the systems and the roles of systems for Big Data and ML.
 
+## Target participants/learners
 
-## Target Participants/Learners
-
-The course is for students in Doctoral and Master studies. In Aalto the course is for students in [Doctoral Programme in Science](https://into.aalto.fi/display/endoctoralsci/Courses+offered) and the [CCIS Master Programme](https://into.aalto.fi/display/enccis/Computer+Science+%28CS%29+2018-2020), especially for *Big Data and Large-scale computing* track and *Software Systems and Technologies* track.
+The course is for students in Doctoral and Master studies. In Aalto the course is for students in [Doctoral Programme in Science](https://into.aalto.fi/display/endoctoralsci/Courses+offered) and the [CCIS Master Programme](https://into.aalto.fi/display/enccis/Computer+Science+%28CS%29+2018-2020).
 
 This course provides advanced knowledge about computing and software systems that are useful for big data and machine learning domains. Therefore, it connects to various other courses, such as *[Big Data Platforms](https://version.aalto.fi/gitlab/bigdataplatforms/cs-e4640)*, *Cloud Computing*, *Deep Learning* and *Master thesis*, by providing complementary in-depth knowledge w.r.t system aspects.
 
 ## Required previous knowledge
 
-Students should have knowledge about cloud computing, big data, operating systems, distributed systems and machine learning. Therefore, it is important that students have passed courses with these topics, such as *Cloud Computing*, *Big Data Platforms*, *Operating Systems*, and *Machine Learning*.
-
-This course is an advanced one, aiming at supporting research topics in master theses and PhD studies. Therefore, it is not  a prerequisite for any course.
-
+Students should have knowledge about cloud computing, big data, operating systems, distributed systems and machine learning. Therefore, it is important that students have passed courses with these topics, such as *Cloud Computing*, *Big Data Platforms*, *Operating Systems*, and *Machine Learning*. Students are expected to be very good with programming skills as well. 
+ 
 ##  Content
+
 *First*, key system requirements due to the complexity, reliability,  and robustness of Big Data and ML applications and services  will be analyzed and presented. Based on that we will learn techniques for supporting performance engineering, configuration management, testing and debugging of Big Data and ML. Such techniques are extremely important; they are **cross-topics** for the course, regardless of the underlying systems empowering Big Data and ML applications and services.
 
-*Second*, selected areas in systems for Big Data and ML will be presented. For each selected area, we will examine the state-of-the-art, strengths and weakness of concepts and techniques. We will focus on engineering frameworks that can be used to development Big Data and ML, according to  the above-mentioned **cross-topics**.  The selected areas in 2020-2022 study plan will be:
-* Dataflows/programming frameworks and orchestration techniques
-* Edge systems and edge-cloud continuum systems
-* New hardware architectures and quantum systems
+*Second*, selected areas in systems for Big Data and ML will be presented. We will examine the computing continuum model, dataflows/programming frameworks and orchestration techniques. We will examine the state-of-the-art, strengths and weakness of concepts and techniques. We will focus on engineering frameworks that can be used to development Big Data and ML, according to  the above-mentioned **cross-topics**.  
 
-**Cross-topics** in these selected areas will be studied. For each selected area, we will focus on the following aspects:
-* understanding and applying key techniques and concepts
+ For each selected area, we will focus on the following aspects:
+* understanding and applying key principles, techniques, and concepts
 * analyzing/evaluating/creating (new) methods/techniques
 
+### Focused Areas in 2023
 
-### Focused Areas in 2020-2022
-
-Advanced Topics in Systems for Big Data and ML will focus on the following areas:
-*  Design and evaluation for systems robustness, reliability, resilience and elasticity for Big Data/ML (with also engineering work)
-*  Test, debug, monitoring, and configuration management (with also engineering work)
-*  Dataflows and Orchestration Frameworks for Big Data/ML (with also engineering work)
-*  Edge systems and edge-cloud continuum for Big Data/ML (with also engineering work)
+* Computing continuum (edge systems, edge-cloud systems)  
+* Design and evaluation for systems robustness, reliability, resilience and elasticity for Big Data/ML (with also engineering work)
+* Observability and explainability for ML applications (with also engineering work)
+* Dataflows and orchestration frameworks for Big Data/ML (with also engineering work)
+* Quality of analytics for ML in  edge-cloud continuum (with also engineering work)
 
 ## Course Plan and Teaching methods
+
 We define the generic plan of the course as follows:
+
 * Lectures given by teachers: students must provide study logs
 * Hands-on tutorials given by teachers: the goal is to give some concrete examples of the techniques discussed in the lectures. However, since it is a research-oriented course, students can also practice similar problems with different software stack.
 * Project topic proposal and presentation: students must identify a topic related to the content of the course and present it
@@ -50,26 +47,26 @@ We define the generic plan of the course as follows:
 As an advanced and research-oriented course, we will use the pass/fail as a way to evaluate students. Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
 
 
-## Fall 2022 - Schedule and Content
+## Fall 2023 - Schedule
 
 * Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
 * Other teachers/assistants: [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
 ### Tentative slots
 
-Data|Content|Lead person
+Date|Content|Lead person
 ---|---|---
-07.09.2022| Course overview, lecture 1 discussion | Linh Truong
-14.09.2022 |Lecture 2 discussion | Linh Truong
-21.09.2022 | Hands-on tutorial 1| Tri Nguyen
-28.09.2022 | Lecture 3 discussion   |  Linh Truong
-05.10.2022 | Lecture 4 discussion | Linh Truong
-12.10.2022 | Hands-on tutorial 2| Tri Nguyen
-26.10.2022 | Project topic discussion| Linh Truong, Tri Nguyen
+06.09.2023| Course overview, lecture 1 discussion | Linh Truong
+13.09.2023 |Lecture 2 discussion | Linh Truong
+20.09.2023 | Hands-on tutorial 1| Tri Nguyen
+27.09.2022 | Lecture 3 discussion   |  Linh Truong
+04.10.2022 | Lecture 4 discussion | Linh Truong
+11.10.2022 | Hands-on tutorial 2| Tri Nguyen
+18.10.2022 | Project topic discussion| Linh Truong, Tri Nguyen
   flexible | offline discussion about topics   | Individual
-16.11.2022 | Topic progress presentation |  All
-1.12.2022  |prefinal checkpoint of progress| All
+14.11.2022 | Topic progress presentation |  All
+28.11.2022  |prefinal checkpoint of progress| All
 7.12.2022  | final project demonstration| All
-12.2022  | final report/code  |  Individual
+15.2022  | final report/code  |  Individual
 
 ### Lectures/Discussions
 
@@ -112,7 +109,8 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.p
 *If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
 
 ### Hands-on tutorials
-We have a few hands-on tutorials for the course that you can carry out for your study. Note that only 1-2 hands-on tutorials will be arranged by the teacher and teaching assistants.
+
+We have a few hands-on tutorials for the course that students can carry out for the study. Note that only 1-2 hands-on tutorials will be arranged by the teacher and teaching assistants.
 
   - [End-to-end ML systems development](./tutorials/MLProjectManagement/)
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
@@ -120,18 +118,26 @@ We have a few hands-on tutorials for the course that you can carry out for your 
   - [Qualty of Analytics for ML](./tutorials/qoa4ml-2022)
   - [Edge ML Pipeline](./tutorials/edgemodelop)
   - [Common tasks with Edge ML](./tutorials/edgemlcommons)
+
 ### Project ideas presentations
+
   - Students will propose the project idea. This is an important aspect of *research-oriented course*. If a student cannot propose an idea, the teacher will suggest some concrete ideas for students.
+
 ### Final project demonstration
-  - The final project demonstration should be organized like an "event" where all students can demonstrate their work and students can discuss experiences in their projects.
+  - The final project demonstration is organized like an "event" where all students can demonstrate their work and students can discuss experiences in their projects.
   - [List of the student projects](demos.md)
 
 ### Guides
+
 * [How to write study/learning logs](StudyLog.md)
 
 ## Reading list
+
 * [Interesting and relevant papers and sites](ReadingList.md)
+
 ## Previous course versions
+
+* [Fall 2022](fall-2022/README.md)
 * [Fall 2021](fall-2021/README.md)
 * [Fall 2020](fall-2020/README.md)
 * [Initial seminar in Spring 2020](spring-2020/README.md)
