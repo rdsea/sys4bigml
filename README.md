@@ -58,15 +58,15 @@ Date|Content|Lead person
 06.09.2023| Course overview, lecture 1 discussion | Linh Truong
 13.09.2023 |Lecture 2 discussion | Linh Truong
 20.09.2023 | Hands-on tutorial 1| Tri Nguyen
-27.09.2022 | Lecture 3 discussion   |  Linh Truong
-04.10.2022 | Lecture 4 discussion | Linh Truong
-11.10.2022 | Hands-on tutorial 2| Tri Nguyen
-18.10.2022 | Project topic discussion| Linh Truong, Tri Nguyen
+27.09.2023 | Lecture 3 discussion   |  Linh Truong
+04.10.2023 | Lecture 4 discussion | Linh Truong
+11.10.2023 | Hands-on tutorial 2| Tri Nguyen
+18.10.2023 | Project topic discussion| Linh Truong, Tri Nguyen
   flexible | offline discussion about topics   | Individual
-14.11.2022 | Topic progress presentation |  All
-28.11.2022  |prefinal checkpoint of progress| All
-7.12.2022  | final project demonstration| All
-15.2022  | final report/code  |  Individual
+8.11.2023 | Topic progress presentation |  All
+22.11.2023  |prefinal checkpoint of progress| All
+7.12.2023  | final project demonstration| All
+15.2023  | final report/code  |  Individual
 
 ### Lectures/Discussions
 
