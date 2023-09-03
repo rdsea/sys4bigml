@@ -1,4 +1,4 @@
-# Monitoring ML systems and application
+# Monitoring ML systems and applications
 
 ## Overview
  The goal of this tutorial is to equip the students with basic skills to monitor their real ML systems and applications. Students will study the provided components to monitor ML services. This will involve the monitoring of different layers and corresponding components, such as the infrastructural layer (e.g., VM), the platform layer (e.g., a middleware), and the application layer (such as ML service).
@@ -14,19 +14,30 @@ Following the following links to setup Prometheus and Grafana:
 * [Configurate Grafana with Prometheus](https://prometheus.io/docs/visualization/grafana/)
 * https://dzone.com/articles/monitoring-with-prometheus
 
-## Identifying the goal of monitoring/observability
+## Identifying the goal of monitoring and observability
 
-What is the goal of monitoring? Given an ML service, what would you like to monitor? Can you define high-level metrics that can be determined from low-level monitoring information? Have you considered all the stakeholders' needs for monitoring? Would these metrics satisfy the future needs?
+Before starting working on the monitoring and observation, you shall work on the following questions:
 
-Goal of monitoring/observability must be done together with ML service design, not an after-thought.
+* What is the goal of monitoring? Given an ML service, what would you like to monitor? 
+
+* Can you define high-level metrics that can be determined from low-level monitoring information? 
+
+* Have you considered all the stakeholders' needs for monitoring? Would these metrics satisfy the future needs?
+
+* Which metrics are common? Which metrics are ML specific?
+
+Goal of monitoring/observability must be done together with the ML service design, not an after-thought.
 
 ## Preparing an ML service
 
 In this tutorial, we would use the BTS ML service that we developed for the ML Project Management tutorial.
 
 Before practicing the monitoring for a machine learning service, we will deploy a simple REST-based machine learning service. We will
-* use a [BTS Prediction model]()
+* use a BTS Prediction model
 * make a simple REST ML service, use [the template and a local version](MLService/)
+
+Note:
+> If you have your own ML services or prefer to use other ML models, feel free to do this. 
 
 ## Working on low-level monitoring features
 
@@ -35,7 +46,8 @@ In this step, you should work on the list of low-level metrics/data, probes:
 * how do the metrics look like and what do you need to collect for the metrics?
 * how does the monitoring, observability affect your ML service design?
 
-## Instrumenting ML service
+## Instrumenting ML services
+
 In this tutorial, we would monitor the [MLService](MLService/) that has been developed in the [MLProjectManagement tutorial](../MLProjectManagement/).
 Check the [sample service](MLService/). You can practice to add many metrics as you want.
 
@@ -160,7 +172,8 @@ Check for the new metrics on the [Prometheus UI](http://localhost:9090/), by sea
 ## Observing monitoring data, working on high-level metrics, visualization
 
 Check monitoring data of machines, middleware and your ML service.
-### Important questions:
+
+Work on the following questions:
 * how do you want your monitoring data is visualized?
 In this example, we use `Grafana` to visualize our monitoring. In order to config `Grafana`, you can update your `docker-compose.yml`:
 ```yml
@@ -185,17 +198,8 @@ In this example, we use `Grafana` to visualize our monitoring. In order to confi
      - monitor-net
 ```
 In order to use `Grafana` to visualize the monitoring data, you need to set the `Prometheus` as a data source. It can be done through **Configuration > Data sources > Add data source**. After that, you can add the visualization through **Create > Dashboard**
-![image info](./images/BTS_monitoring.png "Figure 2: Using Grafana to visualize cpu_percent metric and virtual_memory_percent metric")
+![image info](./images/BTS_monitoring_visualization.png "Figure 2: Using Grafana to visualize cpu_percent metric and virtual_memory_percent metric")
 
-## References
-The key features of Prometheus and Grafana explained in this tutorial are based on Prometheus and Grafana tutorials/documents:
-* https://github.com/prometheus/client_python
-* https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
-* https://dzone.com/articles/monitoring-with-prometheus
-* https://devconnected.com/complete-node-exporter-mastery-with-prometheus
-* https://devconnected.com/monitoring-linux-processes-using-prometheus-and-grafana
-* https://github.com/rycus86/prometheus_flask_exporter
-* https://sysdig.com/blog/prometheus-metrics
 
 ## Open Questions
 
@@ -204,3 +208,16 @@ The key features of Prometheus and Grafana explained in this tutorial are based 
 2. How to make an alert for the specific conditions of metrics detected in your machine learning systems with Prometheus?
 
 3. How to monitor multiple instances of ML services running in  a cluster? For example, we can deploy ML service instances in a Kubernetes cluster. 
+
+4. In terms of engineering, besides the illustrated tools in this tutorial, which tools can be used for monitoring?
+
+## References
+
+The key features of Prometheus and Grafana explained in this tutorial are based on Prometheus and Grafana tutorials/documents:
+* https://github.com/prometheus/client_python
+* https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+* https://dzone.com/articles/monitoring-with-prometheus
+* https://devconnected.com/complete-node-exporter-mastery-with-prometheus
+* https://devconnected.com/monitoring-linux-processes-using-prometheus-and-grafana
+* https://github.com/rycus86/prometheus_flask_exporter
+* https://sysdig.com/blog/prometheus-metrics
