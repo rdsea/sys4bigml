@@ -78,7 +78,7 @@ Date|Content|Lead person
   - Key reading 4: [Declarative Machine Learning Systems](https://queue.acm.org/detail.cfm?id=3479315)
   - Key reading 5: [Technology readiness levels for machine learning systems](https://www.nature.com/articles/s41467-022-33128-9)
 
-- Lecture 2: **Monitoring and Observability for Big Data and ML Systems**
+- Lecture 2: **Monitoring, Observability and Explainability for Big Data and ML Systems**
   - Slides: [Benchmarking, Monitoring, Observability and Experimenting for
 Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.pdf)
   - Key reading 1: [Benchmarking big data systems: A survey](https://www.sciencedirect.com/science/article/pii/S0140366419312344)
@@ -98,7 +98,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.p
   - Key reading 5: [Jeff Smith. 2018. Machine Learning Systems: Designs that scale (1st. ed.). Manning Publications Co., USA.](https://www.manning.com/books/machine-learning-systems)
   - Key reading 6: [Prediction-Serving Systems](https://queue.acm.org/detail.cfm?id=3210557)
 
-- Lecture 4 **Edge Machine Learning**
+- Lecture 4 **Machine Learning in Edge-Cloud Continuum**
   - Slides: [Machine Learning with Edge-centric Systems](slides/cs-e4660-lecture4-edgeml-v0.4.pdf)
   - Key reading 1: [Serving deep neural networks at the cloud edge for vision applications on mobile platforms](https://dl.acm.org/doi/10.1145/3304109.3306221)
   - Key reading 2:[From the Edge to the Cloud: Model Serving in ML.NET](http://sites.computer.org/debull/A18dec/p46.pdf)
