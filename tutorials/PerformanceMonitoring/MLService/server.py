@@ -1,3 +1,7 @@
+"""
+A simple server using flask to wrap tflite ML model 
+
+"""
 from flask import Flask, request
 import tflite_runtime.interpreter as tflite
 import numpy as np

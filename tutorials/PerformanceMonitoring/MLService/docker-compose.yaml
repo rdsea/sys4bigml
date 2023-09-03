@@ -14,7 +14,7 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     volumes:
-      - /Users/nguyenlinh/Research/cs-e4660/tutorials/PerformanceMonitoring/MLService/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ${CSE4660ROOT}/tutorials/PerformanceMonitoring/MLService/prometheus.yml:/etc/prometheus/prometheus.yml
     expose:
       - 9090
     ports:

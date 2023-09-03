@@ -51,8 +51,7 @@ In this step, you should work on the list of low-level metrics/data, probes:
 In this tutorial, we would monitor the [MLService](MLService/) that has been developed in the [MLProjectManagement tutorial](../MLProjectManagement/).
 Check the [sample service](MLService/). You can practice to add many metrics as you want.
 
-* test if the ML service work
-Start the server
+First, test if the ML service work. Start the server
 ```bash
 python server.py
 ```
@@ -60,7 +59,9 @@ and continuously send the request from client
 ```bash
 python client.py
 ```
+
 In this example, we monitor the input varriance from 50 latest requests sent to the server. In order to achieve that, 50 latest inputs are stored in a buffer, and updated everytime a new request is received on the server.
+
 ```python
 buffer = [[0, 0, 0, 0, 0, 0]] * 50
 pointer = 0
@@ -78,6 +79,7 @@ def update_buffer(new_val):
 
 ```
 The new input varriance is also re-calculated, everytime the server receives a new request.
+
 ```python
 global input_variance
 input =  json.loads(request.form.get('inputs'))
@@ -88,6 +90,7 @@ input_variance = buffer_np.var()
 ```
 
 ### Configure Prometheus to monitor the ML Service
+
 If you see the ML service work and the metrics are outputed, then [configure Promethesus to pull metrics](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) from your Prometheus endpoint in your ML service.
 
 * Create `prometheus.yml`
@@ -104,7 +107,8 @@ or if you run Prometheus through docker:
 ```static_configs:
   - targets: ['your_ip_address:8000', 'localhost:8080']
 ```
-Update the `docker-compose.yml` file as follow:
+Update the `docker-compose.yml` file as follow (${CSE4660ROOT} indicates the path of the cs-e4660):
+
 ```yml
 version: '3'
 
@@ -122,7 +126,7 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     volumes:
-      - /Users/nguyenlinh/Research/cs-e4660/tutorials/PerformanceMonitoring/MLService/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ${CSE4660ROOT}/tutorials/PerformanceMonitoring/MLService/prometheus.yml:/etc/prometheus/prometheus.yml
     expose:
       - 9090
     ports:
@@ -130,6 +134,12 @@ services:
     networks:
       - monitor-net
 ```
+
+Running Promethesus:
+```
+$export CSE4660ROOT=/path/to/cs-e4660
+$docker-compose -f docker-compose.yaml up
+ ```
 
 Then check the metrics of your ML service in Prometheus/Grafana:
 You can do that by searching for the metric on the [Prometheus UI](http://localhost:9090/). This is an example of `input_variance` metric result:
@@ -201,7 +211,7 @@ In order to use `Grafana` to visualize the monitoring data, you need to set the 
 ![image info](./images/BTS_monitoring_visualization.png "Figure 2: Using Grafana to visualize cpu_percent metric and virtual_memory_percent metric")
 
 
-## Open Questions
+## Open Questions and Further Investigation
 
 1. We show the monitoring of an ML service but how would you monitor the whole ML system in which a ML service may be just a component? For example, the ML service will be behind a load balancer or ML services accept only data sent via a queue or data stored in cloud file systems?
 
@@ -210,6 +220,8 @@ In order to use `Grafana` to visualize the monitoring data, you need to set the 
 3. How to monitor multiple instances of ML services running in  a cluster? For example, we can deploy ML service instances in a Kubernetes cluster. 
 
 4. In terms of engineering, besides the illustrated tools in this tutorial, which tools can be used for monitoring?
+
+5. If your ML service is implemented and provisioned with other frameworks, such as [Ray](https://ray.io) or [Seldon](https://www.seldon.io/), how would you do the monitoring? 
 
 ## References
 
