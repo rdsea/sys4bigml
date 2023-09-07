@@ -4,10 +4,8 @@
 
 * [SysML: The New Frontier of Machine Learning Systems](https://arxiv.org/abs/1904.03257)
 * [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
-* [Challenges in Enabling Quality of Analytics in the Cloud](https://users.aalto.fi/~truongh4/publications/2017/truong-jdiq-2017.pdf)
-* [Measuring, Quantifying, and Predicting the Cost-Accuracy Tradeoff](https://research.aalto.fi/files/38801332/paper.pdf)
+* [ Coordination-aware assurance for end-to-end machine learning systems: the R3E approach](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
 * https://ai.googleblog.com/2019/12/improving-out-of-distribution-detection.html
-* https://www.researchgate.net/publication/286584036_Principles_of_Software-Defined_Elastic_Systems_for_Big_Data_Analytics
 * https://arxiv.org/pdf/1904.07204.pdf
 
 ### Benchmarking

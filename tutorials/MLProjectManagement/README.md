@@ -1,6 +1,6 @@
 # End-to-End ML Systems Development
 
-The goal of this tutorial is to discuss and practice managing end-to-end ML system development. An end-to-end ML system development  includes many phases, such as data collection, data pre-processing, **not just running experiments for the ML models**.
+The goal of this tutorial is to discuss and practice managing end-to-end ML system development. An end-to-end ML system development  includes many phases, such as data collection, data pre-processing, **not just running experiments for (training of) the ML models**.
 
 ## Motivation and study goal
 
@@ -9,7 +9,7 @@ Managing a machine learning project is a very complicated process involving a hu
 ## Requirements, data for model development, and metadata about data
 
 ### Important questions
-You start building an ML model based on existing data. Key steps in preparing data
+You start building an ML model based on existing data and requirements. Key steps in preparing data
 
 * Investigate the data you have for model development
 * Identify requirements for your ML model/service
@@ -17,8 +17,10 @@ You start building an ML model based on existing data. Key steps in preparing da
 * Checking quality of data, improving data and updating metadata
 
 ### Practice
+
 We will carry out a case study of ML development for predictive maintenance in BTS (Base Transceiver Stations). The example raw data can be accessed from: `tutorials/MLProjectManagement/BTS_Example/raw_data`
-(currently the raw data is not uploaded because we are still figuring out a way to not have to upload the whole day of data, contact [Linh Nguyen](linh.nguyen@aalto.fi) if you need raw data at the moment)
+
+>currently the raw data is not uploaded because we are still figuring out a way to not have to upload the whole day of data, contact us if you need raw data at the moment
 
 ### Prerequisite
 * [Anaconda](https://www.anaconda.com/)
@@ -111,8 +113,7 @@ serial_data['norm_5'] = serial_data['norm_value'].shift(5)
 serial_data['norm_6'] = serial_data['norm_value'].shift(6)
 serial_data = serial_data[6:]
 ```
-You could do extract data from another power grid data file to test the model. We could also assign the starting line and ending line of the data that we use to test the model from the command line.
-The testing data should be pre-processed in the same way as the training data
+You could do the data extraction from another power grid data file to test the model. We could also assign the starting line and ending line of the data that we use to test the model from the command line. The testing data should be pre-processed in the same way as the training data
 
 ```python
 # Read test dataset from a different file
@@ -140,11 +141,22 @@ test_serial_data = test_serial_data[6:]
 
 ### Metadata about data
 
-#### Important questions
+*Concern*: 
+> We examine data and we start to use it for ML model development. What if we dont keep track the information about the data? What do you think?
+
+Researchers have discussed the importance of keeping the information about data to be used for ML. Try to read the following papers:
+* Timnit Gebru, Jamie Morgenstern, Briana Vecchione, Jennifer Wortman Vaughan, Hanna Wallach, Hal Daumé III, and Kate Crawford. 2021. [Datasheets for datasets](https://dl.acm.org/doi/10.1145/3458723). Commun. ACM 64, 12 (December 2021), 86–92.
+
+
+
+
+#### Works for some important questions
+
 - why do we need to keep metadata about data?
 - what are types of metadata? how to obtain them?
 
 #### Practice
+
 Currently, there are existing tools to store metadata of the dataset, e.g BigQuery, Atlas, and to manage and discovery data such as Google Cloud Data Catalog and IBM Knowledge Catalog, etc. However, there is a lack of framework for capturing complex relationships between the datasets and different entities (e.g: other dataset, ML model) in a ML solution.
 
 
@@ -185,12 +197,17 @@ Following json is an example of the metadata for dataset used in this example:
 ]
 ```
 
+In this tutorial:
+> You shall set the goal to find a suitable way that you want to keep metadata that can be updated and retrieved easily based on our ML development tools.  
+
 ## Developing ML models
 
 ### ML Algorithms
 
 #### Important questions
+
 - Which ML algorithms should we choose in order to create suitable ML models? why?
+- For explainability of your choice (to other stakeholders), how would you document the explanation of the choice?
 
 #### Practice
 
@@ -220,6 +237,7 @@ _____
 MLflow allows us to collect experimental data for your machine learning applications. These data are usually useful for further analysis, statistics, prediction and optimization.
 >Other tools for storing experiments are:
 > - https://www.verta.ai/
+> - https://www.comet.com/site/
 > - https://neptune.ai/
 > - https://wandb.ai/site
 
@@ -368,7 +386,7 @@ Now you have the metadata about data used, models and model experiments, you can
 ```
 This metadata of the model capture the model in an end-to-end view to explain the relationship between data, model and metrics obtained from model experiment, all together are part of ML experiments.
 
-## Model serving /ML service
+## Model serving/ML service
 
 ### Important questions
 
@@ -501,6 +519,7 @@ print(result[0][0])
 ### Questions
 - Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service. Assume that you want to monitor more complex metrics such as cost, performance of your API functions, what are the suitable solutions?
 - Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
+
 ### Interesting tools for research
 - [Machine Learning eXchange (MLX)](https://github.com/machine-learning-exchange/mlx)
 
@@ -508,7 +527,7 @@ print(result[0][0])
 
 We will do ML service monitoring using other tutorials
 - [Performance Monitoring](../PerformanceMonitoring/)
-- [Quality of Analytics for ML](../qoa4ml-2022)
+- [Quality of Analytics for ML](../qoa4ml)
 
 
 ## References and additional links
