@@ -3,11 +3,11 @@
 ## List of tutorials
 We have the following hands-on tutorials for practicing some concepts discussed in the course:
 
-* [Performance monitoring/observability](./PerformanceMonitoring/)
 * [ML end-to-end experiment management](./MLProjectManagement/)
-* [ML Serving and elasticity](./MLServing)
+* [Observability and Monitoring](./PerformanceMonitoring)
+* [Machine Learning Serving](./MLServing)
+* [Quality of Analytics for ML](./qoa4ml)
 * [Edge ML Pipeline](./edgemodelop)
-* [Qualty of Analytics for ML](./qoa4ml)
 * [Common ML Development Activities in Edge Systems](./edgemlcommons)
 
 ## Videos

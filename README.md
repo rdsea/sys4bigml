@@ -62,7 +62,7 @@ Date|Content|Lead person
 04.10.2023 | Lecture 4 discussion | Linh Truong
 11.10.2023 | Hands-on tutorial 2| Tri Nguyen
 18.10.2023 | Project topic discussion| Linh Truong, Tri Nguyen
-  flexible | offline discussion about topics   | Individual
+  flexible | discussion about topics and possible hands-on  | all
 8.11.2023 | Topic progress presentation |  All
 22.11.2023  |prefinal checkpoint of progress| All
 7.12.2023  | final project demonstration| All
@@ -115,7 +115,7 @@ We have a few hands-on tutorials for the course that students can carry out for 
   - [End-to-end ML systems development](./tutorials/MLProjectManagement/)
   - [Observability and Monitoring](./tutorials/PerformanceMonitoring)
   - [Machine Learning Serving](./tutorials/MLserving/README.md)
-  - [Qualty of Analytics for ML](./tutorials/qoa4ml/README.md)
+  - [Quality of Analytics for ML](./tutorials/qoa4ml/README.md)
   - [Edge ML Pipeline](./tutorials/edgemodelop)
   - [Common tasks with Edge ML](./tutorials/edgemlcommons)
 
