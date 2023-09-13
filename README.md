@@ -80,7 +80,7 @@ Date|Content|Lead person
 
 - Lecture 2: **Monitoring, Observability and Explainability for Big Data and ML Systems**
   - Slides: [Benchmarking, Monitoring, Observability and Experimenting for
-Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.4.pdf)
+Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.5.pdf)
   - Key reading 1: [Benchmarking big data systems: A survey](https://www.sciencedirect.com/science/article/pii/S0140366419312344)
   - Key reading 2: [MLPERF Training Benchmark](https://arxiv.org/pdf/1910.01500.pdf)
   - Key reading 3: [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
