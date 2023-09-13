@@ -12,4 +12,4 @@ param = {
 response = requests.post(url = API_ENDPOINT, json = param)
 result = response.json()
 # extracting response text 
-print(result[0][0])
+print(result)

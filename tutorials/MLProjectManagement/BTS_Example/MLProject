@@ -5,7 +5,6 @@ conda_env: conda.yaml
 entry_points:
   main:
     parameters:
-      n_layer: {type: int, default: 2}
       configuration_file: {type: string, default: "conf.txt"}
-    command: "python model.py {n_layer} {configuration_file}"
+    command: "python model.py --conf {configuration_file}"
 

@@ -1,28 +1,33 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
-from sklearn.metrics import mean_squared_error
 import mlflow
 import sys
-# from urllib.parse import urlparse
 import mlflow.keras
 from mlflow.models.signature import infer_signature
-import logging
+import argparse
 
-def main():
+if __name__ == "__main__":
     # Read dataset from file
-    raw_dataset = pd.read_csv("./data_grouped/1161114002_122_.csv")
+    parser = argparse.ArgumentParser(description="Argument for MLflow training")
+    parser.add_argument('--conf', type= str, help='configuration file', default= "conf.txt")
+    parser.add_argument('--train', type= str, help='default train dataset', default="./data_grouped/1161114004_122_.csv")
+    parser.add_argument('--test', type= str, help='default test dataset', default="./data_grouped/1161114002_122_.csv")
+    args = parser.parse_args()
+    config_file = args.conf
+    train_data_file = str(args.train)
+    test_data_file = str(args.test)
+
+    raw_dataset = pd.read_csv(train_data_file)
     raw_dataset = raw_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
     dataset = raw_dataset.copy()
     dataset = dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
     dataset_full = dataset.sort_values(by=['norm_time'])
     dataset = dataset_full[0:300]
     # Read test dataset from a different file
-    test_file_name = "./data_grouped/1161114004_122_.csv"
-    test_raw_dataset = pd.read_csv(test_file_name)
+    test_raw_dataset = pd.read_csv(test_data_file)
     test_raw_dataset = test_raw_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
     test_dataset = test_raw_dataset.copy()
     test_dataset = test_dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
@@ -63,28 +68,34 @@ def main():
     test_labels = np.array(test_dataset.drop(['norm_6'], axis=1))
     test_labels = test_labels.reshape(test_labels.shape[0],test_labels.shape[1],1)
 
-
+    # MLflow start recording training metadata
     with mlflow.start_run():
-
+        # Init ML model
         model = keras.Sequential()
-        n = sys.argv[1] if len(sys.argv) > 1 else 2
+        # check number of parameter 
 
         node_param = [] 
-        file_name = sys.argv[2] if len(sys.argv) > 2 else "conf.txt"
-        with open(file_name, 'r') as f:
+        # Load defaut model configuration 
+        with open(config_file, 'r') as f:
             content = f.read()
             node_param = content.split(",")
-        for i in range(int(n)):
+
+        # setup model layer based on loaded configuration
+        for i in range(int(len(node_param))):
             model.add(layers.LSTM(int(node_param[i]), return_sequences=True))
         model.add(layers.TimeDistributed(layers.Dense(1)))
+        # Setup model optimizer
         model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
-        
+        # Train ML model
         fitted_model = model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
+        # Create model signature
         signature = infer_signature(test_features, model.predict(test_features))
         # Let's check out how it looks
-        mlflow.log_param("number of layer", n)
+        # MLflow log model training parameter
+        mlflow.log_param("number of layer", len(node_param))
         mlflow.log_param("number of node each layer", node_param)
         fit_history = fitted_model.history
+        # MLflow log training metric
         for key in fit_history:
             mlflow.log_metric(key, fit_history[key][-1])
         
@@ -95,7 +106,6 @@ def main():
         
         # Let's log the model in the MLflow model registry
         model_name = 'LSTM_model'
-        mlflow.keras.log_model(model,"LSTM_model", signature=signature, input_example=input_example)
+        mlflow.keras.log_model(model,model_name, signature=signature, input_example=input_example)
 
-if __name__ == "__main__":
-    main()
+

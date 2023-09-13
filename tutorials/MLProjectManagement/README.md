@@ -1,20 +1,20 @@
 # End-to-End ML Systems Development
 
-The goal of this tutorial is to discuss and practice managing end-to-end ML system development. An end-to-end ML system development  includes many phases, such as data collection, data pre-processing, **not just running experiments for (training of) the ML models**.
+The goal of this tutorial is to discuss and practice managing the **end-to-end ML system development**. An end-to-end ML system development  includes many phases, such as data collection, data pre-processing, ML model serving, **not just running experiments for (training of) the ML models**.
 
 ## Motivation and study goal
 
-Managing a machine learning project is a very complicated process involving a huge manual effort. How can you effectively manage the end-to-end process from having a dataset to a functioning prediction models?
+Managing a machine learning project is a very complicated process involving a huge manual effort. How can you effectively manage the end-to-end process from having a dataset to serving prediction models?
 
 ## Requirements, data for model development, and metadata about data
 
 ### Important questions
 You start building an ML model based on existing data and requirements. Key steps in preparing data
 
-* Investigate the data you have for model development
-* Identify requirements for your ML model/service
-* Define suitable metadata for the data to be used
-* Checking quality of data, improving data and updating metadata
+* Investigate the data - how/which ML model can be applied?
+* What is the requirements for your ML model/service?
+* Why do we need to manage metadata? which metadata of data/model must be managed?
+* Dealing with dynamic changes in data quality, how can we improve model serving?
 
 ### Practice
 
@@ -23,7 +23,7 @@ We will carry out a case study of ML development for predictive maintenance in B
 >currently the raw data is not uploaded because we are still figuring out a way to not have to upload the whole day of data, contact us if you need raw data at the moment
 
 ### Prerequisite
-* [Anaconda](https://www.anaconda.com/)
+* [Anaconda](https://www.anaconda.com/) or [Python3 Virtualenv](https://docs.python.org/3/library/venv.html)
 * [Pandas](https://pandas.pydata.org/), [numpy](https://numpy.org/)
 * [TensorFlow](https://www.tensorflow.org/install)
 * [MLflow](https://www.mlflow.org/docs/latest/quickstart.html)
@@ -54,28 +54,43 @@ We will carry out a case study of ML development for predictive maintenance in B
 The BTS data that we have is still in its raw format and are not ready to be used for the prediction model. Thus, we need to preprocess the data. We would first convert the `reading_time`, then group the data by `station_id` and `parameter_id`. This process can be done by executing the code below, or the **file `group_data.py`**.
 
 ```python
-import pandas as pd
+import pandas as pd 
 import os, fnmatch
 
+# Init empty DataFrame for loading data
 bts_df = pd.DataFrame()
+
+# Read list of files in raw_data folder
 listOfFiles = os.listdir('./raw_data')
+# Take only .csv file
 pattern = "*.csv"
 
+# Load raw data to DataFrame
 for files in listOfFiles:
     if fnmatch.fnmatch(files, pattern):
         cur_df = pd.read_csv("./raw_data/{}".format(files))
         bts_df = bts_df.append(cur_df)
 
+# Convert time from unix timestamp to integer
 bts_df["unix_timestamp"] = pd.to_datetime(bts_df["reading_time"]).astype(int)
+
+# Normalize timestamp data
 mean_time = bts_df["unix_timestamp"].mean()
 min_time = bts_df["unix_timestamp"].min()
 bts_df["norm_time"] = (bts_df["unix_timestamp"]-mean_time)/(3600*1000000000)
+
+# Sort data and remove unnecessary features 
 bts_df = bts_df.sort_values(by=['norm_time'])
 bts_df.drop(["reading_time"], axis='columns', inplace=True)
 
+# Group data by station ID and parameter ID
+# -> making prediction on individual parameters for each station
 bts_df_grouped = bts_df.groupby(["station_id","parameter_id"])
+
+# Processing grouped data
 for key,item in bts_df_grouped:
     sub_data = bts_df_grouped.get_group(key)
+    # Normalize value in each group
     mean_val = sub_data['value'].mean()
     sub_data['norm_value'] = sub_data['value']-mean_val
     max_val = sub_data['norm_value'].max()
@@ -85,6 +100,14 @@ for key,item in bts_df_grouped:
 ```
 
 After grouping the data, we need to do some further pre-processing to turn our data into serial data, and normalize the data. You can use the following code, or **open the file `Model.ipynb`** and test the code directly.
+
+* Note: You can simply install Jupyter Notebook: 
+```
+$ pip install jupyter
+# Register kernel with your current python virtual environment
+$ python -m ipykernel install --user --name=<your_kernel_name>
+```
+
 
 ```python
 import matplotlib.pyplot as plt
@@ -96,14 +119,21 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 import mlflow
-raw_dataset = pd.read_csv("./data_grouped/1161114002_122_.csv")
-raw_dataset = raw_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
-dataset = raw_dataset.copy()
+# Load grouped dataset
+# We will train the ML model with dataset from station "1161114004" on the parameter "122"
+grouped_dataset = pd.read_csv("./data_grouped/1161114004_122_.csv")
+
+# Take data features with specific data type
+grouped_dataset = grouped_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
+
+dataset = grouped_dataset.copy()
+
+# Drop error/None data and unused features
 dataset = dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
 dataset_full = dataset.sort_values(by=['norm_time'])
-dataset = dataset_full
 
 
+# Shift the data to creat a short time series (6 data points) for each record
 serial_data = dataset.drop(['value','norm_time'], axis=1)
 serial_data['norm_1'] = serial_data['norm_value'].shift(1)
 serial_data['norm_2'] = serial_data['norm_value'].shift(2)
@@ -111,16 +141,17 @@ serial_data['norm_3'] = serial_data['norm_value'].shift(3)
 serial_data['norm_4'] = serial_data['norm_value'].shift(4)
 serial_data['norm_5'] = serial_data['norm_value'].shift(5)
 serial_data['norm_6'] = serial_data['norm_value'].shift(6)
-serial_data = serial_data[6:]
+train_dataset = serial_data[6:]
 ```
 You could do the data extraction from another power grid data file to test the model. We could also assign the starting line and ending line of the data that we use to test the model from the command line. The testing data should be pre-processed in the same way as the training data
 
 ```python
 # Read test dataset from a different file
-test_file_name = "./data_grouped/1161114004_122_.csv"
-test_raw_dataset = pd.read_csv(test_file_name)
-test_raw_dataset = test_raw_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
-test_dataset = test_raw_dataset.copy()
+# We will test the trained ML model with data from station "1161114002" on the same parameter "122"
+test_file_name = "./data_grouped/1161114002_122_.csv"
+test_grouped_dataset = pd.read_csv(test_file_name)
+test_grouped_dataset = test_grouped_dataset.astype({'id':'float','value':'float', 'station_id':'int', 'parameter_id':'int', 'unix_timestamp':'int', 'norm_time':'float'})
+test_dataset = test_grouped_dataset.copy()
 test_dataset = test_dataset.dropna().drop(['id','station_id','parameter_id','unix_timestamp'], axis=1)
 test_dataset_full = test_dataset.sort_values(by=['norm_time'])
 # Choose a small part of the data to test the model
@@ -129,6 +160,7 @@ end_line = 100
 test_data = test_dataset_full[start_line:end_line]
 test_data = test_dataset_full[start_line:end_line]
 
+# Similar to training dataset -> making a time series input for ML prediction
 test_serial_data = test_data.drop(['value','norm_time'], axis=1)
 test_serial_data['norm_1'] = test_serial_data['norm_value'].shift(1)
 test_serial_data['norm_2'] = test_serial_data['norm_value'].shift(2)
@@ -136,7 +168,7 @@ test_serial_data['norm_3'] = test_serial_data['norm_value'].shift(3)
 test_serial_data['norm_4'] = test_serial_data['norm_value'].shift(4)
 test_serial_data['norm_5'] = test_serial_data['norm_value'].shift(5)
 test_serial_data['norm_6'] = test_serial_data['norm_value'].shift(6)
-test_serial_data = test_serial_data[6:]
+test_dataset = test_serial_data[6:]
 ```
 
 ### Metadata about data
@@ -262,49 +294,47 @@ You would need to have a machine learning model to test out MLflow, you can use 
 We use a BTS model whose code can be found in the file `model.py` or [here](https://github.com/rdsea/IoTCloudSamples/tree/master/MLUnits/BTSPrediction)
 
 ```python
-train_dataset = serial_data
-test_dataset = test_serial_data
-train_features = np.array(train_dataset.drop(['norm_value'], axis=1))
-train_features = np.array(train_features)[:,:,np.newaxis]
-train_labels = np.array(train_dataset.drop(['norm_6'], axis=1))
-train_labels = train_labels.reshape(train_labels.shape[0],train_labels.shape[1],1)
-test_features = np.array(test_dataset.drop(['norm_value'], axis=1))
-test_features = test_features.reshape(test_features.shape[0],test_features.shape[1],1)
-test_labels = np.array(test_dataset.drop(['norm_6'], axis=1))
-test_labels = test_labels.reshape(test_labels.shape[0],test_labels.shape[1],1)
+# MLflow start recording training metadata
+    with mlflow.start_run():
+        # Init ML model
+        model = keras.Sequential()
+        # check number of parameter 
+        n = sys.argv[1] if len(sys.argv) > 1 else 2
 
+        node_param = [] 
+        # Load defaut model configuration if not given
+        file_name = sys.argv[2] if len(sys.argv) > 2 else "conf.txt"
+        with open(file_name, 'r') as f:
+            content = f.read()
+            node_param = content.split(",")
 
-with mlflow.start_run():
-
-    model = keras.Sequential()
-    n = sys.argv[1] if len(sys.argv) > 1 else 2
-    node_param = []
-    file_name = sys.argv[2] if len(sys.argv) > 2 else "conf.txt"
-    with open(file_name, 'r') as f:
-        content = f.read()
-        node_param = content.split(",")
-    for i in range(int(n)):
-        model.add(layers.LSTM(int(node_param[i]), return_sequences=True))
-    model.add(layers.TimeDistributed(layers.Dense(1)))
-    model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
-
-    fitted_model = model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
-    signature = infer_signature(test_features, model.predict(test_features))
-    # Let's check out how it looks
-    mlflow.log_param("number of layer", n)
-    mlflow.log_param("number of node each layer", node_param)
-    fit_history = fitted_model.history
-    for key in fit_history:
-        mlflow.log_metric(key, fit_history[key][-1])
-
-    model_dir_path = "./saved_model"
-
-    # Create an input example to store in the MLflow model registry
-    input_example = np.expand_dims(train_features[0], axis=0)
-
-    # Let's log the model in the MLflow model registry
-    model_name = 'LSTM_model'
-    mlflow.keras.log_model(model,"LSTM_model", signature=signature, input_example=input_example)
+        # setup model layer based on loaded configuration
+        for i in range(int(n)):
+            model.add(layers.LSTM(int(node_param[i]), return_sequences=True))
+        model.add(layers.TimeDistributed(layers.Dense(1)))
+        # Setup model optimizer
+        model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.005))
+        # Train ML model
+        fitted_model = model.fit(train_features, train_labels, epochs=2, batch_size=1, verbose=2, validation_data=(test_features, test_labels))
+        # Create model signature
+        signature = infer_signature(test_features, model.predict(test_features))
+        # Let's check out how it looks
+        # MLflow log model training parameter
+        mlflow.log_param("number of layer", n)
+        mlflow.log_param("number of node each layer", node_param)
+        fit_history = fitted_model.history
+        # MLflow log training metric
+        for key in fit_history:
+            mlflow.log_metric(key, fit_history[key][-1])
+        
+        model_dir_path = "./saved_model"
+        
+        # Create an input example to store in the MLflow model registry
+        input_example = np.expand_dims(train_features[0], axis=0)
+        
+        # Let's log the model in the MLflow model registry
+        model_name = 'LSTM_model'
+        mlflow.keras.log_model(model,model_name, signature=signature, input_example=input_example)
 ```
 We can log the input example for the model using `mlflow.keras.log_model` with `input_example`.
 
@@ -316,7 +346,10 @@ $python model.py
 ```
 You could also modify different parameters, such as the loss function, batch_size, epochs, or the test data file etc, and record them using `mlflow.log_param`.
 
-* After running the examples repeatedly, you might be interested in comparing the performance of ran experiments. Open a terminal in the current working directory and call MLflow user interface using the below command:
+* Note: You can practice training ML models with different configurations to create different model versions. Then, identify which metrics need to be managed by MLflow and how to compare performance between different versions.
+
+
+Open a terminal in the current working directory and call MLflow user interface using the below command:
 ```bash
 $mlflow ui
 ```
@@ -414,9 +447,8 @@ conda_env: conda.yaml
 entry_points:
   main:
     parameters:
-      n_layer: {type: int, default: 2}
       configuration_file: {type: string, default: "conf.txt"}
-    command: "python model.py {n_layer} {configuration_file}"
+    command: "python model.py --conf {configuration_file}"
 ```
 Create conda.yaml to define all requirements for the python program
 ```yaml
@@ -447,7 +479,7 @@ $ mlflow run BTS_Example
 ```
 or run it with custom parameters:
 ```bash
-$ mlflow run BTS_Example/ -P n_layer=3 -P configuration_file="conf.txt"
+$ mlflow run BTS_Example/ -P configuration_file="conf.txt"
 ```
 Notably, the directory ml_experiments is where your MLproject and conda.yaml are located. Figure 2 is an illustration of the result after the program completed. As you can see in the picture, mlflow has created a conda environment for your project with a run id and executed your code in that environment. With this approach, your code can be executed everywhere that has mlflow.
 
