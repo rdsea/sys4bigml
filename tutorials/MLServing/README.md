@@ -46,6 +46,15 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 
 
 ## Deploying ML Service on your own machine
+
+### Question:
+- After developing an ML pipeline, how could you deploy the pipeline on heterogeneous computing resources?
+- How to automate environment deployments (hardware/software dependencies) for all services within the pipeline with minimal manual efforts.
+- What would you do if the workload increase/decrease suddently? 
+- How could you guarantee the serving quality?
+- What would you optimize when serving (multiple) ML services?
+
+### Practice
 * Clone the folder from git
 ```bash
 $ git clone https://version.aalto.fi/gitlab/sys4bigml/cs-e4660.git
