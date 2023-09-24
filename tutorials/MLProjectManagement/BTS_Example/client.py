@@ -1,7 +1,7 @@
 # importing the requests library
 import requests
 # defining the api-endpoint 
-API_ENDPOINT = "http://127.0.0.1:8888/invocations"
+API_ENDPOINT = "http://127.0.0.1:8889/invocations"
 
 # data to be sent to api
 param = {
