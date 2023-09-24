@@ -53,17 +53,17 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
 * Other teachers/assistants: [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
 ### Tentative slots
 
-Date|Content|Lead person
----|---|---
-06.09.2023| Course overview, lecture 1 discussion | Linh Truong
-13.09.2023 |Lecture 2 discussion | Linh Truong
-20.09.2023 | Hands-on tutorial 1| Tri Nguyen
-27.09.2023 | Lecture 3 discussion   |  Linh Truong
-04.10.2023 | Lecture 4 discussion | Linh Truong
-11.10.2023 | Hands-on tutorial 2| Tri Nguyen
-18.10.2023 | Project topic discussion| Linh Truong, Tri Nguyen
+Date|Place|Content|Lead person
+---|---|---|---
+06.09.2023| T6 - A136, Tietotekniikan talo|Course overview, lecture 1 discussion | Linh Truong
+13.09.2023 |T6 - A136, Tietotekniikan talo|Lecture 2 discussion | Linh Truong
+20.09.2023 | T6 - A136, Tietotekniikan talo|Hands-on tutorial 1| Tri Nguyen
+27.09.2023 | T6 - A136, Tietotekniikan talo|Lecture 3 discussion   |  Linh Truong
+04.10.2023 | T6 - A136, Tietotekniikan talo|Lecture 4 discussion | Linh Truong
+11.10.2023 | T6 - A136, Tietotekniikan talo|Hands-on tutorial 2| Tri Nguyen
+18.10.2023 | To be confirmed| Project topic discussion| Linh Truong, Tri Nguyen
   flexible | discussion about topics and possible hands-on  | all
-8.11.2023 | Topic progress presentation |  All
+8.11.2023 |T5 - A133, Tietotekniikan talo| Topic progress presentation |  All
 22.11.2023  |prefinal checkpoint of progress| All
 7.12.2023  | final project demonstration| All
 15.2023  | final report/code  |  Individual
