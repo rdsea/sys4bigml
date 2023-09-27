@@ -65,7 +65,7 @@ Date|Place|Content|Lead person
   flexible | discussion about topics and possible hands-on  | all
 8.11.2023 |T5 - A133, Tietotekniikan talo| Topic progress presentation |  All
 22.11.2023  |prefinal checkpoint of progress| All
-7.12.2023  | final project demonstration| All
+4.12.2023  | final project demonstration| All
 15.2023  | final report/code  |  Individual
 
 ### Lectures/Discussions
@@ -90,7 +90,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.5.p
   - The collection of [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847) is also useful
 
 - Lecture 3: **Coordination Models and Techniques for Big Data and Machine Learning**
-  - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/cs-e4660-lecture3-coordination-serving-v0.4.pdf)
+  - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/cs-e4660-lecture3-coordination-serving-v0.5.pdf)
   - Key reading 1: [Cirrus: a Serverless Framework for End-to-end ML Workflows](https://doi.org/10.1145/3357223.3362711)
   - Key reading 2: [Towards ML Engineering: A Brief History Of TensorFlow Extended (TFX)](https://arxiv.org/abs/2010.02013)
   - Key reading 3: [Orchestrating Big Data Analysis Workflows in the Cloud: Research Challenges, Survey, and Future Directions](https://dl.acm.org/doi/fullHtml/10.1145/3332301)
