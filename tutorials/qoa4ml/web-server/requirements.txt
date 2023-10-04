@@ -1,7 +1,7 @@
 flask==2.3.3
 gunicorn==20.0.4
-eventlet==0.30.2
-requests==2.25.1
+eventlet==0.31.0
+requests==2.31.0
 pika
 psutil
 prometheus-client
