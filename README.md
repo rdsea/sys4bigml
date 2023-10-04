@@ -61,11 +61,11 @@ Date|Place|Content|Lead person
 27.09.2023 | T6 - A136, Tietotekniikan talo|Lecture 3 discussion   |  Linh Truong
 04.10.2023 | T6 - A136, Tietotekniikan talo|Lecture 4 discussion | Linh Truong
 11.10.2023 | T6 - A136, Tietotekniikan talo|Hands-on tutorial 2| Tri Nguyen
-18.10.2023 | To be confirmed| Project topic discussion| Linh Truong, Tri Nguyen
+18.10.2023 | R030-A211| Project topic discussion| Linh Truong, Tri Nguyen
   flexible | discussion about topics and possible hands-on  | all
 8.11.2023 |T5 - A133, Tietotekniikan talo| Topic progress presentation |  All
 22.11.2023  |prefinal checkpoint of progress| All
-4.12.2023  | final project demonstration| All
+7.12.2023  | final project demonstration| All
 15.2023  | final report/code  |  Individual
 
 ### Lectures/Discussions
@@ -98,13 +98,14 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.5.p
   - Key reading 5: [Jeff Smith. 2018. Machine Learning Systems: Designs that scale (1st. ed.). Manning Publications Co., USA.](https://www.manning.com/books/machine-learning-systems)
   - Key reading 6: [Prediction-Serving Systems](https://queue.acm.org/detail.cfm?id=3210557)
 
-- Lecture 4 **Machine Learning in Edge-Cloud Continuum**
-  - Slides: [Machine Learning with Edge-centric Systems](slides/cs-e4660-lecture4-edgeml-v0.4.pdf)
+- Lecture 4 **Machine Learning Systems in Edge-Cloud Continuum**
+  - Slides: [Machine Learning Systems in Edge-Cloud Continuum](slides/cs-e4660-lecture4-edgeml-v0.5.pdf)
   - Key reading 1: [Serving deep neural networks at the cloud edge for vision applications on mobile platforms](https://dl.acm.org/doi/10.1145/3304109.3306221)
   - Key reading 2:[From the Edge to the Cloud: Model Serving in ML.NET](http://sites.computer.org/debull/A18dec/p46.pdf)
   - Key reading 3: [Machine Learning at Facebook:Understanding Inference at the Edge](https://research.fb.com/wp-content/uploads/2018/12/Machine-Learning-at-Facebook-Understanding-Inference-at-the-Edge.pdf)
   - Key reading 4: [Distributing Deep Neural Networks with Containerized Partitions at the Edge](https://www.usenix.org/system/files/hotedge19-paper-zhou.pdf)
   - Key reading 5: [A survey of federated learning for edge computing: Research problems and solutions](https://www.sciencedirect.com/science/article/pii/S266729522100009X)
+  - Key reading 6: Joost Verbraeken, Matthijs Wolting, Jonathan Katzy, Jeroen Kloppenburg, Tim Verbelen, and Jan S. Rellermeyer. 2020. [A Survey on Distributed Machine Learning. ACM Comput. Surv. 53, 2, Article 30 (March 2021)](https://doi.org/10.1145/3377454)
 
 *If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
 
@@ -124,6 +125,7 @@ We have a few hands-on tutorials for the course that students can carry out for 
   - Students will propose the project idea. This is an important aspect of *research-oriented course*. If a student cannot propose an idea, the teacher will suggest some concrete ideas for students.
 
 ### Final project demonstration
+
   - The final project demonstration is organized like an "event" where all students can demonstrate their work and students can discuss experiences in their projects.
   - [List of the student projects](demos.md)
 

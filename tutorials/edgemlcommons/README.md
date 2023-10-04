@@ -10,7 +10,7 @@ Very often, we will take a model developed in a common environment and then conv
 
 Practice the following things:
 
-* Download existing models, e.g., from (https://tfhub.dev/s?deployment-format=tfjs), [Open Model Zoo](https://github.com/openvinotoolkit/open_model_zoo) or https://github.com/EN10/KerasMNIST)
+* Download existing models, e.g., from [TensorHub](https://tfhub.dev/s?deployment-format=tfjs), [Open Model Zoo](https://github.com/openvinotoolkit/open_model_zoo) or [Hugging Face](https://huggingface.co/models) or https://github.com/EN10/KerasMNIST)
 * Convert a normal tensorflow model to tensorflow lite
   
 ```
@@ -45,8 +45,12 @@ Carry out the following activities:
 
 - For which application domains/cases  the model inference accuracy would be affected, when applying  model conversion and quantification?
 
-## References
+## Additional links and References
 
 * Some sample models: https://github.com/EN10/KerasMNIST
 * https://www.tensorflow.org/lite/convert/index
 * [OpenVINO](https://docs.openvino.ai/latest/openvino_docs_MO_DG_Deep_Learning_Model_Optimizer_DevGuide.html)
+* [Torchscript](https://pytorch.org/docs/stable/jit.html)
+* [Torch quantization](https://pytorch.org/docs/stable/quantization.html)
+* [Model compression techniques](https://github.com/cedrickchee/awesome-ml-model-compression)
+* [Edge Impulse: An MLOps Platform for Tiny Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2023/file/de081105cd68393144944696d3fb6778-Paper-mlsys2023.pdf)
