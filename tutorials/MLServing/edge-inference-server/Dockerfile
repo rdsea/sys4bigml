@@ -21,6 +21,7 @@ COPY . .
 
 RUN apt-get update
 RUN apt-get -o Dpkg::Options::="--force-confmiss" install -y --reinstall netbase
+RUN pip install eventlet==0.33.0 https://github.com/benoitc/gunicorn/archive/refs/heads/master.zip#egg=gunicorn==20.1.0
 
 EXPOSE 4002
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
