@@ -12,7 +12,7 @@
         ]
     },
     "metric": {
-        "Accuracy": 100.0,
+        "Accuracy": 0.0,
         "ResponseTime": 0.0
     }
 }
