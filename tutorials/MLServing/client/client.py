@@ -17,10 +17,22 @@ config_file = args.conf
 
 
 qoaConfig = qoa_utils.load_config(file_path=config_file)
-qoaClient = QoaClient(qoaConfig['qoa_config'])
+try:
+    qoaClient = QoaClient(qoaConfig['qoa_config'])
+except:
+    print("Unable to init qoa client")
 
 
 url = 'http://web-service:5000/inference'
+
+def responsetime_timer():
+    if "qoaClient" in globals():
+        qoaClient.timer()
+
+def qoa_report():
+    if "qoaClient" in globals():
+        report = qoaClient.report(submit=True)
+        print(report)
 
 
 
@@ -33,13 +45,11 @@ def sender(num_thread):
         ran_file = random.choice(os.listdir("./image"))
         files = {'image': open("./image/"+ran_file, 'rb')}
 
-        qoaClient.timer()
-
+        responsetime_timer()
         response = requests.post(url, files=files)
-
-        qoaClient.timer()
-        report = qoaClient.report(submit=True)
-        # print(report)
+        responsetime_timer()
+        qoa_report()
+        
 
 
         print("Thread - ",num_thread, " Response:" ,response.content)
