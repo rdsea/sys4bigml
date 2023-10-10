@@ -118,16 +118,16 @@ Now we can check if the deployment started
 Returned result
 ```
 NAME                                 READY   STATUS    RESTARTS   AGE
-pod/main-web-server-77df7888fd-wr2wg   1/1     Running   11         4d
+pod/edge-web-server-77df7888fd-wr2wg   1/1     Running   11         4d
 
 NAME                 TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
 service/kubernetes   ClusterIP   10.152.183.1   <none>        443/TCP   6d1h
 
 NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/main-web-server   1/1     1            1           4d
+deployment.apps/edge-web-server   1/1     1            1           4d
 
 NAME                                       DESIRED   CURRENT   READY   AGE
-replicaset.apps/main-web-server-77df7888fd   1         1         1       4d
+replicaset.apps/edge-web-server-77df7888fd   1         1         1       4d
 ```
 You can see the status is "Running" and the READY tab is "1/1" so that it has been started successfully.
 If it not show as above, you can export the logs by the following command for debugging:

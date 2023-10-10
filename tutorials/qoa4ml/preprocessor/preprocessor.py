@@ -8,8 +8,8 @@ import uuid
 import json, time
 import os
 from helper.custom_logger import CustomLogger
-from qoa4ml.reports import Qoa_Client
-import qoa4ml.utils as qoa_utils
+import qoa4ml.qoaUtils as qoa_utils
+from qoa4ml.QoaClient import QoaClient
 
 app = Flask(__name__)
 logger = CustomLogger().get_logger()
@@ -54,22 +54,14 @@ def init_env_variables():
         raise Exception("CLOUD_INFERENCE_PREPROCESSOR_SERVICE_PORT is not defined")
 
 ######################################################################################################################################################
-# ------------ QoA Report ------------ #
+# ------------ Init QoA Client ------------ #
 
-client = "./conf/client.json"
-connector = "./conf/connector.json"
-metric = "./conf/metrics.json"
-client_conf = qoa_utils.load_config(client)
-client_conf["node_name"] = get_node_name()
-client_conf["instance_id"] = get_instance_id()
-connector_conf = qoa_utils.load_config(connector)
-metric_conf = qoa_utils.load_config(metric)
-
-qoa_client = Qoa_Client(client_conf, connector_conf)
-qoa_client.add_metric(metric_conf["App-metric"], "App-metric")
-metrics = qoa_client.get_metric(category="App-metric")
-qoa_utils.proc_monitor_flag = True
-qoa_utils.process_monitor(client=qoa_client,interval=client_conf["interval"], metrics=metric_conf["Process-metric"],category="Process-metric")
+qoa_config_file = "./conf/qoa_config.yaml"
+qoa_config = qoa_utils.load_config(qoa_config_file)
+qoa_config["client"]["instance_name"] = get_instance_id()
+qoa_config["client"]["node_name"] = get_node_name()
+qoa_client = QoaClient(qoa_config)
+qoa_client.process_monitor_start(interval=int(qoa_config["interval"]))
 ######################################################################################################################################################
 
 
@@ -77,6 +69,7 @@ qoa_utils.process_monitor(client=qoa_client,interval=client_conf["interval"], me
 def inference():
 
     if request.method == 'POST':
+        qoa_client.timer()
         job_id = uuid.uuid4().hex
        
         image = request.files['image']
@@ -93,13 +86,12 @@ def inference():
         logger.info(str(r.text))
         json_data = {"data":json.loads(r.text)}
         json_data['uid'] = job_id
-
+        qoa_client.timer()
         ######################################################################################################################################################
-        # ------------ QoA Report ------------ #
-        metrics['Timestamp'].set(time.time())
-        qoa_client.report("App-metric")
+        # ------------ Send QoA Report ------------ #
+        report = qoa_client.report(submit=True)
         ######################################################################################################################################################
-            
+        
         return Response(json.dumps(json_data), status=200, mimetype='application/json')
 
     if request.method == 'GET':

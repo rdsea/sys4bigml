@@ -16,11 +16,13 @@ COPY requirements.txt requirements.txt
 RUN ["mkdir", "/inference/temp"]
 
 RUN pip3 install -r requirements.txt
-COPY . . 
+
 # Injecting customized python version for calling the object detection
 
 RUN apt-get update
 RUN apt-get -o Dpkg::Options::="--force-confmiss" install -y --reinstall netbase
+RUN pip install eventlet==0.33.0 https://github.com/benoitc/gunicorn/archive/refs/heads/master.zip#egg=gunicorn==20.1.0
+COPY . . 
 
 EXPOSE 4002
 # ENTRYPOINT ["tail", "-f", "/dev/null"]

@@ -2,9 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: main-web-server
+  name: edge-web-server
   labels:
-    app: main-web-server
+    app: edge-web-server
 spec:
   replicas: 1
   selector:

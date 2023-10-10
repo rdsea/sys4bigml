@@ -5,8 +5,10 @@ import requests as rq
 import json 
 import os, time
 from helpers.custom_logger import CustomLogger
-from qoa4ml.reports import Qoa_Client
-import qoa4ml.utils as qoa_utils
+
+import qoa4ml.qoaUtils as qoa_utils
+from qoa4ml.QoaClient import QoaClient
+
 
 app = Flask(__name__)
 logger = CustomLogger().get_logger()
@@ -39,22 +41,15 @@ def init_env_variables():
 
 
 ######################################################################################################################################################
-# ------------ QoA Report ------------ #
+# ------------ Init QoA Client ------------ #
 
-client = "./conf/client.json"
-connector = "./conf/connector.json"
-metric = "./conf/metrics.json"
-client_conf = qoa_utils.load_config(client)
-client_conf["node_name"] = get_node_name()
-client_conf["instance_id"] = get_instance_id()
-connector_conf = qoa_utils.load_config(connector)
-metric_conf = qoa_utils.load_config(metric)
+qoa_config_file = "./conf/qoa_config.yaml"
+qoa_config = qoa_utils.load_config(qoa_config_file)
+qoa_config["client"]["instance_name"] = get_instance_id()
+qoa_config["client"]["node_name"] = get_node_name()
+qoa_client = QoaClient(qoa_config)
+qoa_client.process_monitor_start(interval=int(qoa_config["interval"]))
 
-qoa_client = Qoa_Client(client_conf, connector_conf)
-qoa_client.add_metric(metric_conf["App-metric"], "App-metric")
-metrics = qoa_client.get_metric(category="App-metric")
-qoa_utils.proc_monitor_flag = True
-qoa_utils.process_monitor(client=qoa_client,interval=client_conf["interval"], metrics=metric_conf["Process-metric"],category="Process-metric")
 ######################################################################################################################################################
 
 @app.route("/inference", methods = ['GET', 'POST'])
@@ -67,6 +62,7 @@ def inference():
     elif request.method == 'POST':
 
         try:
+            qoa_client.timer()
             for i in range(10):
                 r = rq.post(url=f"http://{service_name}:{port}/process", files = {'image' : request.files['image']})
                 if (r!= None): 
@@ -76,16 +72,17 @@ def inference():
             json_data = json.loads(r.text)
             json_data["success"] = "true"
             result = json.dumps(json_data)
+            qoa_client.timer()
+
+            ######################################################################################################################################################
+            # ------------ Send QoA Report ------------ #
+            report = qoa_client.report(submit=True)
+            ######################################################################################################################################################
+        
         except Exception as e:
             logger.exception("Some Error occurred: {}".format(e)) 
             result = '{"error":"some error occurred in downstream service"}'
             
-        ######################################################################################################################################################
-        # ------------ QoA Report ------------ #
-        metrics['Timestamp'].set(time.time())
-        qoa_client.report("App-metric")
-        ######################################################################################################################################################
-        
         return Response(result, status=200, mimetype='application/json')
     else:
         return Response('{"error":"method not allowed"}', status=405, mimetype='application/json')

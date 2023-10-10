@@ -5,8 +5,8 @@ from flask_restful import reqparse
 from werkzeug.utils import secure_filename
 from darknet import get_tiny_yolo_detection
 import sys
-from qoa4ml.reports import Qoa_Client
-import qoa4ml.utils as qoa_utils
+import qoa4ml.qoaUtils as qoa_utils
+from qoa4ml.QoaClient import QoaClient
 
 UPLOAD_FOLDER = '/inference/temp'
 
@@ -29,21 +29,13 @@ def get_instance_id():
     return pod_id
 
 ######################################################################################################################################################
-# ------------ QoA Report ------------ #
-client = "./conf/client.json"
-connector = "./conf/connector.json"
-metric = "./conf/metrics.json"
-client_conf = qoa_utils.load_config(client)
-client_conf["node_name"] = get_node_name()
-client_conf["instance_id"] = get_instance_id()
-connector_conf = qoa_utils.load_config(connector)
-metric_conf = qoa_utils.load_config(metric)
-
-qoa_client = Qoa_Client(client_conf, connector_conf)
-qoa_client.add_metric(metric_conf["App-metric"], "App-metric")
-metrics = qoa_client.get_metric(category="App-metric")
-qoa_utils.proc_monitor_flag = True
-qoa_utils.process_monitor(client=qoa_client,interval=client_conf["interval"], metrics=metric_conf["Process-metric"],category="Process-metric")
+# ------------ Init QoA Report ------------ #
+qoa_config_file = "./conf/qoa_config.yaml"
+qoa_config = qoa_utils.load_config(qoa_config_file)
+qoa_config["client"]["instance_name"] = get_instance_id()
+qoa_config["client"]["node_name"] = get_node_name()
+qoa_client = QoaClient(qoa_config)
+qoa_client.process_monitor_start(interval=int(qoa_config["interval"]))
 ######################################################################################################################################################
 
 # curl -F "image=@dog.jpg" localhost:5000/inference
@@ -55,6 +47,7 @@ class MLInferenceService(Resource):
             return {"error": "empty"}, 404
         if file and file.filename:
             try:
+                qoa_client.timer()
                 filename = secure_filename(file.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -62,18 +55,18 @@ class MLInferenceService(Resource):
                 #result = {"succes": "OKAY"}
                 os.remove(file_path)
                 response = result, 200
+                qoa_client.timer()
+                ######################################################################################################################################################
+                # ------------ Send QoA Report ------------ #
+                report = qoa_client.report(submit=True)
+                ######################################################################################################################################################
+            
             except Exception as e:
                 print("error occured" + str(e))
                 sys.stdout.flush()
                 errors = 1
                 response = {"Inference error": str(e)}, 404
 
-            ######################################################################################################################################################
-            # ------------ QoA Report ------------ #
-            metrics['Timestamp'].set(time.time())
-            qoa_client.report("App-metric")
-            ######################################################################################################################################################
-            
             return response
 
 api.add_resource(MLInferenceService, '/inference')
