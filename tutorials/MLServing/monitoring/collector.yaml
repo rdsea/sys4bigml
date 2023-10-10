@@ -1,0 +1,6 @@
+collector:
+  end_point: 195.148.22.62
+  exchange_name: teaching_object_detection
+  exchange_type: topic
+  in_routing_key: teaching.#
+  in_queue: collector_1
