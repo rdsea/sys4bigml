@@ -64,8 +64,8 @@ Date|Place|Content|Lead person
 18.10.2023 | R030-A211| Project topic discussion| Linh Truong, Tri Nguyen
   flexible | discussion about topics and possible hands-on  | all
 8.11.2023 |T5 - A133, Tietotekniikan talo| Topic progress presentation |  All
-22.11.2023  |prefinal checkpoint of progress| All
-7.12.2023  | final project demonstration| All
+22.11.2023 | TBD |prefinal checkpoint of progress| All
+4.12.2023  | TBD |final project demonstration| All
 15.2023  | final report/code  |  Individual
 
 ### Lectures/Discussions
