@@ -5,16 +5,11 @@ The purpose of this tutorial is to understand Machine Learning (ML) serving, cre
 
 Kubernetes is an open-source for automating deployment, allowing us deploy containerized applications on top of several container runtimes, for example: Docker, containerd, CRI-O. With Kubernetes, we can deploy scalable, elastic, and reliable ML pipelines without much human effort. Here, we practice ML serving by building your own ML application, containerizing the application and deploying it to a pre-setup K8s server on Google Cloud. Thereafter, we have to re-configure the application to serve multi-tenants as well as scale the ML service.
 
-
 It is recommended that you use linux environment.
-
-## Accompanying Slides and Video
-Will be updated later
 
 ## Prerequisite
 * [Docker](https://docs.docker.com/get-docker/), [Kubernetes](https://kubernetes.io/) or [Minikube](https://minikube.sigs.k8s.io/docs/)
 
-## **ML Model & Data**
 ## Machine Learning Models under Testing
 Within this tutorial, we will practice with an ML application that detects some common objects in submitted images. The model uses [Darknet](https://pjreddie.com/darknet/) which implements [YOLOv3](https://arxiv.org/abs/1804.02767) as the core neural network.
 
@@ -27,7 +22,7 @@ The images for this experiment are extracted from the Google Open Image dataset 
 <img src = "./client/image/bird.jpg" width=50% height=50%>
 </p> 
 <p align = "center">
-Figure 1: Sample image
+Figure 1: Sample image (from Google Open Image)
 </p>
 
 
@@ -35,7 +30,7 @@ Figure 1: Sample image
 <img src = "./client/image/bird_label.jpg" width=50% height=50%>
 </p>
 <p align = "center">
-Figure 2: Labeled image
+Figure 2: Labeled image (from Google Open Image)
 </p>
 
 The sample response:
@@ -55,11 +50,8 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 - What would you optimize when serving (multiple) ML services?
 
 ### Practice
-* Clone the folder from git
-```bash
-$ git clone https://version.aalto.fi/gitlab/sys4bigml/cs-e4660.git
-```
-* Move to the tutorial folder `cs-e4660/tutorials/MLServing-2022`
+* Clone this git (https://github.com/rdsea/sys4bigml/) if you have not done so
+* Move to the tutorial folder `tutorials/MLServing-2022`
 
 ### Build a containerized application
 
@@ -85,7 +77,7 @@ $ minikube image load <archive_name>.tar
 $ minikube images ls
 ```
 
-***Note***: You can use microk8s instead of minikube (refer to [previous year's tutorial](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/master/tutorials/MLServing-2021-discontinued))
+***Note***: You can use microk8s instead of minikube (refer to [another tutorial](https://version.aalto.fi/gitlab/sys4bigml/cs-e4660/-/tree/master/tutorials/MLServing-2021-discontinued))
 You can also build your docker image locally then push it into [Dockerhub](https://hub.docker.com/) so that you don't have to import the image to K8s as it automatically finds the image from Dockerhub if it's not available at local.
 
 ## K8s Deployment
