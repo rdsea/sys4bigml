@@ -60,15 +60,15 @@ Date|Place|Content|Lead person
 18.09.2024 ||Lecture 2 discussion | Linh Truong
 25.09.2024 | |Hands-on tutorial 1| Minh-Tri Nguyen
 2.10.2024 | |Lecture 3 discussion   |  Linh Truong
-9.10.2024 | Hands-on tutorial 2| Minh-Tri Nguyen
+9.10.2024 | | Hands-on tutorial 2| Minh-Tri Nguyen
 16.10.2024 | |Lecture 4 + Hands-on tutorial 3| Hong-Tri Nguyen
 23.10.2024 | | Project topic discussion| Linh Truong, Minh-Tri Nguyen, Hong-Tri Nguyen
-  flexible | discussion about topics and possible hands-on  | All
+  flexible | |discussion about topics and possible hands-on  | All
 6.11.2024 || Checkppoint 1: Topic progress presentation |  All
 20.11.2024 | |Checkppoint 2: Topic progress/prefinal check| All
-  flexible | discussion about project progress  | All
+  flexible | | discussion about project progress  | All
 4.12.2024  | |final project demonstration| All
-11.122024  | final report/code delivery  |  Individual
+11.122024  | |final report/code delivery  |  Individual
 
 ### Lectures/Discussions
 
