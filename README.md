@@ -26,7 +26,7 @@ Students should have knowledge about cloud computing, big data, operating system
 * understanding and applying key principles, techniques, and concepts
 * analyzing/evaluating/creating (new) methods/techniques
 
-### Focused Areas in 2023
+### Focused Areas in 2024
 
 * Computing continuum (edge systems, edge-cloud systems)  
 * Design and evaluation for systems robustness, reliability, resilience and elasticity for Big Data/ML (with also engineering work)
@@ -47,38 +47,46 @@ We define the generic plan of the course as follows:
 As an advanced and research-oriented course, we will use the pass/fail as a way to evaluate students. Passing the course will require the students to (i) participating in lectures and hands-on, (ii) passing study logs, (iii) passing project topic presentation, and (iv) passing the final demonstration.
 
 
-## Fall 2023 - Schedule
+## Fall 2024 - Schedule
 
 * Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
-* Other teachers/assistants: [Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
+* Other teacher/assistant: [Minh-Tri Nguyen](https://www.researchgate.net/profile/Minh_Tri_Nguyen5)
+*  Other teacher/assistant: [Hong-Tri Nguyen](https://hong3nguyen.github.io/)
 ### Tentative slots
 
 Date|Place|Content|Lead person
 ---|---|---|---
-06.09.2023| T6 - A136, Tietotekniikan talo|Course overview, lecture 1 discussion | Linh Truong
-13.09.2023 |T6 - A136, Tietotekniikan talo|Lecture 2 discussion | Linh Truong
-20.09.2023 | T6 - A136, Tietotekniikan talo|Hands-on tutorial 1| Tri Nguyen
-27.09.2023 | T6 - A136, Tietotekniikan talo|Lecture 3 discussion   |  Linh Truong
-04.10.2023 | T6 - A136, Tietotekniikan talo|Lecture 4 discussion | Linh Truong
-11.10.2023 | T6 - A136, Tietotekniikan talo|Hands-on tutorial 2| Tri Nguyen
-18.10.2023 | R030-A211| Project topic discussion| Linh Truong, Tri Nguyen
-  flexible | discussion about topics and possible hands-on  | all
-8.11.2023 |T5 - A133, Tietotekniikan talo| Topic progress presentation |  All
-22.11.2023 | T4 - A140|prefinal checkpoint of progress| All
-4.12.2023  | T5 - A133 |final project demonstration| All
-15.2023  | final report/code  |  Individual
+11.09.2024| |Course overview, lecture 1 discussion | Linh Truong
+18.09.2024 ||Lecture 2 discussion | Linh Truong
+25.09.2024 | |Hands-on tutorial 1| Minh-Tri Nguyen
+2.10.2024 | |Lecture 3 discussion   |  Linh Truong
+9.10.2024 | Hands-on tutorial 2| Minh-Tri Nguyen
+16.10.2024 | |Lecture 4 + Hands-on tutorial 3| Hong-Tri Nguyen
+23.10.2023 | | Project topic discussion| Linh Truong, Minh-Tri Nguyen, Hong-Tri Nguyen
+  flexible | discussion about topics and possible hands-on  | All
+6.11.2024 || Checkppoint 1: Topic progress presentation |  All
+20.11.2024 | |Checkppoint 2: Topic progress/prefinal check| All
+  flexible | discussion about project progress  | All
+4.12.2024  | |final project demonstration| All
+11.122024  | final report/code delivery  |  Individual
 
 ### Lectures/Discussions
 
-- Lecture 1: **Robustness, Reliability, Resilience and Elasticity for Big Data/ML Systems**
+- Lecture 1: **Robustness, Reliability, Resilience and Elasticity for Machine Learning Systems in Edge-Cloud Continuum**
   - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/cs-e4660-lecture1-r3e-design-v0.5.pdf)
   - Key reading 1: [R3E -An Approach to Robustness, Reliability, Resilience and Elasticity Engineering for End-to-End Machine Learning Systems](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
   - Key reading 2: [The New Frontier of Machine Learning Systems](https://arxiv.org/pdf/1904.03257.pdf)
   - Key reading 3: [Hidden Technical Debt in Machine Learning Systems](https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html)
   - Key reading 4: [Declarative Machine Learning Systems](https://queue.acm.org/detail.cfm?id=3479315)
   - Key reading 5: [Technology readiness levels for machine learning systems](https://www.nature.com/articles/s41467-022-33128-9)
-
-- Lecture 2: **Monitoring, Observability and Explainability for Big Data and ML Systems**
+  - Key reading 6: [Serving deep neural networks at the cloud edge for vision applications on mobile platforms](https://dl.acm.org/doi/10.1145/3304109.3306221)
+  - Key reading 7:[From the Edge to the Cloud: Model Serving in ML.NET](http://sites.computer.org/debull/A18dec/p46.pdf)
+  - Key reading 8: [Machine Learning at Facebook:Understanding Inference at the Edge](https://research.fb.com/wp-content/uploads/2018/12/Machine-Learning-at-Facebook-Understanding-Inference-at-the-Edge.pdf)
+  - Key reading 9: [Distributing Deep Neural Networks with Containerized Partitions at the Edge](https://www.usenix.org/system/files/hotedge19-paper-zhou.pdf)
+  - Key reading 10: [A survey of federated learning for edge computing: Research problems and solutions](https://www.sciencedirect.com/science/article/pii/S266729522100009X)
+  - Key reading 11: Joost Verbraeken, Matthijs Wolting, Jonathan Katzy, Jeroen Kloppenburg, Tim Verbelen, and Jan S. Rellermeyer. 2020. [A Survey on Distributed Machine Learning. ACM Comput. Surv. 53, 2, Article 30 (March 2021)](https://doi.org/10.1145/3377454)
+  
+- Lecture 2: **Monitoring, Observability and Explainability for ML Systems**
   - Slides: [Benchmarking, Monitoring, Observability and Experimenting for
 Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.5.pdf)
   - Key reading 1: [Benchmarking big data systems: A survey](https://www.sciencedirect.com/science/article/pii/S0140366419312344)
@@ -89,7 +97,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.5.p
   - Site 1: [MLCommons](https://mlcommons.org/en/)
   - The collection of [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847) is also useful
 
-- Lecture 3: **Coordination Models and Techniques for Big Data and Machine Learning**
+- Lecture 3: **Coordination Models and Techniques for Machine Learning Systems**
   - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/cs-e4660-lecture3-coordination-serving-v0.5.pdf)
   - Key reading 1: [Cirrus: a Serverless Framework for End-to-end ML Workflows](https://doi.org/10.1145/3357223.3362711)
   - Key reading 2: [Towards ML Engineering: A Brief History Of TensorFlow Extended (TFX)](https://arxiv.org/abs/2010.02013)
@@ -98,14 +106,8 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.5.p
   - Key reading 5: [Jeff Smith. 2018. Machine Learning Systems: Designs that scale (1st. ed.). Manning Publications Co., USA.](https://www.manning.com/books/machine-learning-systems)
   - Key reading 6: [Prediction-Serving Systems](https://queue.acm.org/detail.cfm?id=3210557)
 
-- Lecture 4 **Machine Learning Systems in Edge-Cloud Continuum**
-  - Slides: [Machine Learning Systems in Edge-Cloud Continuum](slides/cs-e4660-lecture4-edgeml-v0.5.pdf)
-  - Key reading 1: [Serving deep neural networks at the cloud edge for vision applications on mobile platforms](https://dl.acm.org/doi/10.1145/3304109.3306221)
-  - Key reading 2:[From the Edge to the Cloud: Model Serving in ML.NET](http://sites.computer.org/debull/A18dec/p46.pdf)
-  - Key reading 3: [Machine Learning at Facebook:Understanding Inference at the Edge](https://research.fb.com/wp-content/uploads/2018/12/Machine-Learning-at-Facebook-Understanding-Inference-at-the-Edge.pdf)
-  - Key reading 4: [Distributing Deep Neural Networks with Containerized Partitions at the Edge](https://www.usenix.org/system/files/hotedge19-paper-zhou.pdf)
-  - Key reading 5: [A survey of federated learning for edge computing: Research problems and solutions](https://www.sciencedirect.com/science/article/pii/S266729522100009X)
-  - Key reading 6: Joost Verbraeken, Matthijs Wolting, Jonathan Katzy, Jeroen Kloppenburg, Tim Verbelen, and Jan S. Rellermeyer. 2020. [A Survey on Distributed Machine Learning. ACM Comput. Surv. 53, 2, Article 30 (March 2021)](https://doi.org/10.1145/3377454)
+- Lecture 4 **Vulnerability Diagnostics for Machine Learning Systems in Edge-Cloud Continuum**
+  - Reading: 
 
 *If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
 
@@ -139,7 +141,8 @@ We have a few hands-on tutorials for the course that students can carry out for 
 
 ## Previous course versions
 
-* [Fall 2022](fall-2022/README.md)
+* [Fall 2024](./fall-2023/README.md)
+* [Fall 2022](fall-2022/)
 * [Fall 2021](fall-2021/README.md)
 * [Fall 2020](fall-2020/README.md)
 * [Initial seminar in Spring 2020](spring-2020/README.md)
