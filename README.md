@@ -68,7 +68,7 @@ Date|Place|Content|Lead person
 20.11.2024 | |Checkppoint 2: Topic progress/prefinal check| All
   flexible | | discussion about project progress  | All
 4.12.2024  | |final project demonstration| All
-11.122024  | |final report/code delivery  |  Individual
+11.12.2024  | |final report/code delivery  |  Individual
 
 ### Lectures/Discussions
 
