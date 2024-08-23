@@ -107,7 +107,12 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.5.p
   - Key reading 6: [Prediction-Serving Systems](https://queue.acm.org/detail.cfm?id=3210557)
 
 - Lecture 4 **Vulnerability Diagnostics for Machine Learning Systems in Edge-Cloud Continuum**
-  - Reading: 
+  - Reading 1: [Trustworthy AI: From Principles to Practices](https://dl.acm.org/doi/full/10.1145/3555803)
+  - Reading 2: [Dapper, a Large-Scale Distributed Systems Tracing Infrastructure](https://netman.aiops.org/~peidan/ANM2019/7.TraceAnomalyDetection/ReadingList/2010Google_Dapper.pdf)
+  - Reading 3: [Failure Diagnosis in Microservice Systems: A Comprehensive Survey and  Analysis](https://arxiv.org/abs/2407.01710)
+  - Reading 4: [SoK: History is a Vast Early Warning System:  Auditing the Provenance of System Intrusions](https://ieeexplore.ieee.org/abstract/document/10179405)
+  - Reading 5: [Why and where: A characterization of data provenance](https://link.springer.com/chapter/10.1007/3-540-44503-X_20)
+  - Raeding 6: [TraceDiag: Adaptive, Interpretable, and Efficient Root Cause Analysis on Large-Scale Microservice Systems](https://dl.acm.org/doi/abs/10.1145/3611643.3613864)
 
 *If you need the sources of slides for your teaching, pls. contact [Linh Truong](https://users.aalto.fi/~truongh4/)*
 
