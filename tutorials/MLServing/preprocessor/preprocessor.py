@@ -7,10 +7,10 @@ import requests as rq
 import uuid
 import json, time
 import os
-from helper.custom_logger import CustomLogger
+import logging
+logging.basicConfig(format="%(asctime)s:%(levelname)s -- %(message)s", level=logging.INFO)
 
 app = Flask(__name__)
-logger = CustomLogger().get_logger()
 
 counter = 0
 
@@ -23,46 +23,45 @@ def init_env_variables():
     edge_inference_service_name = os.environ.get('EDGE_INFERENCE_SERVICE_NAME')
     edge_inference_port = os.environ.get("EDGE_INFERENCE_PREPROCESSOR_SERVICE_PORT")
     if not edge_inference_service_name:
-        logger.error("EDGE_INFERENCE_SERVICE_NAME is not defined")
+        logging.error("EDGE_INFERENCE_SERVICE_NAME is not defined")
         raise Exception("EDGE_INFERENCE_SERVICE_NAME is not defined")
     if not edge_inference_port:
-        logger.error("EDGE_INFERENCE_PREPROCESSOR_SERVICE_PORT is not defined")
+        logging.error("EDGE_INFERENCE_PREPROCESSOR_SERVICE_PORT is not defined")
         raise Exception("EDGE_INFERENCE_PREPROCESSOR_SERVICE_PORT is not defined")
 
     cloud_inference_service_name = os.environ.get('CLOUD_INFERENCE_SERVICE_NAME')
     cloud_inference_port = os.environ.get("CLOUD_INFERENCE_PREPROCESSOR_SERVICE_PORT")
     if not cloud_inference_service_name:
-        logger.error("CLOUD_INFERENCE_SERVICE_NAME is not defined")
+        logging.error("CLOUD_INFERENCE_SERVICE_NAME is not defined")
         raise Exception("CLOUD_INFERENCE_SERVICE_NAME is not defined")
     if not cloud_inference_port:
-        logger.error("CLOUD_INFERENCE_PREPROCESSOR_SERVICE_PORT is not defined")
+        logging.error("CLOUD_INFERENCE_PREPROCESSOR_SERVICE_PORT is not defined")
         raise Exception("CLOUD_INFERENCE_PREPROCESSOR_SERVICE_PORT is not defined")
 
 
 
 
 @app.route("/process", methods = ['POST', 'GET'])
-def inference():
-
+def pre_processing():
     if request.method == 'POST':
-        job_id = uuid.uuid4().hex
-       
-        image = request.files['image']
-        img = Image.open(image)
-        data = preprocess(img)
-
-        service_name, port = get_inference_server()
-        
-        for i in range(10):
-            r = rq.post(url=f"http://{service_name}:{port}/inference", files = {'image': ('image.jpg', data, 'image/jpeg')})
-            if (r!= None): 
-                break
-            time.sleep(0.1)
-        logger.info(str(r.text))
-        json_data = {"data":json.loads(r.text)}
-        json_data['uid'] = job_id
-
-        # publish to broker = time, status and jobid
+        json_data = {}
+        try:
+            job_id = uuid.uuid4().hex
+            image = request.files['image']
+            img = Image.open(image)
+            data = preprocess(img)
+            service_name, port = get_inference_server()
+            for i in range(10):
+                r = rq.post(url=f"http://{service_name}:{port}/inference", files = {'image': ('image.jpg', data, 'image/jpeg')})
+                if (r!= None): 
+                    break
+                time.sleep(0.1)
+            logging.info(str(r.text))
+            json_data['data'] = json.loads(r.text)
+            json_data['uid'] = job_id
+        except Exception as e:
+            logging.exception("Some error occurred in pre_processing: {}".format(e)) 
+            json_data['error'] = "Some error occurred in pre_processing service"
 
         return Response(json.dumps(json_data), status=200, mimetype='application/json')
 
@@ -74,7 +73,6 @@ def inference():
 def preprocess(img):
     enhancer = ImageEnhance.Sharpness(img)
     enhanced_im = enhancer.enhance(1.2)
-
     byte_io = BytesIO()
     enhanced_im.save(byte_io, 'JPEG')
     byte_io.seek(0)
