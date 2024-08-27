@@ -1,36 +1,14 @@
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
   name: object-detection-client
   labels:
     app: object-detection-client
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: detection-client
-  template:
-    metadata:
-      labels:
-        app: detection-client
-    spec:
-      # nodeSelector:
-      #   workerType: "edgeWorker.rdsea.csc"
-      containers:
-        - name: detection-client
-          imagePullPolicy: "Always"
-          image: rdsea/obj_client:teaching
-          ports:
-            - containerPort: 5000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: client-service
-spec:
-  ports:
-  - port: 5000
-    targetPort: 5000
-  selector:
-    app: detection-client
+  containers:
+    - name: detection-client
+      imagePullPolicy: "Always"
+      image: rdsea/obj_client:teaching
+      ports:
+        - containerPort: 5000

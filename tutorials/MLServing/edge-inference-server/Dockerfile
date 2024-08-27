@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.10
 RUN apt update
 RUN apt install -y git wget make build-essential manpages-dev python3-pip vim
 
