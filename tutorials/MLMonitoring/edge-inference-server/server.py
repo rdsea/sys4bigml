@@ -37,11 +37,11 @@ api = Api(app)
 
 class MLInferenceService(Resource):
     def post(self):  
-        # qoa_client.timer()
+        qoa_client.timer()
         corr_id = str(uuid.uuid4())      
         file = request.files['image']
         if file.filename == '':
-            # qoa_report(corr_id)
+            qoa_report(corr_id)
             return {"error": "empty"}, 404
         if file and file.filename:
             try:
@@ -56,7 +56,7 @@ class MLInferenceService(Resource):
                 logging.error(f"error occured in inference service {e}")
                 sys.stdout.flush()
                 response = {"Inference error": str(e)}, 404
-            # qoa_report(corr_id)
+            qoa_report(corr_id)
             return response
 
 api.add_resource(MLInferenceService, '/inference')

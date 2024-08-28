@@ -1,6 +1,8 @@
 collector:
   end_point: localhost
-  exchange_name: teaching_object_detection
+  exchange_name: test_qoa4ml
   exchange_type: topic
-  in_routing_key: teaching.#
+  in_routing_key: test.#
   in_queue: collector_1
+opa:
+  end_point: localhost:8080
