@@ -1,0 +1,8 @@
+flask==2.3.3
+flask-restful==0.3.9
+pika==1.2.0
+psutil
+prometheus-client
+paho-mqtt==1.6.1
+dnspython==2.2.1
+devtools

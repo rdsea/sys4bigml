@@ -1,0 +1,15 @@
+client:
+  username: aaltosea1
+  instance_name: ml_inference
+  stage_id: ml_inference
+  functionality: REST
+  application_name: test
+  role: ml
+connector:
+  - name: amqp_connector
+    connector_class: AMQP
+    config:
+      end_point: 195.148.22.62
+      exchange_name: test_qoa4ml
+      exchange_type: topic
+      out_routing_key: test.mlinference

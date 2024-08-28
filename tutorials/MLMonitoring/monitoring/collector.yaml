@@ -1,0 +1,6 @@
+collector:
+  end_point: localhost
+  exchange_name: teaching_object_detection
+  exchange_type: topic
+  in_routing_key: teaching.#
+  in_queue: collector_1

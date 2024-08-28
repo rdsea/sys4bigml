@@ -1,0 +1,17 @@
+qoa_config:
+  client:
+    client_id: "aaltosea2"
+    instance_name: "obj_client"
+    stage_id: "CLIENT"
+    method: "REST"
+    application: "object_detection_teaching"
+    role: "client"
+  connector:
+    amqp_connector:
+      class: amqp
+      conf:
+        end_point: localhost
+        exchange_name: teaching_object_detection
+        exchange_type: topic
+        out_routing_key: teaching.object_detection
+

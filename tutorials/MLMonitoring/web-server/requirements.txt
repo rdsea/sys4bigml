@@ -1,0 +1,9 @@
+flask==2.3.3
+requests==2.31.0
+pika
+psutil
+prometheus-client
+paho-mqtt==1.6.1
+pandas
+dnspython==2.2.1
+devtools

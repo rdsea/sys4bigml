@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: object-detection-client
+  labels:
+    app: object-detection-client
+spec:
+  containers:
+    - name: detection-client
+      imagePullPolicy: "Always"
+      image: rdsea/obj_client_qoa:teaching
+      ports:
+        - containerPort: 5000
