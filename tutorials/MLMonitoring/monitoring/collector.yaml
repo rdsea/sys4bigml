@@ -1,5 +1,5 @@
 collector:
-  end_point: standalone-linh.cs.aalto.fi
+  end_point: localhost
   exchange_name: test_qoa4ml
   exchange_type: topic
   in_routing_key: test.#
