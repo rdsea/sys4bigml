@@ -7,7 +7,7 @@ import logging
 logging.basicConfig(format="%(asctime)s:%(levelname)s -- %(message)s", level=logging.INFO)
 
 parser = argparse.ArgumentParser(description="Data processing")
-parser.add_argument('--f', help='frequency', default=5)
+parser.add_argument('--f', help='frequency', default=3)
 parser.add_argument('--conf', help='time sleep', default="./qoa_config.yaml")
 args = parser.parse_args()
 frequency = int(args.f)

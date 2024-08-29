@@ -11,8 +11,5 @@ RUN pip install qoa4ml==0.2.16
 COPY . .
 
 EXPOSE 5000
-# USER nobody
 RUN chmod +x /proc-server/start.sh
 ENTRYPOINT ["./start.sh"]
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
-# CMD ["gunicorn", "-k", "eventlet", "-b", "0.0.0.0:5000", "preprocessor:app"]

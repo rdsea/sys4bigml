@@ -9,7 +9,7 @@ connector:
   - name: amqp_connector
     connector_class: AMQP
     config:
-      end_point: localhost
+      end_point: standalone-linh.cs.aalto.fi
       exchange_name: test_qoa4ml
       exchange_type: topic
       out_routing_key: test.mlinference

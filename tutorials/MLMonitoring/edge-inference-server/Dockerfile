@@ -31,4 +31,3 @@ EXPOSE 4002
 RUN chmod +x /inference/darknet/start.sh
 ENTRYPOINT ["./start.sh"]
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
-# CMD ["gunicorn", "-k", "eventlet", "-b", "0.0.0.0:4002", "server:app"]

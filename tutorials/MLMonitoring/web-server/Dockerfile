@@ -15,4 +15,3 @@ EXPOSE 5000
 RUN chmod +x /web-server/start.sh
 ENTRYPOINT ["./start.sh"]
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
-# CMD ["gunicorn", "-k", "eventlet", "-b", "0.0.0.0:5000", "web_server:app"]

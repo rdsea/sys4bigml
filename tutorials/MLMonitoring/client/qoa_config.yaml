@@ -1,17 +1,15 @@
-qoa_config:
-  client:
-    client_id: "aaltosea2"
-    instance_name: "obj_client"
-    stage_id: "CLIENT"
-    method: "REST"
-    application: "object_detection_teaching"
-    role: "client"
-  connector:
-    amqp_connector:
-      class: amqp
-      conf:
-        end_point: localhost
-        exchange_name: teaching_object_detection
-        exchange_type: topic
-        out_routing_key: teaching.object_detection
-
+client:
+  username: aaltosea1
+  instance_name: obj_client
+  stage_id: CLIENT
+  functionality: REST
+  application_name: object_detection_teaching
+  role: client
+connector:
+  - name: amqp_connector
+    connector_class: AMQP
+    config:
+      end_point: standalone-linh.cs.aalto.fi
+      exchange_name: test_qoa4ml
+      exchange_type: topic
+      out_routing_key: test.client
