@@ -1,0 +1,19 @@
+{
+    "application": "ml-monitoring-teaching",
+    "user": [
+        "TA1",
+        "student1",
+        "student2"
+    ],
+    "stages": {
+        "gateway": {
+            "response_time_threshold": 0.4
+        },
+        "pre_processing": {
+            "response_time_threshold": 0.4
+        },
+        "ml_inference": {
+            "response_time_threshold": 0.2
+        }
+    }
+}
