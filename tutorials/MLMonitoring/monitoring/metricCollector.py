@@ -12,11 +12,11 @@ from qoa4ml.utils import qoa_utils as utils
 logging.basicConfig(format="%(asctime)s:%(levelname)s -- %(message)s", level=logging.WARNING)
 
 violation_count = 0
-error_request_count = 0
+request_count = 0
 violation_messages = []
 
 def display_summary(stdscr):
-    global violation_count, error_request_count, violation_messages
+    global violation_count, request_count, violation_messages
 
     # Initialize colors
     curses.start_color()
@@ -34,7 +34,7 @@ def display_summary(stdscr):
     # Prepare data for the table
     table_data = [
         ["Number of Violations", violation_count],
-        ["Number of Error Requests", error_request_count],
+        ["Number of Success Requests", request_count],
     ]
 
     # Display the table with borders
@@ -78,7 +78,7 @@ class OPA_Reporter(object):
         self.config = config
 
     def message_processing(self, ch, method, properties, body):
-        global violation_count, error_request_count, violation_messages
+        global violation_count, request_count, violation_messages
 
         mess = json.loads(str(body.decode('utf-8')))
         instance_id = mess["metadata"]["client_config"]["id"]
@@ -101,8 +101,8 @@ class OPA_Reporter(object):
         # logging.info(f"Response Body: {response_body}")
 
         # Update error counters based on the response
-        if response.status_code != 200:
-            error_request_count += 1
+        if response.status_code == 200:
+            request_count += 1
 
         # Update the violation count and messages
         result = response_body.get('result', [])

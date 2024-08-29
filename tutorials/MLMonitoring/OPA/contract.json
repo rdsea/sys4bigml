@@ -7,13 +7,13 @@
     ],
     "stages": {
         "gateway": {
-            "response_time_threshold": 0.4
+            "response_time_threshold": 0.1
         },
         "pre_processing": {
-            "response_time_threshold": 0.4
+            "response_time_threshold": 0.1
         },
         "ml_inference": {
-            "response_time_threshold": 0.2
+            "response_time_threshold": 0.1
         }
     }
 }
