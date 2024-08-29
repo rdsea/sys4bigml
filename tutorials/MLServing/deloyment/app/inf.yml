@@ -24,9 +24,6 @@ spec:
           image: rdsea/obj_inf:teaching
           ports:
             - containerPort: 4002
-          resources:
-            requests:
-              cpu: "1000m"
 ---
 apiVersion: v1
 kind: Service
