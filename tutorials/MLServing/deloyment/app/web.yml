@@ -28,9 +28,9 @@ spec:
               value: "8000"
             - name: SERVICE_NAME
               value: "edge-preprocessor"
-          # resources:
-          #   requests:
-          #     cpu: "300m"
+          resources:
+            requests:
+              cpu: "300m"
 ---
 apiVersion: v1
 kind: Service

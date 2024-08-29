@@ -32,9 +32,9 @@ spec:
               value: "4001"
             - name: CLOUD_INFERENCE_SERVICE_NAME
               value: "cloud-inference-service"
-          # resources:
-          #   requests:
-          #     cpu: "300m"
+          resources:
+            requests:
+              cpu: "300m"
 
 ---
 apiVersion: v1
