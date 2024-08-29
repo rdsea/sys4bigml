@@ -7,7 +7,7 @@ The purpose of this tutorial is to understand Machine Learning (ML) serving:
 
 Kubernetes is an open-source for automating deployment, allowing us deploy containerized applications on top of several container runtimes, for example: Docker, containerd, CRI-O. With Kubernetes, we can deploy scalable, elastic, and reliable ML pipelines without much human effort. Here, we practice ML serving by building your own ML application, containerizing the application and deploying it to a pre-setup K8s server on Google Cloud. Thereafter, we have to re-configure the application to serve multi-tenants as well as scale the ML service.
 
-It is recommended that you use linux environment.
+****Note***: It is recommended that you use linux environment.*
 
 ## Prerequisite
 * [Docker](https://docs.docker.com/get-docker/), [Kubernetes](https://kubernetes.io/) or [Minikube](https://minikube.sigs.k8s.io/docs/)
@@ -47,7 +47,7 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 ### Question:
 - After developing an ML pipeline, how could you deploy the pipeline on heterogeneous computing resources?
 - How to automate environment deployments (hardware/software dependencies) for all services within the pipeline with minimal manual efforts.
-- What would you do if the workload increase/decrease suddently? 
+- What would you do if the workload increase/decrease suddenly? 
 - How could you guarantee the serving quality?
 - What would you optimize when serving (multiple) ML services?
 
@@ -145,7 +145,7 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 ```
 
 ## Practice
-- Change the ML serving model (e.g., using YOLOv2) without causing interruption (Hint: develop new models, modify the model information, build a new image, and redeploy the service). 
+- Change the ML serving model (e.g., using YOLOv5 or YOLOv5) without causing interruption (Hint: develop new models, modify the model information, build a new image, and redeploy the service). 
 
 ## Open questions
 - What if an ML model requires a lot of resources? Are using Flask and Docker and calling the inference as a blocking function suitable?
@@ -156,7 +156,7 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 
 
 ## References
-The tutorial is built upon Kubernetes documents. The main references is:
+The tutorial is built upon Kubernetes documents. The main references are:
 
 * https://kubernetes.io/
 * https://hub.docker.com/
