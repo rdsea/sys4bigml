@@ -25,9 +25,17 @@ In the source code we already help you initiate an `qoa_client` to report the re
 
 ***Hint***: you can create a report as a python dictionary and use `qoa_client.report(report=<your report>, submit=True)` to report multiple metrics in your schema. Alternatively, you can use the `qoa_client.observe_metric(<metric name (str)>, <value>)` function to add a metric with it value to the report (in default schema of QoA4ML) and send the report by calling `qoa_client.report(submit=True)`.
 
+<p align = "center">
+<img src = "./img/example.png" width=100% height=100%>
+</p> 
+<p align = "center">
+Figure 1: Qoa4ML example integration in Preprocessing service
+</p>
+
 
 
 You must integrate the monitoring for all services in the application then:
+- Run a RabbitMQ message broker to publish monitoring data (metric reports) via messaging
 - Configure the `qoa_config.yaml` to specify where would you submit the metric reports (`connector.config.enpoint`)
 - Re-build the docker images for individual services.
 - Import the images to the Kubernetes environment (minikube, microk8s), or push the docker image to Docker Hub with specific repos and tags.
@@ -44,8 +52,16 @@ In this section, we will use the Open Policy Agent (OPA) engine to evaluate the 
 $ ./start_opa_agent.sh
 $ ./submit_policy.sh
 ```
+
+<p align = "center">
+<img src = "./img/flow.png" width=100% height=100%>
+</p> 
+<p align = "center">
+Figure 2: Monitoring and evaluation workflow
+</p>
+
 Your work includes:
-- Modify the policy and contract to evaluate the metrics that you have reported from the above section (in the `OPA` folder).
+- Modify the policy (`policy.rego`) and contract (`contract.json`) to evaluate the metrics that you have reported from the above section (in the `OPA` folder).
 - Modify the `metricCollector.py` in folder `monitoring` to parse the metrics reported from the Qoa4ML monitoring probes and send them to the OPA engine.
 - Run the `metricCollector.py` to check the contract violation detected by the OPA engine.
 
