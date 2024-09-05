@@ -78,37 +78,40 @@ class OPA_Reporter(object):
         self.config = config
 
     def message_processing(self, ch, method, properties, body):
-        global violation_count, request_count, violation_messages
+        try:
+            global violation_count, request_count, violation_messages
 
-        mess = json.loads(str(body.decode('utf-8')))
-        instance_id = mess["metadata"]["client_config"]["id"]
-        stage_id = mess["metadata"]["client_config"]["stage_id"]
-        response_time = mess["service"][stage_id]["metrics"]["response_time"][instance_id]["records"][0]["responseTime"]
-        # logging.info(f"Stage: {stage_id} - Response time: {response_time}")
-        
-        # Construct the input data for the OPA policy
-        input_data = {
-            "input": {
-                "stage_id":  stage_id,
-                "response_time": response_time
+            mess = json.loads(str(body.decode('utf-8')))
+            instance_id = mess["metadata"]["client_config"]["instance_id"]
+            stage_id = mess["metadata"]["client_config"]["stage_id"]
+            response_time = mess["service"][stage_id]["metrics"]["response_time"][instance_id]["records"][0]["responseTime"]
+            # logging.info(f"Stage: {stage_id} - Response time: {response_time}")
+            
+            # Construct the input data for the OPA policy
+            input_data = {
+                "input": {
+                    "stage_id":  stage_id,
+                    "response_time": response_time
+                }
             }
-        }
 
-        # Send a POST request to the OPA server with the input data
-        response = requests.post(self.config["end_point"], headers={'Content-Type': 'application/json'}, data=json.dumps(input_data))
-        # logging.info(f"Status Code: {response.status_code}")
-        response_body = response.json()
-        # logging.info(f"Response Body: {response_body}")
+            # Send a POST request to the OPA server with the input data
+            response = requests.post(self.config["end_point"], headers={'Content-Type': 'application/json'}, data=json.dumps(input_data))
+            # logging.info(f"Status Code: {response.status_code}")
+            response_body = response.json()
+            # logging.info(f"Response Body: {response_body}")
 
-        # Update error counters based on the response
-        if response.status_code == 200:
-            request_count += 1
+            # Update error counters based on the response
+            if response.status_code == 200:
+                request_count += 1
 
-        # Update the violation count and messages
-        result = response_body.get('result', [])
-        if result and result[0].get('violation', False):
-            violation_count += 1
-            violation_messages = result[0].get('messages', []) + violation_messages 
+            # Update the violation count and messages
+            result = response_body.get('result', [])
+            if result and result[0].get('violation', False):
+                violation_count += 1
+                violation_messages = result[0].get('messages', []) + violation_messages 
+        except Exception as e:
+            logging.error(f"Error processing message: {e}", exc_info=True)
 
 def main(stdscr):
     # Parse arguments from the command line
