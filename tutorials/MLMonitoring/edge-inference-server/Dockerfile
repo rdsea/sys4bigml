@@ -29,5 +29,7 @@ COPY . .
 
 EXPOSE 4002
 RUN chmod +x /inference/darknet/start.sh
-ENTRYPOINT ["./start.sh"]
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
+RUN chmod -R 777 /inference/temp
+USER root
+# ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["tail", "-f", "/dev/null"]

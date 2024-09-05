@@ -46,9 +46,10 @@ class MLInferenceService(Resource):
         if file and file.filename:
             try:
                 logging.info("Received a POST request!")
-                filename = secure_filename(file.filename)
+                filename = str(uuid.uuid4()) + secure_filename(file.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                os.chmod(file_path, 0o777)
                 result = get_tiny_yolo_detection(file_path)
                 os.remove(file_path)
                 response = result, 200

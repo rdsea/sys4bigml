@@ -26,7 +26,8 @@ spec:
             - containerPort: 4002
           resources:
             requests:
-              cpu: "1000m"
+              cpu: "500m"
+          
 ---
 apiVersion: v1
 kind: Service
