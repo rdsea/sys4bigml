@@ -1,4 +1,4 @@
-# ML Serving tutorial
+# Hands-on Tutorial: Elasticity and Scalability for End-to-End ML Serving
 
 ## Study goal
 The purpose of this tutorial is to understand Machine Learning (ML) serving:
