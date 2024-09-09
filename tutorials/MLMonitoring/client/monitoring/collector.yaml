@@ -1,8 +1,8 @@
 collector:
-  end_point: localhost
+  end_point: rabbitmq
   exchange_name: test_qoa4ml
   exchange_type: topic
   in_routing_key: test.#
   in_queue: collector_1
 opa:
-  end_point: 'http://localhost:8181/v1/data/sys4bigml/violation/get_violation_result'
+  end_point: 'http://opa:8181/v1/data/sys4bigml/violation/get_violation_result'
