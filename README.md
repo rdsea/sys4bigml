@@ -56,18 +56,18 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
 
 Date|Place|Content|Lead person
 ---|---|---|---
-11.09.2024| |Course overview, lecture 1 discussion | Linh Truong
-18.09.2024 ||Lecture 2 discussion | Linh Truong
-25.09.2024 | |Hands-on tutorial 1| Minh-Tri Nguyen
-2.10.2024 | |Lecture 3 discussion   |  Linh Truong
-9.10.2024 | | Hands-on tutorial 2| Minh-Tri Nguyen
+11.09.2024| U359b|Course overview, lecture 1 discussion | Linh Truong
+18.09.2024 |U359b|Lecture 2 discussion | Linh Truong
+25.09.2024 |U359b|Hands-on tutorial 1| Minh-Tri Nguyen
+2.10.2024 |U359b |Lecture 3 discussion   |  Linh Truong
+9.10.2024 | U359b| Hands-on tutorial 2| Minh-Tri Nguyen
 16.10.2024 | |Lecture 4 + Hands-on tutorial 3| Hong-Tri Nguyen
 23.10.2024 | | Project topic discussion| Linh Truong, Minh-Tri Nguyen, Hong-Tri Nguyen
   flexible | |discussion about topics and possible hands-on  | All
 6.11.2024 || Checkpoint 1: Topic progress presentation |  All
-20.11.2024 | |Checkpoint 2: Topic progress/prefinal check| All
+20.11.2024 | U359b |Checkpoint 2: Topic progress/prefinal check| All
   flexible | | discussion about project progress  | All
-4.12.2024  | |final project demonstration| All
+4.12.2024  |U359b  |final project demonstration| All
 11.12.2024  | |final report/code delivery  |  Individual
 
 ### Lectures/Discussions
