@@ -7,5 +7,5 @@ RUN pip3 install requests qoa4ml==0.3.2
 COPY . .
 
 EXPOSE 5000
-# USER nobody
+# ENTRYPOINT ["python", "client.py"]
 ENTRYPOINT ["tail", "-f", "/dev/null"]

@@ -9,6 +9,23 @@ import json, time
 import os
 import logging
 logging.basicConfig(format="%(asctime)s:%(levelname)s -- %(message)s", level=logging.INFO)
+from typing import Optional
+
+from qoa4ml.qoa_client import QoaClient
+from qoa4ml.reports.ml_reports import MLReport
+
+try:
+    qoa_client = QoaClient(report_cls=MLReport, config_path="./qoa_config.yaml")
+    logging.info("QoaClient initiated successfully")
+except Exception as e: 
+    logging.error(f"Error when initiating QoaClient: {e}")
+
+def qoa_report(corr_id: Optional[str] = None):
+    qoa_client.timer()
+    if corr_id is not None:
+        qoa_client.report(submit=True, corr_id=corr_id)
+    else:
+        qoa_client.report(submit=True)
 
 app = Flask(__name__)
 
@@ -43,6 +60,8 @@ def init_env_variables():
 
 @app.route("/process", methods = ['POST', 'GET'])
 def pre_processing():
+    qoa_client.timer()
+    corr_id = str(uuid.uuid4())
     if request.method == 'POST':
         json_data = {}
         try:
@@ -62,12 +81,14 @@ def pre_processing():
         except Exception as e:
             logging.exception("Some error occurred in pre_processing: {}".format(e)) 
             json_data['error'] = "Some error occurred in pre_processing service"
-
+        qoa_report(corr_id)
         return Response(json.dumps(json_data), status=200, mimetype='application/json')
 
     if request.method == 'GET':
+        qoa_report(corr_id)
         return Response('{"error":"method not allowed"}', status=200, mimetype='application/json')
     else:
+        qoa_report(corr_id)
         return Response('{"error":"method not allowed"}', status=405, mimetype='application/json')
 
 def preprocess(img):

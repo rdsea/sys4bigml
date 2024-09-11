@@ -1,11 +1,13 @@
 # ML Serving tutorial
 
 ## Study goal
-The purpose of this tutorial is to understand Machine Learning (ML) serving, create a simple end-to-end ML pipeline in Python and deploy it on [Kubernetes](https://kubernetes.io/)(K8s) environment. This covers all  basic steps making a serving pipeline including preparing data, develop ML application as microservices, deploy ML as a Service (MLaaS) on K8s environment. Thereby, we can scale application, re-train or replace the model on run time without interrupting the ML service.
+The purpose of this tutorial is to understand Machine Learning (ML) serving:
+- Creating a simple end-to-end ML pipeline in Python and deploy it on [Kubernetes](https://kubernetes.io/)(K8s) environment.
+- Scaling the end-to-end pipeline based on the resource utilization. 
 
 Kubernetes is an open-source for automating deployment, allowing us deploy containerized applications on top of several container runtimes, for example: Docker, containerd, CRI-O. With Kubernetes, we can deploy scalable, elastic, and reliable ML pipelines without much human effort. Here, we practice ML serving by building your own ML application, containerizing the application and deploying it to a pre-setup K8s server on Google Cloud. Thereafter, we have to re-configure the application to serve multi-tenants as well as scale the ML service.
 
-It is recommended that you use linux environment.
+****Note***: It is recommended that you use linux environment.*
 
 ## Prerequisite
 * [Docker](https://docs.docker.com/get-docker/), [Kubernetes](https://kubernetes.io/) or [Minikube](https://minikube.sigs.k8s.io/docs/)
@@ -45,20 +47,20 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 ### Question:
 - After developing an ML pipeline, how could you deploy the pipeline on heterogeneous computing resources?
 - How to automate environment deployments (hardware/software dependencies) for all services within the pipeline with minimal manual efforts.
-- What would you do if the workload increase/decrease suddently? 
+- What would you do if the workload increase/decrease suddenly? 
 - How could you guarantee the serving quality?
 - What would you optimize when serving (multiple) ML services?
 
 ### Practice
 * Clone this git (https://github.com/rdsea/sys4bigml/) if you have not done so
-* Move to the tutorial folder `tutorials/MLServing-2022`
+* Move to the tutorial folder `tutorials/MLServing`
 
 ### Build a containerized application
 
 There are 3 separate folders for 3 microservices: Web service, Preprocessing service and Inference service.
 Each folder contains a Python application, a Dockerfile, and a requirement file (dependencies)
 * In this tutorial, we use docker to build a container for our ML service:
-    - The `Dockerfile` provides step by step to build our desired image from `python:3.9` based image running on `amd64` architecture (depending on where you will run the container, you can change the based image that fit the hardware architecture).
+    - The `Dockerfile` provides step by step to build our desired image from `python:3.10` based image running on `amd64` architecture (depending on where you will run the container, you can change the based image that fit the hardware architecture).
 * Build the docker image by running `build_docker.sh` (You may need to change the file permission using `chmod`, but you should run it line by line in your terminal to understand the process and easier to handle some unexpected errors):
     * Change the name tag and version of the image you're going to build:
 ```bash
@@ -143,18 +145,18 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 ```
 
 ## Practice
-- Change the ML serving model (e.g., using YOLOv2) without causing interruption (Hint: develop new models, modify the model information, build a new image, and redeploy the service). 
+- Change the ML serving model (e.g., using YOLOv5 or YOLOv5) without causing interruption (Hint: develop new models, modify the model information, build a new image, and redeploy the service). 
 
 ## Open questions
 - What if an ML model requires a lot of resources? Are using Flask and Docker and calling the inference as a blocking function suitable?
-- What is the role of observability for Elastic ML serving? Can you setup an observability system for this ML serving example?
+- How do you scale the end-to-end pipeline elastically based on the resource utilization?
 - How do we know the current model is outdated then when we should update the serving model or deploy the new one?
 - Should we deploy multiple models for one service (e.g: different requests might be served by different models)?
 - What would happen if any service container is down? how to backup and recover?
 
 
 ## References
-The tutorial is built upon Kubernetes documents. The main references is:
+The tutorial is built upon Kubernetes documents. The main references are:
 
 * https://kubernetes.io/
 * https://hub.docker.com/
