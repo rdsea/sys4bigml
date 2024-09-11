@@ -56,7 +56,7 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
 
 Date|Place|Content|Lead person
 ---|---|---|---
-11.09.2024| U359b|Course overview, lecture 1 discussion | Linh Truong
+11.09.2024| U359b|Course overview, [lecture 1 discussion](slides/cs-e4660-lecture1-r3e-design-v0.6.pdf) | Linh Truong
 18.09.2024 |U359b|Lecture 2 discussion | Linh Truong
 25.09.2024 |U359b|Hands-on tutorial 1| Minh-Tri Nguyen
 2.10.2024 |U359b |Lecture 3 discussion   |  Linh Truong
