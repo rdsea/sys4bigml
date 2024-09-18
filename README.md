@@ -87,8 +87,7 @@ Date|Place|Content|Lead person
   - Key reading 11: Joost Verbraeken, Matthijs Wolting, Jonathan Katzy, Jeroen Kloppenburg, Tim Verbelen, and Jan S. Rellermeyer. 2020. [A Survey on Distributed Machine Learning. ACM Comput. Surv. 53, 2, Article 30 (March 2021)](https://doi.org/10.1145/3377454)
   
 - Lecture 2: **Monitoring, Observability and Explainability for ML Systems**
-  - Slides: [Benchmarking, Monitoring, Observability and Experimenting for
-Big Data and Machine Learning Systems](slides/)
+  - Slides: [Monitoring, Observability and Experimenting for Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.6.pdf)
   - Key reading 1: [Benchmarking big data systems: A survey](https://www.sciencedirect.com/science/article/pii/S0140366419312344)
   - Key reading 2: [MLPERF Training Benchmark](https://arxiv.org/pdf/1910.01500.pdf)
   - Key reading 3: [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
