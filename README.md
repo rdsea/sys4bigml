@@ -71,7 +71,7 @@ Date|Place|Content|Lead person
 11.12.2024  | |final report/code delivery  |  Individual
 
 ### Lectures/Discussions
-
+- Lecture 0: [**Introduction to Federated Machine Learning**](slides/cs-e4660-introduction-FL-v0.3.pdf) 
 - Lecture 1: **Robustness, Reliability, Resilience and Elasticity for Machine Learning Systems in Edge-Cloud Continuum**
   - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Machine Learning Systems in Edge-Cloud Continuum](slides/cs-e4660-lecture1-r3e-design-v0.6.pdf)
   - Key reading 1: [R3E -An Approach to Robustness, Reliability, Resilience and Elasticity Engineering for End-to-End Machine Learning Systems](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
