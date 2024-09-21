@@ -552,9 +552,6 @@ print(result[0][0])
 - Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service. Assume that you want to monitor more complex metrics such as cost, performance of your API functions, what are the suitable solutions?
 - Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
 
-### Interesting tools for research
-- [Machine Learning eXchange (MLX)](https://github.com/machine-learning-exchange/mlx)
-
 ### Further tutorials
 
 We will do ML service monitoring using other tutorials
@@ -564,9 +561,10 @@ We will do ML service monitoring using other tutorials
 
 ## References and additional links
 
-Interesting resources about ML engineering:
+Rsources about ML engineering:
 * [Best Practices for ML Engineering by Martin Zinkevic](https://developers.google.com/machine-learning/guides/rules-of-ml)
-* An interesting work about ["Operationalizing Machine Learning: An Interview Study"](https://arxiv.org/pdf/2209.09125v1.pdf)
+* ["Operationalizing Machine Learning: An Interview Study"](https://arxiv.org/pdf/2209.09125v1.pdf)
+* [Machine Learning eXchange (MLX)](https://github.com/machine-learning-exchange/mlx)
 
 Part of the tutorial related to MLflow (experiments, package, serving) is built upon MLflow official documents. The main references are:
 * https://www.mlflow.org/docs/latest/index.html
