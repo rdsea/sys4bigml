@@ -164,6 +164,11 @@ The tutorial is built upon Kubernetes documents. The main references are:
 * https://kubernetes.io/
 * https://hub.docker.com/
 
+Other ML serving tools:
+* [LitServe](https://github.com/Lightning-AI/LitServe)
+* [BentoML](https://github.com/bentoml/BentoML)
+* [Ray](https://github.com/ray-project/ray)
+
 ## Contributions
 
 Author:   Minh-Tri Nguyen, (tri.m.nguyen@aalto.fi)
