@@ -41,6 +41,15 @@ Carry out the following activities:
 * Using a visualization tool (e.g., [Netron](https://github.com/lutzroeder/netron)) examine the graphs of two models? What differences do you see?
 * Load and run the two  models and check some runtime metrics?
 
+### Some useful utilities
+
+Checking and optimization for ARM, e.g. using  [ML Inference Advisor](https://pypi.org/project/mlia/):
+
+```
+ $mlia check models/cnn.h5  -t cortex-a
+ $mlia optimize models/cnn.h5  -t cortex-a
+```
+
 ### Reflections
 
 - For which application domains/cases  the model inference accuracy would be affected, when applying  model conversion and quantification?
@@ -54,3 +63,4 @@ Carry out the following activities:
 * [Torch quantization](https://pytorch.org/docs/stable/quantization.html)
 * [Model compression techniques](https://github.com/cedrickchee/awesome-ml-model-compression)
 * [Edge Impulse: An MLOps Platform for Tiny Machine Learning](https://proceedings.mlsys.org/paper_files/paper/2023/file/de081105cd68393144944696d3fb6778-Paper-mlsys2023.pdf)
+* [Machine Learning Platform: Arm NN, Compute Library and Arm MLIA](https://www.mlplatform.org/)

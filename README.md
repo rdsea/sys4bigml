@@ -56,24 +56,24 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
 
 Date|Place|Content|Lead person
 ---|---|---|---
-11.09.2024| |Course overview, lecture 1 discussion | Linh Truong
-18.09.2024 ||Lecture 2 discussion | Linh Truong
-25.09.2024 | |Hands-on tutorial 1| Minh-Tri Nguyen
-2.10.2024 | |Lecture 3 discussion   |  Linh Truong
-9.10.2024 | | Hands-on tutorial 2| Minh-Tri Nguyen
+11.09.2024| U359b|Course overview, [lecture 1 discussion](slides/cs-e4660-lecture1-r3e-design-v0.6.pdf) | Linh Truong
+18.09.2024 |U359b|Lecture 2 discussion | Linh Truong
+25.09.2024 |U359b|Hands-on tutorial 1| Minh-Tri Nguyen
+2.10.2024 |U359b |Lecture 3 discussion   |  Linh Truong
+9.10.2024 | U359b| Hands-on tutorial 2| Minh-Tri Nguyen
 16.10.2024 | |Lecture 4 + Hands-on tutorial 3| Hong-Tri Nguyen
 23.10.2024 | | Project topic discussion| Linh Truong, Minh-Tri Nguyen, Hong-Tri Nguyen
   flexible | |discussion about topics and possible hands-on  | All
 6.11.2024 || Checkpoint 1: Topic progress presentation |  All
-20.11.2024 | |Checkpoint 2: Topic progress/prefinal check| All
+20.11.2024 | U359b |Checkpoint 2: Topic progress/prefinal check| All
   flexible | | discussion about project progress  | All
-4.12.2024  | |final project demonstration| All
+4.12.2024  |U359b  |final project demonstration| All
 11.12.2024  | |final report/code delivery  |  Individual
 
 ### Lectures/Discussions
-
+- Lecture 0: [**Introduction to Federated Learning**](slides/cs-e4660-introduction-FL-v0.3.pdf) 
 - Lecture 1: **Robustness, Reliability, Resilience and Elasticity for Machine Learning Systems in Edge-Cloud Continuum**
-  - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Big Data/Machine Learning Systems](slides/cs-e4660-lecture1-r3e-design-v0.5.pdf)
+  - Slides: [Robustness, Reliability, Resilience and Elasticity (R3E) for Machine Learning Systems in Edge-Cloud Continuum](slides/cs-e4660-lecture1-r3e-design-v0.6.pdf)
   - Key reading 1: [R3E -An Approach to Robustness, Reliability, Resilience and Elasticity Engineering for End-to-End Machine Learning Systems](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
   - Key reading 2: [The New Frontier of Machine Learning Systems](https://arxiv.org/pdf/1904.03257.pdf)
   - Key reading 3: [Hidden Technical Debt in Machine Learning Systems](https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html)
@@ -87,8 +87,7 @@ Date|Place|Content|Lead person
   - Key reading 11: Joost Verbraeken, Matthijs Wolting, Jonathan Katzy, Jeroen Kloppenburg, Tim Verbelen, and Jan S. Rellermeyer. 2020. [A Survey on Distributed Machine Learning. ACM Comput. Surv. 53, 2, Article 30 (March 2021)](https://doi.org/10.1145/3377454)
   
 - Lecture 2: **Monitoring, Observability and Explainability for ML Systems**
-  - Slides: [Benchmarking, Monitoring, Observability and Experimenting for
-Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.5.pdf)
+  - Slides: [Monitoring, Observability and Experimenting for Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.6.pdf)
   - Key reading 1: [Benchmarking big data systems: A survey](https://www.sciencedirect.com/science/article/pii/S0140366419312344)
   - Key reading 2: [MLPERF Training Benchmark](https://arxiv.org/pdf/1910.01500.pdf)
   - Key reading 3: [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
@@ -98,7 +97,7 @@ Big Data and Machine Learning Systems](slides/cs-e4660-lecture2-analytics-v0.5.p
   - The collection of [Putting Machine Learning into Production Systems](https://queue.acm.org/detail.cfm?id=3365847) is also useful
 
 - Lecture 3: **Coordination Models and Techniques for Machine Learning Systems**
-  - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/cs-e4660-lecture3-coordination-serving-v0.5.pdf)
+  - Slides: [Coordination Models and Techniques for  Big Data and Machine Learning Systems](slides/)
   - Key reading 1: [Cirrus: a Serverless Framework for End-to-end ML Workflows](https://doi.org/10.1145/3357223.3362711)
   - Key reading 2: [Towards ML Engineering: A Brief History Of TensorFlow Extended (TFX)](https://arxiv.org/abs/2010.02013)
   - Key reading 3: [Orchestrating Big Data Analysis Workflows in the Cloud: Research Challenges, Survey, and Future Directions](https://dl.acm.org/doi/fullHtml/10.1145/3332301)

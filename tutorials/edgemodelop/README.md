@@ -2,7 +2,7 @@
 
 ## Learning objectives
 
-The purpose of this tutorial is to build a simple dynamic inferencing system with Machine Learning serving on edge devices. The inferencing system will consist of 2 subsystems that are IoT data streaming data and ML pipeline.
+The purpose of this tutorial is to build a simple dynamic inference system with Machine Learning serving on edge devices. The inference system will consist of 2 subsystems that are IoT data streaming data and ML pipeline.
 
 In the first part, IoT data streaming, we have to face the variety of edge resources. We are going to use one of the most common messages delivery protocol, [MQTT](https://mqtt.org/) for transporting IoT data over TCP/IP. In the second part, an ML pipeline would be deployed partially on edge devices, which have limited resources but are located close to users, to make predictions in real-time. While the main process of data pre-processing and model training are still performed in a centralized manner on cloud, moving ML inference to the edge can mitigate the burden on cloud computing as well as network functions.
 
@@ -15,11 +15,13 @@ Machine Learning Inference on Edge Abstraction View
 To complete this tutorial, you are recommended to use linux environment.
 
 ## Accompanying Slides and Video
+
 * [Slides](cs-e4660-hands-on-edge_ml.pdf)
 
 ## Prerequisite
+
 We assume that edge devices will be Raspberry PIs.
-Given two Raspberry Pi 4, one would be installed with Unbuntu (64-bit) 20.04 (Ubuntu-Rasp), the other has the newest Raspberry Pi OS - Raspbian (32-bit) Released: 2020-08-20 (Raspbian-Rasp).
+Given two Raspberry Pi 4, one would be installed with Ubuntu (64-bit) 20.04 (Ubuntu-Rasp), the other has the newest Raspberry Pi OS - Raspbian (32-bit) Released: 2020-08-20 (Raspbian-Rasp).
 Since two different OSs would support different software stack and runtime environment, it partially demonstrates the variety of edge resources.
 
 Raspberry Pi:
@@ -98,8 +100,11 @@ Now we can easily simulate an user application to send request to our edge devic
 * Can you identify a scenario for backup and restore service when failure occur on edge?
 * Proposed a scenario for elastic, dynamic, collaborative, resource specific, multiple ML applications serving on edge cluster?
 
-## References
+## References and other tools
+
 * https://docs.openvinotoolkit.org/2020.4/openvino_docs_MO_DG_Deep_Learning_Model_Optimizer_DevGuide.html
+* https://github.com/ARM-software/armnn
+
 ## Contributions
 
 Author:   Minh-Tri Nguyen, (tri.m.nguyen@aalto.fi)

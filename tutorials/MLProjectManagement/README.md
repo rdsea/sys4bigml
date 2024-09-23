@@ -5,7 +5,7 @@ The goal of this tutorial is to discuss and practice managing the **end-to-end M
 ## Motivation and study goal
 
 Managing a machine learning project is a very complicated process involving a huge manual effort. How can you effectively manage the end-to-end process from having a dataset to serving prediction models?
-
+> We suggest you to follow all steps, especially studying and practicing key questions posted. However, you can use different datasets and different models to practice the tutorial. If you want to train a model using federated ML frameworks for advanced topics, you can check our [Introduction to FL](../../slides/cs-e4660-introduction-FL-v0.3.pdf) and use suitable tools mentioned in the slides, such as [Flower](https://flower.ai/). For experiment data, you can check [the experiment of Fraud Detection in the experiment in our UCC paper](https://acris.aalto.fi/ws/portalfiles/portal/105781165/Enabling_Awareness_of_Quality_of_Training_and_Costs_in_Federated_Machine_Learning_Marketplaces.pdf).
 ## Requirements, data for model development, and metadata about data
 
 ### Important questions
@@ -552,9 +552,6 @@ print(result[0][0])
 - Now the model is deployed and running as a service. You can use monitoring techniques to monitor the service. Assume that you want to monitor more complex metrics such as cost, performance of your API functions, what are the suitable solutions?
 - Then how can you link the monitoring data of the service back to the model, model experiments, trained data, etc.
 
-### Interesting tools for research
-- [Machine Learning eXchange (MLX)](https://github.com/machine-learning-exchange/mlx)
-
 ### Further tutorials
 
 We will do ML service monitoring using other tutorials
@@ -564,9 +561,10 @@ We will do ML service monitoring using other tutorials
 
 ## References and additional links
 
-Interesting resources about ML engineering:
+Rsources about ML engineering:
 * [Best Practices for ML Engineering by Martin Zinkevic](https://developers.google.com/machine-learning/guides/rules-of-ml)
-* An interesting work about ["Operationalizing Machine Learning: An Interview Study"](https://arxiv.org/pdf/2209.09125v1.pdf)
+* ["Operationalizing Machine Learning: An Interview Study"](https://arxiv.org/pdf/2209.09125v1.pdf)
+* [Machine Learning eXchange (MLX)](https://github.com/machine-learning-exchange/mlx)
 
 Part of the tutorial related to MLflow (experiments, package, serving) is built upon MLflow official documents. The main references are:
 * https://www.mlflow.org/docs/latest/index.html
