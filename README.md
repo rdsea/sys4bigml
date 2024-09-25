@@ -67,7 +67,7 @@ Date|Place|Content|Lead person
 6.11.2024 |R030A133 T5| Checkpoint 1: Topic progress presentation |  All
 20.11.2024 | R030A133 T5 |Checkpoint 2: Topic progress/prefinal check| All
   flexible | | discussion about project progress  | All
-4.12.2024  |R030A133 T5  |final project demonstration| All
+4.12.2024  |U359b  |final project demonstration| All
 11.12.2024  | |final report/code delivery  |  Individual
 
 ### Lectures/Discussions
