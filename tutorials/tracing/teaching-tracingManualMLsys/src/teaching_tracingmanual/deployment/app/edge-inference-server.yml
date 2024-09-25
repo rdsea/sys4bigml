@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-inference-server
+  labels:
+    app: edge-inference-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edge-inference-server
+  template:
+    metadata:
+      labels:
+        app: edge-inference-server
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: edge-inference
+          imagePullPolicy: "Always"
+          image: hongtringuyen/edge-inference-server
+          ports:
+            - containerPort: 4002
+          resources:
+            requests:
+              cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edge-inference-service
+spec:
+  ports:
+  - port: 4002
+    targetPort: 4002
+  selector:
+    app: edge-inference-server
+  type: NodePort
