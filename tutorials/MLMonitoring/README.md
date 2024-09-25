@@ -1,9 +1,11 @@
-# ML Monitoring tutorial
+# Hands-on Tutorial: Monitoring and Evaluating Quality of End-to-End ML Serving
 
 ## Study goal
 The purpose of this tutorial is to learn: 
-- Implementing end-to-end monitoring of machine learning (ML) serving.
+- Implementing end-to-end monitoring in machine learning (ML) serving.
 - Evaluating performance of the ML services in real-time supporting runtime explainability.
+
+Monitoring the quality of an end-to-end ML pipeline is crucial for ensuring the reliability and performance of ML models in production. ML-specific metrics, such as model accuracy, precision, recall, and latency, provide insights into how well the model is performing and help identify potential issues. Monitoring these metrics enable continuous evaluation and improvement of the model, ensuring the ML serving remains effective over time. Additionally, monitoring can help in detecting data drift and model degradation, which are critical for runtime explainability in end-to-end ML serving.
 
 ## Prerequisite
 * [Docker](https://docs.docker.com/get-docker/)

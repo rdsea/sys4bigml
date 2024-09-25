@@ -1,11 +1,12 @@
-# ML Serving tutorial
+# Hands-on Tutorial: Elasticity and Scalability for End-to-End ML Serving
 
 ## Study goal
 The purpose of this tutorial is to understand Machine Learning (ML) serving:
 - Creating a simple end-to-end ML pipeline in Python and deploy it on [Kubernetes](https://kubernetes.io/)(K8s) environment.
 - Scaling the end-to-end pipeline based on the resource utilization. 
 
-Kubernetes is an open-source for automating deployment, allowing us deploy containerized applications on top of several container runtimes, for example: Docker, containerd, CRI-O. With Kubernetes, we can deploy scalable, elastic, and reliable ML pipelines without much human effort. Here, we practice ML serving by building your own ML application, containerizing the application and deploying it to a pre-setup K8s server on Google Cloud. Thereafter, we have to re-configure the application to serve multi-tenants as well as scale the ML service.
+Kubernetes is an open-source for automating deployment, allowing us deploy containerized applications on top of several container runtimes, for example: Docker, containerd, CRI-O.
+Scaling Machine Learning (ML) applications with Kubernetes provides significant benefits in terms of resilience and robustness. Kubernetes offers automatic scaling and horizontal pod autoscaling, ensuring that ML applications can handle varying loads efficiently without manual intervention. Its self-healing capabilities automatically replace failed containers, maintaining application availability even in the face of component failures. Kubernetes also supports rolling updates, allowing seamless updates without downtime. Load balancing and resource management features prevent bottlenecks and ensure efficient resource utilization. Additionally, Kubernetes' namespace isolation and resource quotas facilitate multi-tenancy, while its cloud-agnostic nature and integrated monitoring and logging tools enhance portability and observability, making it an ideal platform for deploying scalable, elastic, and reliable ML pipelines.
 
 ****Note***: It is recommended that you use linux environment.*
 
@@ -42,7 +43,7 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 ```
 
 
-## Deploying ML Service on your own machine
+## Deploying ML Services on your own machine
 
 ### Question:
 - After developing an ML pipeline, how could you deploy the pipeline on heterogeneous computing resources?
@@ -146,13 +147,15 @@ Response: b'{"data": [["bird", 0.9479365348815918, [375.28814697265625, 469.7745
 
 ## Practice
 - Change the ML serving model (e.g., using YOLOv5 or YOLOv5) without causing interruption (Hint: develop new models, modify the model information, build a new image, and redeploy the service). 
+- Collect metrics showing resource utilization/workload
+- Configure, deploy auto-scaling services and change workload to see the updates
 
 ## Open questions
-- What if an ML model requires a lot of resources? Are using Flask and Docker and calling the inference as a blocking function suitable?
+
 - How do you scale the end-to-end pipeline elastically based on the resource utilization?
 - How do we know the current model is outdated then when we should update the serving model or deploy the new one?
-- Should we deploy multiple models for one service (e.g: different requests might be served by different models)?
-- What would happen if any service container is down? how to backup and recover?
+- Should we deploy multiple (ensemble) models for one service (e.g: different requests might be served by different models)?
+- How can Kubernetes support runtime explainability for end-to-end ML serving?
 
 
 ## References
@@ -160,6 +163,11 @@ The tutorial is built upon Kubernetes documents. The main references are:
 
 * https://kubernetes.io/
 * https://hub.docker.com/
+
+Other ML serving tools:
+* [LitServe](https://github.com/Lightning-AI/LitServe)
+* [BentoML](https://github.com/bentoml/BentoML)
+* [Ray](https://github.com/ray-project/ray)
 
 ## Contributions
 
