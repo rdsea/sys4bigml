@@ -154,7 +154,7 @@ We have a few hands-on tutorials for the course that students can carry out for 
 
 ## Citation (if you use the material):
 
-Hong-Linh Truong, *Advanced Topics in Software Systems*, https://version.aalto.fi/gitlab/sys4bigml/cs-e4660, 2020 [BIB Entry](site.bib)
+Hong-Linh Truong, *Advanced Topics in Software Systems*, https://github.com/rdsea/sys4bigml, 2020 [BIB Entry](site.bib)
 
 **Copyrights/Licences: the lecture slides and course structure/info use [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Individual tutorials have their own licenses ([Apache Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0))**
 
