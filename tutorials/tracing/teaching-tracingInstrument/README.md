@@ -1,7 +1,18 @@
 # Teaching-tracinginstrument
 
+
+## Download tutorials from opentelemetry-python with auto-instrumetation
+
+```bash
+git clone -n --depth=3 --filter=tree:0 https://github.com/open-telemetry/opentelemetry-python
+cd opentelemetry-python
+git sparse-checkout set --no-cone docs/examples/auto-instrumentation
+git checkout
+```
+
 ## Requirement
 
+To execute this auto-instrumetation, we need to create virtualenv and then dependencies.
 ```bash
 # create virtualenv by yourself
 mkdir auto-instrumetation
@@ -24,6 +35,7 @@ opentelemetry-bootstrap -a install
 ```bash
 # 1st terminal
 python server_manual.py
+
 # 2nd terminal
 python client.py YOLO # or any text you want 
 ```
