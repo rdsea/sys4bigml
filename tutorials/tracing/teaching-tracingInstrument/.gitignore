@@ -8,4 +8,4 @@ wheels/
 
 # venv
 .venv
-teaching_tracinginstrument/
+*.py
