@@ -15,8 +15,6 @@ spec:
       labels:
         app: web-server
     spec:
-      # nodeSelector:
-      #   workerType: "edgeWorker.rdsea.csc"
       containers:
         - name: web-server
           imagePullPolicy: "Always"
