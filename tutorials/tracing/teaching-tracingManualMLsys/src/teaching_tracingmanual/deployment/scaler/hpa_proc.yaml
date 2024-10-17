@@ -1,0 +1,22 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  creationTimestamp: "2024-08-27T09:47:39Z"
+  name: edge-preprocessor
+  namespace: default
+  resourceVersion: "7112"
+  uid: 98b46630-788f-4747-8228-2e5e884b0aab
+spec:
+  maxReplicas: 10
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 95
+        type: Utilization
+    type: Resource
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: edge-preprocessor
