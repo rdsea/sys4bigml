@@ -46,7 +46,7 @@ python client.py YOLO # or any text you want
 # 1st terminal
 opentelemetry-instrument --traces_exporter console --metrics_exporter none python server_automatic.py
 # 2nd terminal
-python clinet.py Hong3Nguyen # or any text you want 
+python client.py Hong3Nguyen # or any text you want 
 ```
 
 ### Server-programatic 
@@ -55,5 +55,5 @@ python clinet.py Hong3Nguyen # or any text you want
 # 1st terminal
 python server_programmatic.py
 # 2nd terminal
-python clinet.py Hong3Nguyen # or any text you want
+python clieht.py Hong3Nguyen # or any text you want
 ```
