@@ -75,8 +75,8 @@ table inet filter {
         }
 }
 
-# then apply this new setting 
-sudo nft -f /etc/nftables.conf 
+# then apply this new setting with sudo mode
+nft -f /etc/nftables.conf 
 
 ```
 
