@@ -1,6 +1,6 @@
 flask==2.3.3
-pillow==10.0.1
-requests==2.31.0
+pillow
+requests
 pika
 psutil
 prometheus-client
