@@ -1,5 +1,11 @@
 # Tracing Manual
 
+The traditional setting for a distributed tracing in an example for our ML system as figure:
+![A traditional setting with distributed tracing](img/traditional_tracing_sys.png)
+
+This work is an example for a manual setting tracing data.
+![An example for a trace tree (DAG) with spans](img/trace_spans.png)
+
 ## Requerement
 
 - Install minikube
@@ -11,9 +17,8 @@
 # direct to the core place
 cd /src/teaching_tracingmanual/
 
-# Build docker for yourself if need o.w you can use from ourside
-./2-buildDocker.sh <DockerHub_username> <Kubernetes_deployment_folder>
-
+# Build docker for yourself if need o.w you can use from our site by skipping this step
+./2-buildDocker.sh <DockerHub_username> deployment/app
 # NOTE optional check QoA4ML 
 #./3-changeQoA4MLversion
 ```
@@ -46,3 +51,33 @@ kubectl apply -f deployment/app/.
 ```
 
 4. Check localhost:16686 from Jaeger to capture traces from the system/pipeline
+At this step, you may not see any results from Jaeger capturing trace data since the firewall drops the message from kubernetes.
+As a solution for direct message from my minikube/pods to a docker service (Jaeger) is to allow a port 4318 since I am working on http. This protocol has default listening port with Jaeger setting.
+
+```bash
+# go to the firewall setting from my Ubuntu machine with sudo mode
+vim /etc/nftables.conf
+
+# allow port 4318 for example like below
+flush ruleset
+
+table inet filter {
+        chain input {
+                type filter hook input priority 0; policy accept;
+                # Jaeger port
+                tcp dport 4318 accept
+        }
+        chain forward {
+                type filter hook forward priority 0;
+        }
+        chain output {
+                type filter hook output priority 0;
+        }
+}
+
+# then apply this new setting 
+sudo nft -f /etc/nftables.conf 
+
+```
+
+With this setting of the firewall, you can allow the port from minikube to docker Jaeger.
