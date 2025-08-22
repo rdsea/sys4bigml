@@ -55,5 +55,5 @@ python client.py Hong3Nguyen # or any text you want
 # 1st terminal
 python server_programmatic.py
 # 2nd terminal
-python clieht.py Hong3Nguyen # or any text you want
+python client.py Hong3Nguyen # or any text you want
 ```
