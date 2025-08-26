@@ -65,12 +65,11 @@ Date|Place|Content|Lead person
 24.09.2025 | |Hands-on   |  Hong-Tri Nguyen
 01.10.2025 | | Designs and Analytics of Hybrid Intelligence Software built with GenAI/LLMs| Korawit Rupanya 
 08.10.2025 | |Topic Introduction/discussion| All
-22.10.2025 | | Project topic presentation/discussion| All
-flexible   | | Project topic discussion| All
-flexible   | |discussion about topics and possible hands-on  | All
+22.10.2025 | | Project progress presentation| All
+29.10.2025 |flexible| Project topic discussion| All
 05.11.2025 | | Checkpoint 1: Topic progress discussion |  All
-12.11.2025 | |Checkpoint 2: Topic progress presentation| All
-19.11.2025 | | discussion about project progress  | All
+12.11.2025 |flexible | discussion about project progress| All
+19.11.2025 | |Checkpoint 2: Topic progress presentation  | All
 26.11.2025 | |Final project demonstration and demonstration| All
 10.12.2025 | |Final report/code delivery  |  Individual
 
