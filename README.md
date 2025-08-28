@@ -59,18 +59,18 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
 
 Date|Place|Content|Lead person
 ---|---|---|---
-03.09.2025 | |[lecture 1 - Multi Continuum Computing: Service-based Applications and Systems]() | Linh Truong
-10.09.2025 ||Lecture 2 - Robustness, Reliability, Resilience and Elasticity for multi-continuum service-based software systems | Linh Truong
-17.09.2025 | | Observability, Vulnerability Diagnostics, and Explainability| Hong-Tri Nguyen
-24.09.2025 | |Hands-on   |  Hong-Tri Nguyen
-01.10.2025 | | Designs and Analytics of Hybrid Intelligence Software built with GenAI/LLMs| Korawit Rupanya 
-08.10.2025 | |Topic Introduction/discussion| All
-22.10.2025 | | Project progress presentation| All
-29.10.2025 |flexible| Project topic discussion| All
-05.11.2025 | | Checkpoint 1: Topic progress discussion |  All
+03.09.2025 |R030A133 T5 |[lecture 1 - Multi Continuum Computing: Service-based Applications and Systems]() | Linh Truong
+10.09.2025 |R030A133 T5|Lecture 2 - Robustness, Reliability, Resilience and Elasticity for multi-continuum service-based software systems | Linh Truong
+17.09.2025 |R030A133 T5 | Observability, Vulnerability Diagnostics, and Explainability| Hong-Tri Nguyen
+24.09.2025 | R030A140 T4|Hands-on   |  Hong-Tri Nguyen
+01.10.2025 |R030A140 T4 | Designs and Analytics of Hybrid Intelligence Software built with GenAI/LLMs| Korawit Rupanya 
+08.10.2025 |R030A136 T6  |Topic Introduction/discussion| All
+22.10.2025 |R030A133 T5  | Project progress presentation| All
+29.10.2025 |flexible, R030A133 T5| Project topic discussion| All
+05.11.2025 |R030A133 T5  | Checkpoint 1: Topic progress discussion |  All
 12.11.2025 |flexible | discussion about project progress| All
-19.11.2025 | |Checkpoint 2: Topic progress presentation  | All
-26.11.2025 | |Final project demonstration and demonstration| All
+19.11.2025 | R030A133 T5 |Checkpoint 2: Topic progress presentation  | All
+26.11.2025 |R030A133 T5  |Final project demonstration and demonstration| All
 10.12.2025 | |Final report/code delivery  |  Individual
 
 ### Lectures/Discussions
