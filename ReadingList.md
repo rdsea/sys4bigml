@@ -1,4 +1,10 @@
-## Reading List for Advanced Topics in Software Systems for Big Data and ML
+## Reading List for Advanced Topics in Software Systems 
+
+### Multi-Continuum Computing
+* Hong-Linh Truong,Kostas Magoutis, [A Multi-Continuum View for Swarm-Edge-Cloud Service-based Applications](), Working paper, 2025
+* [The computing continuum: Past, present, and future](https://www.sciencedirect.com/science/article/abs/pii/S1574013725000589), 2025
+* [The Compute Continuum: Trends and Challenges](https://ieeexplore.ieee.org/document/10896925)
+* [A Unified Model for the Mobile-Edge-Cloud Continuum](https://doi.org/10.1145/3226644)
 
 ### Robustness, Reliability, Resilience and Elasticity
 
@@ -9,16 +15,19 @@
 * https://arxiv.org/pdf/1904.07204.pdf
 
 ### Benchmarking
+
 * https://arxiv.org/pdf/1910.01500.pdf
 * https://mlperf.org/training-overview
 * https://aimatrix.ai/en-us/
 
-###  QoA Tradeoffs analysis:
+###  QoA Tradeoffs analysis
+
 * https://www.microsoft.com/en-us/research/blog/reliability-in-reinforcement-learning/
 * https://dzone.com/articles/qa-how-reliable-are-your-machine-learning-systems
 * https://dl.acm.org/doi/10.1145/3352020.3352024
 
-### Monitoring:
+### Monitoring
+
 * [Towards Observability Data Management at Scale](https://sigmodrecord.org/publications/sigmodRecord/2012/pdfs/05_Vision_Karumuri.pdf)
 *  https://www.sysml.cc/doc/2019/199.pdf
 * https://monitorml.com/index.html
@@ -44,6 +53,7 @@ An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 
 ### Reactive ML Systems
 * Jeff Smith. 2018. Machine Learning Systems: Designs that scale (1st. ed.). Manning Publications Co., USA.https://www.manning.com/books/machine-learning-systems
+
 ### Serving with different models:
   * Prediction-Serving Systems, https://queue.acm.org/detail.cfm?id=3210557
   * Ryan Chard, Logan Ward, Zhuozhao Li, Yadu Babuji, Anna Woodard, Steven Tuecke, Kyle Chard, Ben Blaiszik, and Ian Foster. 2019. Publishing and Serving Machine Learning Models with DLHub. In Proceedings of the Practice and Experience in Advanced Research Computing on Rise of the Machines (learning) (PEARC ’19). Association for Computing Machinery, New York, NY, USA, Article 73, 1–7. DOI:https://doi.org/10.1145/3332186.3332246
@@ -63,3 +73,5 @@ An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 * https://heartbeat.fritz.ai/how-to-fit-large-neural-networks-on-the-edge-eb621cdbb33
 * https://cloud.google.com/solutions/machine-learning/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning
 * https://research.google/pubs/pub43146/
+
+### Hybrid Intelligence Software with LLMs
