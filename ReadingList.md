@@ -75,10 +75,9 @@ An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 * https://research.google/pubs/pub43146/
 
 ### Hybrid Intelligence Software with LLMs
+* [Design Principles and Guidelines for LLM Observability: Insights from Developers](https://doi.org/10.1145/3706599.3719914)
 * [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
 * [Toward a Quality Model for Hybrid Intelligence Teams](https://www.scopus.com/pages/publications/85196358874)
 * [On Coordinating LLMs and Platform Knowledge
 for Software Modernization and New Developments](https://ieeexplore.ieee.org/document/10664288)
-* [Human–AI Collaboration for Remote Sighted Assistance:
-Perspectives from the LLM Era](https://doi.org/10.3390/fi16070254)
 * [Hybrid Intelligence - Combining the Human in the Loop with the Computer in the Loop: A Systematic Literature Review](https://www.researchgate.net/publication/356209722_Hybrid_Intelligence_-_Combining_the_Human_in_the_Loop_with_the_Computer_in_the_Loop_A_Systematic_Literature_Review)
