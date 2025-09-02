@@ -75,6 +75,7 @@ An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 * https://research.google/pubs/pub43146/
 
 ### Hybrid Intelligence Software with LLMs
+* [Evaluation and Benchmarking of LLM Agents: A Survey](https://doi.org/10.1145/3711896.3736570)
 * [Design Principles and Guidelines for LLM Observability: Insights from Developers](https://doi.org/10.1145/3706599.3719914)
 * [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
 * [Toward a Quality Model for Hybrid Intelligence Teams](https://www.scopus.com/pages/publications/85196358874)
