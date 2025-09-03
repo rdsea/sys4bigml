@@ -60,7 +60,7 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
 
 Date|Place|Content|Lead person
 ---|---|---|---
-03.09.2025 |R030A133 T5 |[lecture 1 - Multi Continuum Computing: Service-based Applications and Systems](slides/cs-e4660-lecture1-multicontinuum_v0.7.pdf) | Linh Truong
+03.09.2025 |R030A133 T5 |[Lecture 1 - Multi-Continuum Computing: Service-based Applications and Systems](slides/cs-e4660-lecture1-multicontinuum_v0.7.pdf) | Linh Truong
 10.09.2025 |R030A133 T5|Lecture 2 - Robustness, Reliability, Resilience and Elasticity for multi-continuum service-based software systems | Linh Truong
 17.09.2025 |R030A133 T5 | Observability, Vulnerability Diagnostics, and Explainability| Hong-Tri Nguyen
 24.09.2025 | R030A140 T4|Hands-on   |  Hong-Tri Nguyen
