@@ -1,4 +1,4 @@
-# Teaching-tracinginstrument
+# Basic tracing
 The material from this hand-on is mostly from [OpenTelemetry Python documentation](https://opentelemetry.io/docs/zero-code/python/)
 
 ## Workflow
