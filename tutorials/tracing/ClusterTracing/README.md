@@ -56,6 +56,10 @@ Jaeger Query
   ↓  (HTTP 16686)
 User/UI
 ```
+- Cluster setting
+```bash
+minikube start --cpu=4
+```
 
 ## 2. Otel and Jaeger collectors along with Elasticsearch
 ### Flowchart
