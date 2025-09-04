@@ -14,7 +14,7 @@ spec:
       containers:
         - name: query
           # for jaeger 1.6
-          image: jaegertracing/jaeger-collector:1.61.0
+          image: jaegertracing/jaeger-query:1.61.0
           args:
             - "--span-storage.type=elasticsearch"
             - "--es.server-urls=https://elasticsearch-master.observability.svc:9200"
@@ -22,7 +22,7 @@ spec:
             - "--es.tls.enabled=true"
             - "--es.tls.ca=/etc/certs/ca.crt"
             - "--es.username=elastic"
-            - "--es.password=20PAX9EE8byumHjF"
+            - "--es.password=lDpWEaFcMHsJvKe7"
           #image: cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
           # env:
           #   - name: SPAN_STORAGE_TYPE
@@ -83,7 +83,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: jaeger.hong3nguyen.com
+    - host: jaeger.softsys.com
       http:
         paths:
           - path: /
