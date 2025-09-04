@@ -1,0 +1,31 @@
+replicas: 1
+
+esconfig:
+  elasticsearch.yml: |
+    cluster.name: "observability-cluster"
+    node.name: "elasticsearch-master"
+    network.host: 0.0.0.0
+    discovery.type: single-node
+
+resources:
+  requests:
+    memory: 1Gi
+    cpu: 500m
+  limits:
+    memory: 1Gi
+    cpu: 1
+volumeclaimtemplate:
+  accessmodes: ["readwriteonce"]
+  storageclassname: local-path
+  resources:
+    requests:
+      storage: 1Gi
+# single-node roles
+master:
+  replicas: 1
+data:
+  replicas: 0
+ingest:
+  replicas: 0
+coordinating:
+  replicas: 0
