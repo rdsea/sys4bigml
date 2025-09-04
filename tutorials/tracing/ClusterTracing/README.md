@@ -56,10 +56,69 @@ Jaeger Query
   ↓  (HTTP 16686)
 User/UI
 ```
+
 - Cluster setting
 ```bash
 minikube start --cpu=4
+
+cd infrastructure
+# install traefik
+helm repo add traefik https://traefik.github.io/charts
+helm repo update
+
+kubectl create namespace traefik
+helm install traefik traefik/traefik \
+  --namespace traefik
+
+# export IP for external
+./metallb.sh # OR minikube tunnel
+
 ```
+
+- elasticsearch setting
+```bash
+cd infrastructure
+helm repo add elastic https://helm.elastic.co
+kubectl create namespace observability
+
+helm install elasticsearch elastic/elasticsearch -n observability -f value_elasticsearch.yaml
+
+kubectl get secret elasticsearch-master-certs -n observability -o jsonpath="{.data['ca\.crt']}" | base64 --decode > ca.crt
+
+kubectl get secret -n observability elasticsearch-master-credentials -o yaml
+
+kubectl create secret generic jaeger-es-ca \
+  --from-file=ca.crt=./ca.crt \
+  -n observability
+
+# create username and password
+ kubectl create secret generic jaeger-es-creds -n observability \
+  --from-literal=ES_USERNAME=elastic \
+  --from-literal=ES_PASSWORD='lDpWEaFcMHsJvKe7'
+```
+
+- apply tracing configuration
+```bash
+cd deployment
+
+kubectl apply -f .
+```
+
+- apply application 
+```bash
+cd application/cluster
+
+kubectl apply -f .
+
+cd application/edge
+
+docker compose up -d 
+```
+
+- client send request
+- source venv first
+> python client_processing.py --url http://preprocessing:5010/preprocessing
+
 
 ## 2. Otel and Jaeger collectors along with Elasticsearch
 ### Flowchart
