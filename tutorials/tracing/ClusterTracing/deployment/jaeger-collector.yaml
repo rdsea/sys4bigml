@@ -1,0 +1,137 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: jaeger-collector
+#   namespace: observability
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels: { app: jaeger-collector }
+#   template:
+#     metadata:
+#       labels: { app: jaeger-collector }
+#     spec:
+#       containers:
+#         - name: collector
+#           image: cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
+#
+#           ports:
+#             - name: grpc
+#               containerPort: 14250
+#             - name: http
+#               containerPort: 14268
+#           volumeMounts:
+#             - name: es-ca
+#               mountPath: /etc/certs
+#               readOnly: true
+#       volumes:
+#         - name: es-ca
+#           secret:
+#             secretName: jaeger-es-ca
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger-collector
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jaeger-collector
+  template:
+    metadata:
+      labels:
+        app: jaeger-collector
+    spec:
+      containers:
+        - name: collector
+          image:
+            jaegertracing/jaeger-collector:1.61.0
+            # Use env vars instead of deprecated CLI flags
+            # Jaeger 1.6
+          args:
+            - "--span-storage.type=elasticsearch"
+            - "--es.server-urls=https://elasticsearch-master.observability.svc:9200"
+            - "--es.tls.enabled=true"
+            - "--es.tls.ca=/etc/certs/ca.crt"
+            - "--es.username=elastic"
+            - "--es.password=20PAX9EE8byumHjF"
+            # **Enable OTLP receiver**
+            - "--collector.otlp.enabled=true"
+            - "--collector.otlp.grpc.host-port=:4317"
+            - "--collector.otlp.http.host-port=:4318"
+            - "--log-level=debug"
+          # env:
+          #   - name: SPAN_STORAGE_TYPE
+          #     value: "elasticsearch"
+          #   - name: ES_SERVER_URLS
+          #     value: "https://elasticsearch-master.observability.svc:9200"
+          #   - name: ES_TLS_ENABLED
+          #     value: "true"
+          #   - name: ES_TLS_CA
+          #     value: "/etc/certs/ca.crt"
+          #   # If you need to skip TLS hostname verification (not recommended), set to "true"
+          #   # - name: ES_TLS_SKIP_HOST_VERIFY
+          #   #   value: "true"
+          #
+          #   - name: COLLECTOR_OTLP_ENABLED
+          #     value: "true"
+          #   - name: COLLECTOR_OTLP_GRPC_HOST_PORT
+          #     value: "0.0.0.0:4317"
+          #   - name: COLLECTOR_OTLP_HTTP_HOST_PORT
+          #     value: "0.0.0.0:4318"
+          #
+          #   - name: LOG_LEVEL
+          #     value: "debug"
+          #
+          #   # pull username/password from the secret
+          #   - name: ES_USERNAME
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: jaeger-es-creds
+          #         key: ES_USERNAME
+          #   - name: ES_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: jaeger-es-creds
+          #         key: ES_PASSWORD
+
+          ports:
+            - name: grpc-internal
+              containerPort: 14250
+            - name: http-internal
+              containerPort: 14268
+            - name: grpc
+              containerPort: 4317
+            - name: http
+              containerPort: 4318
+          volumeMounts:
+            - name: es-ca
+              mountPath: /etc/certs
+              readOnly: true
+      volumes:
+        - name: es-ca
+          secret:
+            secretName: jaeger-es-ca
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger-collector
+  namespace: observability
+spec:
+  selector: { app: jaeger-collector }
+  ports:
+    - name: grpc
+      port: 14250
+      targetPort: grpc
+    - name: http
+      port: 14268
+      targetPort: http
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318

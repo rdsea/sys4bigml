@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger-query
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: jaeger-query }
+  template:
+    metadata:
+      labels: { app: jaeger-query }
+    spec:
+      containers:
+        - name: query
+          # for jaeger 1.6
+          image: jaegertracing/jaeger-collector:1.61.0
+          args:
+            - "--span-storage.type=elasticsearch"
+            - "--es.server-urls=https://elasticsearch-master.observability.svc:9200"
+            # For TLS+auth:
+            - "--es.tls.enabled=true"
+            - "--es.tls.ca=/etc/certs/ca.crt"
+            - "--es.username=elastic"
+            - "--es.password=20PAX9EE8byumHjF"
+          #image: cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
+          # env:
+          #   - name: SPAN_STORAGE_TYPE
+          #     value: "elasticsearch"
+          #   - name: ES_SERVER_URLS
+          #     value: "https://elasticsearch-master.observability.svc:9200"
+          #   - name: ES_TLS_ENABLED
+          #     value: "true"
+          #   - name: ES_TLS_CA
+          #     value: "/etc/certs/ca.crt"
+          #   # If you need to skip TLS hostname verification (not recommended), set to "true"
+          #   # - name: ES_TLS_SKIP_HOST_VERIFY
+          #   #   value: "true"
+          #   - name: LOG_LEVEL
+          #     value: "debug"
+          #
+          #   # pull username/password from the secret
+          #   - name: ES_USERNAME
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: jaeger-es-creds
+          #         key: ES_USERNAME
+          #   - name: ES_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: jaeger-es-creds
+          #         key: ES_PASSWORD
+
+          ports:
+            - name: http-query
+              containerPort: 16686
+          volumeMounts:
+            - name: es-ca
+              mountPath: /etc/certs
+              readOnly: true
+      volumes:
+        - name: es-ca
+          secret:
+            secretName: jaeger-es-ca
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger-query
+  namespace: observability
+spec:
+  selector: { app: jaeger-query }
+  ports:
+    - name: http
+      port: 16686
+      targetPort: http-query
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jaeger-ingress
+  namespace: observability
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: jaeger.hong3nguyen.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jaeger-query
+                port:
+                  number: 16686
