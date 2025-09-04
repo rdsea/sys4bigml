@@ -60,7 +60,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: otel-collector.local
+    - host: otel-collector.softsys.com
       http:
         paths:
           - path: /v1/traces
