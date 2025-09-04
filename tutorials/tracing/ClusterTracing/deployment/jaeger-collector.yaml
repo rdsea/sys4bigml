@@ -55,7 +55,7 @@ spec:
             - "--es.tls.enabled=true"
             - "--es.tls.ca=/etc/certs/ca.crt"
             - "--es.username=elastic"
-            - "--es.password=20PAX9EE8byumHjF"
+            - "--es.password=lDpWEaFcMHsJvKe7"
             # **Enable OTLP receiver**
             - "--collector.otlp.enabled=true"
             - "--collector.otlp.grpc.host-port=:4317"
