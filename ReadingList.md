@@ -12,11 +12,12 @@
 * [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
 * [ Coordination-aware assurance for end-to-end machine learning systems: the R3E approach](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
 * https://ai.googleblog.com/2019/12/improving-out-of-distribution-detection.html
-* https://arxiv.org/pdf/1904.07204.pdf
+* [Tutorial: Safe and Reliable Machine Learning](https://arxiv.org/pdf/1904.07204.pdf)
+* [On the Resilience of LLM-Based Multi-Agent Collaboration with Faulty Agents](https://arxiv.org/pdf/2408.00989)
 
 ### Benchmarking
 
-* https://arxiv.org/pdf/1910.01500.pdf
+* [MLPERF TRAINING BENCHMARK](https://arxiv.org/pdf/1910.01500.pdf)
 * https://mlperf.org/training-overview
 * https://aimatrix.ai/en-us/
 
@@ -37,7 +38,7 @@
 * https://chromium.googlesource.com/external/github.com/tensorflow/tensorflow/+/r0.10/tensorflow/g3doc/tutorials/monitors/index.md
 
 ### Data Monitoring and Validation:
-* https://mlsys.org/Conferences/2019/doc/2019/167.pdf
+* [DATA VALIDATION FOR MACHINE LEARNING](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
 * https://github.com/tensorflow/data-validation
 * https://towardsdatascience.com/hands-on-tensorflow-data-validation-61e552f123d7
 * https://databricks.com/session/apache-spark-data-validation
@@ -45,9 +46,10 @@
 * https://cloud.google.com/blog/products/gcp/improving-data-quality-for-machine-learning-and-analytics-with-cloud-dataprep
 
 ### Orchestration and Pipelines
-* https://dl.acm.org/doi/fullHtml/10.1145/3332301
+* [Orchestrating Big Data Analysis Workflows in the Cloud: Research Challenges, Survey, and Future Directions](https://dl.acm.org/doi/fullHtml/10.1145/3332301)
 * https://docs.microsoft.com/en-us/azure/machine-learning/concept-ml-pipelines
-* https://shivaram.org/publications/keystoneml-icde17.pdf
+* [KeystoneML: Optimizing Pipelines for Large-Scale
+Advanced Analytics](https://shivaram.org/publications/keystoneml-icde17.pdf)
 * [Demystifying Parallel and Distributed Deep Learning:
 An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 
@@ -63,7 +65,7 @@ An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 
 ### Edge ML
 
-* https://www.usenix.org/system/files/conference/hotedge18/hotedge18-papers-talagala.pdf
+* [ECO: Harmonizing Edge and Cloud with ML/DL Orchestration](https://www.usenix.org/system/files/conference/hotedge18/hotedge18-papers-talagala.pdf)
 * https://arxiv.org/pdf/1706.08420.pdf
 * https://arxiv.org/pdf/1907.08349.pdf
 * https://arxiv.org/pdf/1908.00080.pdf
