@@ -1,4 +1,7 @@
-# Service system tracing
+# Tracing service-based system on Edge environment
+
+## Goal
+- This observability focuses on tracing
 
 The traditional setting for a distributed tracing in an example for our ML system as figure:
 ![A traditional setting with distributed tracing](doc/img/traditional_tracing_sys.png)
@@ -6,10 +9,19 @@ The traditional setting for a distributed tracing in an example for our ML syste
 This work is an example for a manual setting tracing data.
 ![An example for a trace tree (DAG) with spans](doc/img/trace_spans.png)
 
+- Do we want to have analysis
+
+## reflect edge and cloud setting env 
+- What is the edge? -- concept for the edge
+     - emulate via docker containers
+- Edge:
+     - List of single machines
+- Cloud:
+      - K8s-based cluster -- minikube to emulate this 
 ## Requirement
 
 ### Application
-- We use an application from my colleague or any service-based applications 
+- We use an object classification application from my colleague or any service-based applications 
 
 - If you use your own application, please carefully check those 
 ```python
@@ -94,3 +106,5 @@ docker run --rm --name otelcol  \
 
 > python client_processing.py --url http://preprocessing:5010/preprocessing
 
+## Further investigation
+- How can you extension this tutorial to further various 
