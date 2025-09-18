@@ -9,6 +9,7 @@ We have the following hands-on tutorials for practicing some concepts discussed 
 * [Quality of Analytics for ML](./qoa4ml)
 * [Edge ML Pipeline](./edgemodelop)
 * [Common ML Development Activities in Edge Systems](./edgemlcommons)
+* [Observability in term of Robustness for HIS-LLM in Multi continuum System](./r4hisllm)
 
 ## Videos
 Some tutorials have hands-on videos that can be found at:
