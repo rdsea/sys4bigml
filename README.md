@@ -62,7 +62,7 @@ Date|Place|Content|Lead person
 ---|---|---|---
 03.09.2025 |R030A133 T5 |[Lecture 1 - Multi-Continuum Computing: Service-based Applications and Systems](slides/cs-e4660-lecture1-multicontinuum_v0.7.pdf) | Linh Truong
 10.09.2025 |R030A133 T5|[Lecture 2 - Robustness, Reliability, Resilience and Elasticity for multi-continuum service-based software systems](slides/cs-e4660-lecture2_r3e_design_v0.7.pdf) | Linh Truong
-17.09.2025 |R030A133 T5 | Observability, Vulnerability Diagnostics, and Explainability| Hong-Tri Nguyen
+17.09.2025 |R030A133 T5 | [Observability, Vulnerability Diagnostics, and Explainability](slides/cs-e4660-lecture3-observability_diagnostic_explainability.pdf)| Hong-Tri Nguyen
 24.09.2025 | R030A140 T4|Hands-on   |  Hong-Tri Nguyen
 01.10.2025 |R030A140 T4 | Designs and Analytics of Hybrid Intelligence Software built with GenAI/LLMs| Korawit Rupanya 
 08.10.2025 |R030A136 T6  |Topic Introduction/discussion| All
