@@ -1,0 +1,69 @@
+# networks:
+#   tracing-net:
+#     external: true # $ docker network create tracing-net
+#     driver: bridge
+# $ docker network connect tracing-net jaeger
+
+services:
+  preprocessing:
+    image: hongtringuyen/preprocessing
+    container_name: preprocessing
+    # networks:
+    #   - tracing-net
+    ports:
+      - 5010:5010
+    environment:
+      DOCKER: "true"
+      MANUAL_TRACING: true
+      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+      OTEL_ENDPOINT: "http://130.233.195.221:4318/v1/traces"
+
+  ensemble:
+    image: hongtringuyen/ensemble
+    container_name: ensemble
+    #restart: unless-stopped
+    # networks:
+    #   - tracing-net
+    environment:
+      DOCKER: "true"
+      MANUAL_TRACING: true
+      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+      SEND_TO_QUEUE: false
+      OTEL_ENDPOINT: "http://130.233.195.221:4318/v1/traces"
+
+  efficientnetb0:
+    image: hongtringuyen/inference
+    container_name: efficientnetb0
+    # networks:
+    #   - tracing-net
+    command: ["--model", "EfficientNetB0"]
+    environment:
+      MANUAL_TRACING: true
+      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+      OTEL_ENDPOINT: "http://130.233.195.221:4318/v1/traces"
+
+  mobilenetv2:
+    image: hongtringuyen/inference
+    container_name: mobilenetv2
+    # networks:
+    #   - tracing-net
+    restart: unless-stopped
+    command: ["--model", "MobileNetV2"]
+    environment:
+      MANUAL_TRACING: true
+      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+      OTEL_ENDPOINT: "http://130.233.195.221:4318/v1/traces"
+
+  llm-llava:
+    image: hongtringuyen/llm_service
+    container_name: llava
+    # ports:
+    #   - 5012:5012
+    #command: [""]
+    environment:
+      OLLAMA_HOST: "http://host.docker.internal:11434"
+      LLM_MODEL: "llava:7b"
+      MANUAL_TRACING: true
+      OTEL_ENDPOINT: "http://130.233.195.221:4318/v1/traces"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

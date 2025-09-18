@@ -1,0 +1,79 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ensemble
+  labels:
+    app: ensemble
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ensemble
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: ensemble
+        version: v1
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: ensemble
+          image: hongtringuyen/ensemble
+          ports:
+            - containerPort: 5011
+          env:
+            - name: MANUAL_TRACING
+              value: "true"
+            - name: OTEL_ENDPOINT
+              value: "http://otel-collector.observability.svc.cluster.local:4318/v1/traces"
+            - name: SEND_TO_QUEUE
+              value: "false"
+            - name: RABBITMQ_URL
+              value: "gateway.cloud-1.svc:31469"
+            - name: RABBITMQ_QUEUE_NAME
+              value: "object_detection_result"
+            - name: RABBITMQ_USERNAME
+              value: "admin"
+            - name: RABBITMQ_PASSWORD
+              value: "adminadminadmin"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "200Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ensemble-service
+spec:
+  ports:
+    - port: 5011
+      targetPort: 5011
+  selector:
+    app: ensemble
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ensemble-ingress
+  namespace: default
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: ensemble
+      http:
+        paths:
+          - path: /ensemble_service
+            pathType: Prefix
+            backend:
+              service:
+                name: ensemble-service
+                port:
+                  number: 5011
