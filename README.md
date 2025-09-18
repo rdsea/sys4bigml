@@ -95,6 +95,7 @@ We have a few hands-on tutorials for the course that students can carry out for 
   - [Quality of Analytics for ML](./tutorials/qoa4ml/README.md)
   - [Edge ML Pipeline](./tutorials/edgemodelop)
   - [Common tasks with Edge ML](./tutorials/edgemlcommons)
+  - [Observability in term of Robustness for HIS-LLM in Multi continuum computing](./tutorials/r4hisllm)
 
 ### Project ideas presentations
 
