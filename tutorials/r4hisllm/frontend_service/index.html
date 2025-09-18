@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paragliding Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1 id="greeting">Loading greeting...</h1>
+
+    <form id="queryForm">
+      <input type="text" id="queryInput" placeholder="Enter your paragliding plan" required>
+      <button type="submit">Ask Agent</button>
+    </form>
+
+    <div id="votesContainer" class="hidden">
+      <h2>Expert Votes:</h2>
+      <ul id="votesList"></ul>
+    </div>
+
+    <div id="suggestionContainer" class="hidden">
+      <h2>LLM Suggestion:</h2>
+      <p id="suggestion"></p>
+    </div>
+
+    <div id="finalResultContainer" class="hidden">
+      <h2>Final Result (Detailed):</h2>
+      <p id="finalResult"></p>
+    </div>
+
+    <div id="finalDecisionContainer" class="hidden">
+      <h2>Final Decision (LLM + Expert):</h2>
+      <p id="finalDecision"></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
