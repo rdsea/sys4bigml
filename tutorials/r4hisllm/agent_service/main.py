@@ -24,10 +24,9 @@ from opentelemetry.sdk.metrics import MeterProvider, Counter
 # Mount /metrics endpoint
 from starlette.middleware.wsgi import WSGIMiddleware
 from prometheus_client import make_asgi_app
-
-# OpenLIT import
-import openlit
-
+# Opik for LLM tracing
+import opik
+from opik.integrations.langchain import OpikTracer
 # Load environment variables
 load_dotenv()
 # Ollama environment variables
@@ -37,10 +36,6 @@ OLLAMA_PORT = int(os.getenv("OLLAMA_PORT"))
 # OTEL environment variables
 OTEL_ENDPOINT = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT_HTTP")
 SERVICE_NAME = os.getenv("AGENT_OTEL_SERVICE_NAME")
-
-# Initialize OpenLIT
-openlit.init()
-
 # --------------------------
 # OpenTelemetry Tracing Setup
 # --------------------------
@@ -50,7 +45,6 @@ span_processor = BatchSpanProcessor(OTLPSpanExporter(endpoint=OTEL_ENDPOINT))
 tracer_provider.add_span_processor(span_processor)
 trace.set_tracer_provider(tracer_provider)
 tracer = trace.get_tracer(__name__)
-
 # --------------------------
 # OpenTelemetry Metrics Setup
 # --------------------------
@@ -74,7 +68,9 @@ external_service_counter = meter.create_counter(
     "agent_external_requests_total",
     description="Total requests to external services"
 )
-
+# Create the Opik tracer
+opik.configure(use_local=True)
+opik_tracer = OpikTracer(tags=["langchain", "ollama"])
 # --------------------------
 # FastAPI app setup
 # --------------------------
@@ -108,7 +104,7 @@ llm = OllamaLLM(
     model=OLLAMA_MODEL,
     temperature=0.7,
     base_url=f"http://{OLLAMA_HOST}:{OLLAMA_PORT}"
-)
+).with_config({"callbacks": [opik_tracer]})
 
 @app.get("/greet")
 def greet_user():
