@@ -100,7 +100,6 @@ services:
       - his_network
     depends_on:
       - jaeger
-      - clickhouse
     restart: always
 
   jaeger:
@@ -120,7 +119,7 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - "9090:9090"
+      - "9092:9090"
     networks:
       - his_network
     depends_on:
@@ -136,22 +135,6 @@ services:
       - his_network
     depends_on:
       - prometheus
-
-  clickhouse:
-    image: clickhouse/clickhouse-server:latest
-    container_name: clickhouse
-    volumes:
-      - clickhouse-data:/var/lib/clickhouse
-      - ./assets/clickhouse-config.xml:/etc/clickhouse-server/config.d/custom-config.xml:ro
-    ports:
-      - "9000:9000"
-      - "8123:8123"
-    restart: always
-    networks:
-      - his_network
-
-volumes:
-  clickhouse-data:
 
 networks:
   his_network:

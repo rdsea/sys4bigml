@@ -24,9 +24,10 @@ from opentelemetry.sdk.metrics import MeterProvider, Counter
 # Mount /metrics endpoint
 from starlette.middleware.wsgi import WSGIMiddleware
 from prometheus_client import make_asgi_app
-# Opik for LLM tracing
-import opik
-from opik.integrations.langchain import OpikTracer
+# Langfuse imports
+from langfuse import Langfuse
+from langfuse.langchain import CallbackHandler
+from langfuse import get_client
 # Load environment variables
 load_dotenv()
 # Ollama environment variables
@@ -68,9 +69,6 @@ external_service_counter = meter.create_counter(
     "agent_external_requests_total",
     description="Total requests to external services"
 )
-# Create the Opik tracer
-opik.configure(use_local=True)
-opik_tracer = OpikTracer(tags=["langchain", "ollama"])
 # --------------------------
 # FastAPI app setup
 # --------------------------
@@ -104,7 +102,22 @@ llm = OllamaLLM(
     model=OLLAMA_MODEL,
     temperature=0.7,
     base_url=f"http://{OLLAMA_HOST}:{OLLAMA_PORT}"
-).with_config({"callbacks": [opik_tracer]})
+)
+# Initialize Langfuse
+langfuse = Langfuse(
+    public_key=os.getenv("LANGFUSE_PUBLIC_KEY"),
+    secret_key=os.getenv("LANGFUSE_SECRET_KEY"),
+    host=os.getenv("LANGFUSE_HOST")
+) 
+langfuse = get_client()
+ 
+# Verify connection, do not use in production as this is a synchronous call
+if langfuse.auth_check():
+    print("Langfuse client is authenticated and ready!")
+else:
+    print("Authentication failed. Please check your credentials and host.")
+# Create Langfuse callback handler
+langfuse_handler = CallbackHandler()
 
 @app.get("/greet")
 def greet_user():
@@ -129,7 +142,7 @@ def greet_user():
             output_parser = StrOutputParser()
             chain_city = RunnableSequence(city_prompt | llm | output_parser)
             llm_request_counter.add(1)  # Increment metric
-            city = chain_city.invoke({"spots": spot_names})
+            city = chain_city.invoke({"spots": spot_names}, config={"callbacks": [langfuse_handler]})
 
             # Step 2: Generate friendly greeting mentioning the city
             greeting_prompt = PromptTemplate(
@@ -137,7 +150,7 @@ def greet_user():
                 input_variables=["city"]
             )
             chain_greeting = RunnableSequence(greeting_prompt | llm | output_parser)
-            greeting = chain_greeting.invoke({"city": city.strip()})
+            greeting = chain_greeting.invoke({"city": city.strip()}, config={"callbacks": [langfuse_handler]})
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"LLM processing error: {e}")
@@ -183,7 +196,7 @@ def plan_paragliding(user_input: dict):
         llm_suggestion = chain_llm.invoke({
             "user_input": user_input.get("query", ""),
             "spots_text": spots_text
-        })
+        }, config={"callbacks": [langfuse_handler]})
 
         # 4. Ask human review service to validate/refine the suggestion
         try:
@@ -217,7 +230,7 @@ def plan_paragliding(user_input: dict):
         final_result = chain_summary.invoke({
             "llm_suggestion": llm_suggestion,
             "expert_review": expert_review
-        })
+        }, config={"callbacks": [langfuse_handler]})
 
         # 6. Compute final decision from expert votes
         final_decision = "undecided"
