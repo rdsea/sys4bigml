@@ -1,6 +1,6 @@
 # 01-basic-client-server-tracing
 
-# GOAL
+# Study goals
 - Give an example/feeling of setting an end-to-end trace from client-server application
   - Architecture for an end-to-end trace
   - Introduce various instrumentations:
