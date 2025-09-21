@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: efficientnetb0
+  labels:
+    app: efficientnetb0
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: efficientnetb0
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: efficientnetb0
+        version: v1
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: efficientnetb0
+          image: hongtringuyen/inference
+          ports:
+            - containerPort: 5012
+          args: ["--model", "EfficientNetB0"]
+          env:
+            - name: MANUAL_TRACING
+              value: "true"
+            - name: OTEL_ENDPOINT
+              value: "http://otel-collector.observability.svc.cluster.local:4318/v1/traces"
+          resources:
+            requests:
+              cpu: "2000m"
+              memory: "200Mi"
+            limits:
+              cpu: "2500m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: efficientnetb0-service
+spec:
+  ports:
+    - port: 5012
+      targetPort: 5012
+  selector:
+    app: efficientnetb0
