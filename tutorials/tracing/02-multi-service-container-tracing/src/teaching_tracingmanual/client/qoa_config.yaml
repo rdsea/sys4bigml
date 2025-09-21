@@ -1,0 +1,15 @@
+client:
+  username: aaltosea1
+  instance_name: obj_client
+  stage_id: CLIENT
+  functionality: REST
+  application_name: object_detection_teaching
+  role: client
+connector:
+  - name: amqp_connector
+    connector_class: AMQP
+    config:
+      end_point: rabbitmq
+      exchange_name: test_qoa4ml
+      exchange_type: topic
+      out_routing_key: test.client
