@@ -14,6 +14,8 @@
 
 ## Application
 The material from this hand-on is mostly from [Object-classification respository](https://github.com/rdsea/object_classification_v2.git)
+- Edge runs preprocessing service
+- Cloud - cluster: runs by ensemble and inference services
 
 ## Requirement
 
