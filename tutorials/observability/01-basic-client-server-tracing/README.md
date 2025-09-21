@@ -1,24 +1,28 @@
 # Basic tracing
-The material from this hand-on is mostly from [OpenTelemetry Python documentation](https://opentelemetry.io/docs/zero-code/python/)
 
-<<<<<<< Updated upstream
-=======
 # GOAL
+- Give an example/feeling of basic client-server tracing
+- Introduce various instrumentations:
+  - Zero-code instrumentation
+  - Lib-based instrumentation
+  - Manual instrumentation
 
 # Application
+The material from this hand-on is mostly from [OpenTelemetry Python documentation](https://opentelemetry.io/docs/zero-code/python/)
 
->>>>>>> Stashed changes
 ## Workflow
+- Client side sends requests to server 
+- Various instrumentation is generated
+  - to Console
+  - to TracingBackend
 
-### Requirement
+### Virtual env setting
 - We need to create virtualenv and then dependencies.
 
-### UV
+#### UV
 - Could some issues with "opentelemetry-bootstrap -a install", please check this [troubleshooting](https://opentelemetry.io/docs/zero-code/python/troubleshooting/#bootstrap-using-uv)
 
-### rye
-
-### virtualenv
+#### virtualenv
 
 - Create virtualenv 
 ```bash
