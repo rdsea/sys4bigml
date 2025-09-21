@@ -1,0 +1,106 @@
+# ---- Deployment + Service (in 'default' namespace) ----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami
+  namespace: default
+  labels:
+    app: whoami
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+        - name: whoami
+          image: hashicorp/http-echo:0.2.3
+          args: ["-text=hello from whoami"]
+          ports:
+            - containerPort: 5678
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+  namespace: default
+spec:
+  selector:
+    app: whoami
+  ports:
+    - protocol: TCP
+      port: 80 # the port Traefik will target
+      targetPort: 5678
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: whoami-ingress
+  namespace: default
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: whoami.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: whoami
+                port: 80
+# # ---- Gateway (in traefik namespace) ----
+# # NOTE: replace 'gatewayClassName: traefik' with the actual GatewayClass name
+# # returned by `kubectl get gatewayclass` if different.
+# ---
+# apiVersion: gateway.networking.k8s.io/v1beta1
+# kind: Gateway
+# metadata:
+#   name: whoami-gateway
+#   namespace: traefik
+# spec:
+#   gatewayClassName: traefik
+#   listeners:
+#     - name: web
+#       protocol: HTTP
+#       port: 80
+#       allowedRoutes:
+#         namespaces:
+#           from: All
+#     - name: websecure
+#       protocol: HTTPS
+#       port: 443
+#       tls:
+#         certificateRefs:
+#           - name: local-selfsigned-tls # change if you use a different TLS secret
+#       allowedRoutes:
+#         namespaces:
+#           from: All
+#
+# # ---- HTTPRoute (in default namespace) ----
+# ---
+# apiVersion: gateway.networking.k8s.io/v1beta1
+# kind: HTTPRoute
+# metadata:
+#   name: whoami-route
+#   namespace: default
+# spec:
+#   parentRefs:
+#     - name: whoami-gateway
+#       namespace: traefik
+#   hostnames:
+#     - "whoami.local"
+#   rules:
+#     - matches:
+#         - path:
+#             type: PathPrefix
+#             value: /
+#       backendRefs:
+#         - name: whoami
+#           port: 80
+#           weight: 1
