@@ -1,7 +1,12 @@
-# Tracing service-based system on Edge environment
+# 02-multi-service-container-tracing
 
-## Goal
-- This observability focuses on tracing
+## Study goals
+- Give an example for an end-to-end trace setting in service-based applications
+  - Instrumentation
+    - Lib-based instrumentation
+  - Collector
+    - receive - process - export
+  - Backends of tracing
 
 The traditional setting for a distributed tracing in an example for our ML system as figure:
 ![A traditional setting with distributed tracing](doc/img/traditional_tracing_sys.png)
@@ -9,18 +14,16 @@ The traditional setting for a distributed tracing in an example for our ML syste
 This work is an example for a manual setting tracing data.
 ![An example for a trace tree (DAG) with spans](doc/img/trace_spans.png)
 
-- Do we want to have analysis
+## Assumption for edge-cloud environment setting
+- The world network on a single machine
+- Services are presented by docker-based containers
 
-## reflect edge and cloud setting env 
-- What is the edge? -- concept for the edge
-     - emulate via docker containers
-- Edge:
-     - List of single machines
-- Cloud:
-      - K8s-based cluster -- minikube to emulate this 
+## Application
+The material from this hand-on is mostly from [Object-classification respository](https://github.com/rdsea/object_classification_v2.git)
+
 ## Requirement
 
-### Application
+### Edit in source code
 - We use an object classification application from my colleague or any service-based applications 
 
 - If you use your own application, please carefully check those 
@@ -71,8 +74,9 @@ provider.add_span_processor(
 
 ```
 
-### Collector
+### Collector and Tracing backends
 
+#### Single Jaeger runs as the collector and tracing backend of the trace data
 - **Jaeger**
 ```bash
 docker run --rm --name jaeger \
@@ -82,6 +86,8 @@ docker run --rm --name jaeger \
 
 <!-- NOTE: --> NOTE: remember to connect jaeger to the network of the docker-compose 
 > docker network connect deployment_default jaeger
+
+#### Collector with Otel and tracing backend with Jaeger
 - **Otel-Collector and Jaeger**
 
 ```bash
@@ -96,6 +102,7 @@ docker run --rm --name otelcol  \
   -v "./config/otel-collector-config.yaml":/etc/otelcol-contrib/config.yaml \
   otel/opentelemetry-collector-contrib:0.133.0 \
   --config /etc/otelcol-contrib/config.yaml
+
 ```
 <!-- NOTE: --> NOTE: remember to connect jaeger to the network of the docker-compose 
 > docker network connect deployment_default jaeger
@@ -103,6 +110,7 @@ docker run --rm --name otelcol  \
 > docker network connect deployment_default otelcol
 
 #### Test
+- run this script at image/ to load image before sending to preprocessing service
 
 > python client_processing.py --url http://preprocessing:5010/preprocessing
 
