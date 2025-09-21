@@ -1,11 +1,15 @@
 # Basic tracing
 
 # GOAL
-- Give an example/feeling of basic client-server tracing
-- Introduce various instrumentations:
-  - Zero-code instrumentation
-  - Lib-based instrumentation
-  - Manual instrumentation
+- Give an example/feeling of setting an end-to-end trace from client-server application
+  - Architecture for an end-to-end trace
+  - Introduce various instrumentations:
+    - Zero-code instrumentation
+    - Lib-based instrumentation
+    - Manual instrumentation
+  - Collector
+    - setting and components
+  - Distributed tracing backbend
 
 # Application
 The material from this hand-on is mostly from [OpenTelemetry Python documentation](https://opentelemetry.io/docs/zero-code/python/)
