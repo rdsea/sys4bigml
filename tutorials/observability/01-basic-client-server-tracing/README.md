@@ -7,12 +7,12 @@
     - Zero-code instrumentation
     - Lib-based instrumentation
     - Manual instrumentation
-  - Collector
+  - Collector with Otel collector
     - setting and components
-  - Distributed tracing backbend
+  - Distributed tracing backbend with Jaeger
 
 ## Application
-The material from this hand-on is mostly from [OpenTelemetry Python documentation](https://opentelemetry.io/docs/zero-code/python/)
+The material from this hand-on is mostly from Flask-based client and server [OpenTelemetry Python documentation](https://opentelemetry.io/docs/zero-code/python/)
 
 ## Workflow
 - Client side sends requests to server 
@@ -44,8 +44,6 @@ opentelemetry-bootstrap -a install
 pip install flask requests
 ```
 
-## Application
-- Flask-based client and server from [OpenTelemetry Python examples](https://github.com/open-telemetry/opentelemetry-python)
 
 ## Tracing with Flask-based client-server 
 
@@ -164,8 +162,9 @@ provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
 ```
 
 
-### To OpenTelemetry Collector before Jaeger Collector
-- add a configuration 
+### Collector
+#### To OpenTelemetry Collector before Jaeger Collector
+- add a collector configuration 
 
 ```yaml
 receivers:
@@ -197,15 +196,7 @@ service:
       exporters: [otlp/jaeger]
 ```
 
-- Jaeger
-```bash
-docker run --rm --name jaeger  \
-  -e COLLECTOR_OTLP_ENABLED=true \
-  -p 16686:16686 \
-  cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
-
-```
-- OpenTelemetry Collector
+- start OpenTelemetry Collector
 ```bash
 
 docker run --rm --name otelcol  \
@@ -215,4 +206,13 @@ docker run --rm --name otelcol  \
   --config /etc/otelcol-contrib/config.yaml
 
 ```
+### backbend
 
+- Jaeger
+```bash
+docker run --rm --name jaeger  \
+  -e COLLECTOR_OTLP_ENABLED=true \
+  -p 16686:16686 \
+  cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
+
+```
