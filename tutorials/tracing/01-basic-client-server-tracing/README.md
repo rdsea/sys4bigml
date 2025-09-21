@@ -1,6 +1,13 @@
 # Basic tracing
 The material from this hand-on is mostly from [OpenTelemetry Python documentation](https://opentelemetry.io/docs/zero-code/python/)
 
+<<<<<<< Updated upstream
+=======
+# GOAL
+
+# Application
+
+>>>>>>> Stashed changes
 ## Workflow
 
 ### Requirement
