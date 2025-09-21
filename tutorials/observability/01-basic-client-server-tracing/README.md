@@ -1,4 +1,4 @@
-# Basic tracing
+# 01-basic-client-server-tracing
 
 # GOAL
 - Give an example/feeling of setting an end-to-end trace from client-server application
