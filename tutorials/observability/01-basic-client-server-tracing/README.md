@@ -11,12 +11,12 @@
     - setting and components
   - Distributed tracing backbend
 
-# Application
+## Application
 The material from this hand-on is mostly from [OpenTelemetry Python documentation](https://opentelemetry.io/docs/zero-code/python/)
 
 ## Workflow
 - Client side sends requests to server 
-- Various instrumentation is generated
+- Trace data is generated from instrumentation step
   - to Console
   - to TracingBackend
 
