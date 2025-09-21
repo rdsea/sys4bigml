@@ -1,7 +1,109 @@
-# Tracing in a cluster 
+# 03-cluster-kubernetes-tracing
 
-## Prerequisite
+## Study goals
+- Give an example for setting an end-to-end trace in a cluster environment 
+  - internal tracing data flow
+  - external tracing data flow
 
+- Potential setting for an edge-cloud continuum 
+
+## Assumption for edge-cloud environment setting
+- The world network on a single machine
+- Edge emulator - services are presented by docker-based containers
+- Cloud emulator - cluster is presented by k8s-based emulation
+
+## Application
+The material from this hand-on is mostly from [Object-classification respository](https://github.com/rdsea/object_classification_v2.git)
+
+## Requirement
+
+### The 
+```yaml
+App
+  ↓  (http 4318)
+Collector (OTel)
+  ↓  (OTLP gRPC 4317 or OTLP HTTP 4318)
+Jaeger Collector
+  ↓  (HTTPS 9200 w/ TLS+auth)
+Elasticsearch
+  ↑  (HTTPS 9200 w/ TLS+auth)
+Jaeger Query
+  ↓  (HTTP 16686)
+User/UI
+```
+
+## Workflow
+
+### Requisites for a cluster
+- Cluster setting
+```bash
+minikube start --cpu=4
+
+cd infrastructure
+# install traefik
+helm repo add traefik https://traefik.github.io/charts
+helm repo update
+
+kubectl create namespace traefik
+helm install traefik traefik/traefik \
+  --namespace traefik
+
+# export IP for external
+./metallb.sh # OR minikube tunnel
+
+```
+
+### Jaeger along with Elasticsearch
+#### elasticsearch setting
+```bash
+cd infrastructure
+helm repo add elastic https://helm.elastic.co
+kubectl create namespace observability
+
+helm install elasticsearch elastic/elasticsearch -n observability -f value_elasticsearch.yaml
+
+kubectl get secret elasticsearch-master-certs -n observability -o jsonpath="{.data['ca\.crt']}" | base64 --decode > ca.crt
+
+kubectl get secret -n observability elasticsearch-master-credentials -o yaml
+
+kubectl create secret generic jaeger-es-ca \
+  --from-file=ca.crt=./ca.crt \
+  -n observability
+
+# create username and password
+ kubectl create secret generic jaeger-es-creds -n observability \
+  --from-literal=ES_USERNAME=elastic \
+  --from-literal=ES_PASSWORD='lDpWEaFcMHsJvKe7'
+```
+
+#### Collectors and query
+- apply tracing configuration
+```bash
+cd deployment
+
+kubectl apply -f .
+```
+
+
+#### Application setting
+- apply application 
+```bash
+cd application/cluster
+
+kubectl apply -f .
+
+cd application/edge
+
+docker compose up -d 
+```
+
+#### Test 
+- source venv first
+- remember execute at image/
+> python client_processing.py --url http://preprocessing:5010/preprocessing
+
+
+## Further investigation
 ```yaml
                 +------------------+
                 |     User/UI      |
@@ -40,111 +142,13 @@
 
 
 ```
-# Cluster tracing
-## 1. Jaeger along with Elasticsearch
-### Flowchart
-```yaml
-App
-  ↓  (Jaeger thrift UDP 6831)
-Sidecar (OTel)
-  ↓  (OTLP gRPC 4317 or OTLP HTTP 4318)
-Jaeger Collector
-  ↓  (HTTPS 9200 w/ TLS+auth)
-Elasticsearch
-  ↑  (HTTPS 9200 w/ TLS+auth)
-Jaeger Query
-  ↓  (HTTP 16686)
-User/UI
-```
-
-- Cluster setting
-```bash
-minikube start --cpu=4
-
-cd infrastructure
-# install traefik
-helm repo add traefik https://traefik.github.io/charts
-helm repo update
-
-kubectl create namespace traefik
-helm install traefik traefik/traefik \
-  --namespace traefik
-
-# export IP for external
-./metallb.sh # OR minikube tunnel
-
-```
-
-- elasticsearch setting
-```bash
-cd infrastructure
-helm repo add elastic https://helm.elastic.co
-kubectl create namespace observability
-
-helm install elasticsearch elastic/elasticsearch -n observability -f value_elasticsearch.yaml
-
-kubectl get secret elasticsearch-master-certs -n observability -o jsonpath="{.data['ca\.crt']}" | base64 --decode > ca.crt
-
-kubectl get secret -n observability elasticsearch-master-credentials -o yaml
-
-kubectl create secret generic jaeger-es-ca \
-  --from-file=ca.crt=./ca.crt \
-  -n observability
-
-# create username and password
- kubectl create secret generic jaeger-es-creds -n observability \
-  --from-literal=ES_USERNAME=elastic \
-  --from-literal=ES_PASSWORD='lDpWEaFcMHsJvKe7'
-```
-
-- apply tracing configuration
-```bash
-cd deployment
-
-kubectl apply -f .
-```
-
-- apply application 
-```bash
-cd application/cluster
-
-kubectl apply -f .
-
-cd application/edge
-
-docker compose up -d 
-```
-
-- client send request
-- source venv first
-> python client_processing.py --url http://preprocessing:5010/preprocessing
-
-
-## 2. Otel and Jaeger collectors along with Elasticsearch
-### Flowchart
-```yaml
-App
-  ↓  (Jaeger thrift UDP 6831)
-Sidecar (OTel)
-  ↓  (OTLP gRPC 4317 or OTLP HTTP 4318)
-Otel-to-Jaeger Collector
-  ↓  (OTLP gRPC 4317)
-Jaeger Collector
-  ↓  (HTTPS 9200 w/ TLS+auth)
-Elasticsearch
-  ↑  (HTTPS 9200 w/ TLS+auth)
-Jaeger Query
-  ↓  (HTTP 16686)
-User/UI
-```
-
 ## 3. Jaeger with Istio and Envoy
 ### Flowchart
 ```yaml
 App Pod
   ↓   (traffic)
 Envoy Sidecar (Istio Proxy) 
-  |   1. Envoy generates traces  <--------- Importance is here via "mesh-default"
+  |   1. Envoy generates traces
   ↓   2. (Telemetry API) OTLP gRPC 4317
 Jaeger Collector (in istio-system)
   ↓   SPAN_STORAGE_TYPE=badger
