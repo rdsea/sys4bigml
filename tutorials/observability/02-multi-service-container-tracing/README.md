@@ -20,7 +20,7 @@ The application is a simplified machine learning system for object classificatio
 These services are containerized and defined in `deployment/docker-compose.yaml`. They are already instrumented with OpenTelemetry.
 
 The overall architecture is depicted below:
-![A traditional setting with distributed tracing](doc/img/traditional_tracing_sys.png)
+![A traditional setting with distributed tracing](doc/img/full-tracing.svg)
 
 ## Hands-on Steps
 
@@ -28,16 +28,26 @@ The overall architecture is depicted below:
 In this part, we will run the application and have all services send traces directly to Jaeger.
 
 1. **Review the Docker Compose setup:**
-   The `deployment/docker-compose.yaml` file has been set up to run all the necessary services, including Jaeger. By default, the application services are configured to send traces directly to the Jaeger container (`http://jaeger:4318`).
+   The `application/docker-compose.yaml` file has been set up to run all the service-based application. By default, the application services are configured to send traces directly to the Jaeger container (`http://jaeger:4318`).
 
 2. **Start the application:**
    Open a terminal and run the following command from the `02-multi-service-container-tracing` directory:
    ```bash
-   docker-compose -f deployment/docker-compose.yaml up -d
+   docker compose -f application/docker-compose.yaml up -d
    ```
-   This will start all the services in the background.
+   This will start all the service-based application in the background.
 
-3. **Generate load:**
+3. **Start Jaeger to collect spans**
+   ```bash
+   docker run --rm --name jaeger \
+     -p 16686:16686 \
+     -p 4317:4317 \
+     -p 4318:4318 \
+     cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
+   #cr.jaegertracing.io/jaegertracing/all-in-one:latest
+   ```
+
+4. **Generate load:**
    The `application/loadgen` directory contains a script to send requests to the application.
 
    a. **Create a virtual environment and install dependencies:**
@@ -51,10 +61,10 @@ In this part, we will run the application and have all services send traces dire
    b. **Run the load generator:**
       The following command will send an image to the `preprocessing` service.
       ```bash
-      python client_processing.py --url http://localhost:5010/preprocessing
+      python client_processing.py --url http://localhost:5010/preprocessing --ds_path ../../image
       ```
 
-4. **Observe traces in Jaeger:**
+5. **Observe traces in Jaeger:**
    Open your web browser and navigate to `http://localhost:16686`. You should see the Jaeger UI. In the "Service" dropdown, you should find the services from our application (e.g., `preprocessing`, `ensemble`). Select one and click "Find Traces" to see the distributed traces.
 
    ![An example for a trace tree (DAG) with spans](doc/img/trace_spans.png)
@@ -68,10 +78,12 @@ It is a best practice to use an OpenTelemetry Collector to manage telemetry data
    Stop the running services and restart them with the `OTEL_EXPORTER_OTLP_ENDPOINT` environment variable set to the collector's address:
    ```bash
    # Stop the services
-   docker-compose -f deployment/docker-compose.yaml down
+   docker compose -f deployment/otel-jaeger.yaml up -d
 
-   # Restart with the collector as the endpoint
-   OTEL_EXPORTER_OTLP_ENDPOINT="http://otelcol:4318" docker-compose -f deployment/docker-compose.yaml up -d
+   # Restart with the application docker compose with different endpoint
+   OTEL_ENDPOINT="http://otelcol:4318/v1/traces" 
+
+   docker-compose -f application/docker-compose.yaml up -d
    ```
 
 2. **Generate load and observe traces:**
