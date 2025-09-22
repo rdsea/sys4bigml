@@ -24,4 +24,4 @@ services:
 
 networks:
   otel-net:
-    driver: bridge
+    external: true
