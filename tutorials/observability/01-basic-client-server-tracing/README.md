@@ -28,6 +28,7 @@ This tutorial uses the following tools and technologies:
 
 ## Application Overview
 The [example application from opentelemetry-python](https://github.com/open-telemetry/opentelemetry-python/tree/main/docs/examples/auto-instrumentation) consists of a simple client and server:
+- Create `application/` and copy client-server* application from opentelemetry-python example to
 - `application/client.py`: A Python script that sends requests to the server.
 - `application/server_automatic.py`, `application/server_manual.py`, `application/server_programmatic.py`: Three versions of a Flask-based server, each demonstrating a different way to instrument with OpenTelemetry.
 
@@ -105,7 +106,8 @@ Now, let's send the traces to a Jaeger backend instead of the console.
      -p 16686:16686 \
      -p 4317:4317 \
      -p 4318:4318 \
-     cr.jaegertracing.io/jaegertracing/all-in-one:latest
+     cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
+   #cr.jaegertracing.io/jaegertracing/all-in-one:latest
    ```
 
 2. **Run the application with the OTLP exporter:**
@@ -114,7 +116,7 @@ Now, let's send the traces to a Jaeger backend instead of the console.
    **For Zero-Code Instrumentation:**
    ```bash
    opentelemetry-instrument \
-       --traces_exporter otlp \
+       --traces_exporter otlp_proto_http \
        --exporter_otlp_endpoint "http://localhost:4318" \
        --service_name server-auto \
        python application/server_automatic.py
@@ -134,10 +136,12 @@ Now, let's send the traces to a Jaeger backend instead of the console.
    otlp_exporter = OTLPSpanExporter(endpoint="http://localhost:4318/v1/traces")
    provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
    ```
+   - A TracerProvider is responsible for creating tracers, and for managing how spans are processed and exported 
+   - Created `provider` the global tracer provider; hence, whenever someone calls `trace.get_tracer(...)` use this provider
    Then run the client. You should be able to see the traces in the Jaeger UI.
 
 ### Part 4: Using the OpenTelemetry Collector
-In a production environment, it's common to use an OpenTelemetry Collector to receive, process, and export telemetry data.
+It's common to use an OpenTelemetry Collector to receive, process, and export telemetry data.
 
 1. **Configure the Collector:**
    The configuration for the collector is in `config/otel-collector-config.yaml`. This collector is configured to receive OTLP data and export it to Jaeger.
@@ -152,9 +156,10 @@ In a production environment, it's common to use an OpenTelemetry Collector to re
    ```
 
 3. **Run Jaeger (if not already running):**
-   Ensure your Jaeger instance is running.
+   - Ensure your Jaeger instance is running.
+   - Ensure the docker network is the same between otel-collector and jaeger. O.w can use a docker compose file `deployment/app-otel-jaeger.yaml`
 
 4. **Run the application:**
    Now, your application can send traces to the OpenTelemetry Collector (running on port 4317/4318), which will then forward them to Jaeger. The application configuration is the same as in Part 3.
 
-   Run the client a few times, and you should see the traces appearing in the Jaeger UI. The service name will be whatever you configured (e.g., `server-auto`).
+   Run the client a few times, and you should see the traces appearing in the Jaeger UI. 
