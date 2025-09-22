@@ -1,27 +1,27 @@
 services:
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    container_name: jaeger
-    ports:
-      - "16686:16686" # Jaeger UI
-      - "4317:4317"   # OTLP gRPC
-      - "4318:4318"   # OTLP HTTP
-    networks:
-      - tracing-net
-
-  otelcol:
-    image: otel/opentelemetry-collector-contrib:latest
-    container_name: otelcol
-    command: ["--config=/etc/otelcol-contrib/config.yaml"]
-    volumes:
-      - ./../config/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
-    ports:
-      - "4317:4317" # OTLP gRPC receiver
-      - "4318:4318" # OTLP HTTP receiver
-    networks:
-      - tracing-net
-    depends_on:
-      - jaeger
+  # jaeger:
+  #   image: jaegertracing/all-in-one:latest
+  #   container_name: jaeger
+  #   ports:
+  #     - "16686:16686" # Jaeger UI
+  #     - "4317:4317"   # OTLP gRPC
+  #     - "4318:4318"   # OTLP HTTP
+  #   networks:
+  #     - tracing-net
+  #
+  # otelcol:
+  #   image: otel/opentelemetry-collector-contrib:latest
+  #   container_name: otelcol
+  #   command: ["--config=/etc/otelcol-contrib/config.yaml"]
+  #   volumes:
+  #     - ./../config/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+  #   ports:
+  #     - "4317:4317" # OTLP gRPC receiver
+  #     - "4318:4318" # OTLP HTTP receiver
+  #   networks:
+  #     - tracing-net
+  #   depends_on:
+  #     - jaeger
 
   preprocessing:
     image: hongtringuyen/preprocessing
@@ -74,3 +74,4 @@ services:
 networks:
   tracing-net:
     driver: bridge
+
