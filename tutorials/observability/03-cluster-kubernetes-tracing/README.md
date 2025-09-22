@@ -1,256 +1,137 @@
 # 03-cluster-kubernetes-tracing
 
-## Study goals
-- Give an example for setting an end-to-end trace in a cluster environment 
-  - internal tracing data flow
-  - external tracing data flow
+## Study Goals
+This tutorial demonstrates how to set up end-to-end tracing in a hybrid "edge-cloud" environment. You will learn to:
+- Deploy an observability backend (OpenTelemetry Collector, Jaeger, Elasticsearch) to a Kubernetes cluster.
+- Deploy application services to both a Kubernetes cluster ("cloud") and a local Docker container ("edge").
+- Configure services to send traces to a central OpenTelemetry Collector.
+- Visualize end-to-end traces that span across the Docker and Kubernetes environments.
 
-- Potential setting for an edge-cloud continuum 
+## Prerequisites
+- minikube
+- kubectl
+- Helm
+- Docker
 
-## Assumption for edge-cloud environment setting
-- The world network on a single machine
-- Edge emulator - services are presented by docker-based containers
-- Cloud emulator - cluster is presented by k8s-based emulation
+## Architecture
+This tutorial implements a hybrid architecture:
+- **Cloud Environment (Kubernetes):** The main application logic (`ensemble`, `efficientnetb0`, `mobilenetv2`) and the entire observability stack (Collector, Jaeger, Elasticsearch) run in a minikube cluster.
+- **Edge Environment (Docker):** The `preprocessing` service runs as a container on your local machine, simulating an edge device.
+- **Tracing Flow:** The `preprocessing` service on the edge sends traces to the OpenTelemetry Collector in the cluster via an Ingress. The services within the cluster also send their traces to the Collector. The Collector then exports these traces to Jaeger, which uses Elasticsearch for storage.
 
-## Application
-The material from this hand-on is mostly from [Object-classification respository](https://github.com/rdsea/object_classification_v2.git)
-- Edge runs preprocessing service
-- Cloud - cluster: runs by ensemble and inference services
+## Hands-on Steps
 
-## Requirement
+### Part 1: Cluster Setup
+1. **Start Minikube:**
+   ```bash
+   minikube start --cpus=4 --memory=8g
+   ```
 
-### The 
-```yaml
-App
-  ↓  (http 4318)
-Collector (OTel)
-  ↓  (OTLP gRPC 4317 or OTLP HTTP 4318)
-Jaeger Collector
-  ↓  (HTTPS 9200 w/ TLS+auth)
-Elasticsearch
-  ↑  (HTTPS 9200 w/ TLS+auth)
-Jaeger Query
-  ↓  (HTTP 16686)
-User/UI
-```
+2. **Install Traefik Ingress Controller:**
+   ```bash
+   helm repo add traefik https://traefik.github.io/charts
+   helm repo update
+   kubectl create namespace traefik
+   helm install traefik traefik/traefik --namespace traefik
+   ```
 
-## Workflow
+3. **Expose Cluster Services:**
+   Enable external access to your cluster. The easiest way is to use `minikube tunnel`.
+   ```bash
+   minikube tunnel
+   # OR
+   ./infrastructure/metallb.sh
+   ```
+   Keep this command running in a separate terminal.
 
-### Requisites for a cluster
-- Cluster setting
-```bash
-minikube start --cpu=4
+4. **Configure Hostnames:**
+   Find the external IP address of the Traefik proxy service and add it to your `/etc/hosts` file.
+   ```bash
+   # Get the IP address
+   kubectl get svc -n traefik traefik -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 
-cd infrastructure
-# install traefik
-helm repo add traefik https://traefik.github.io/charts
-helm repo update
+   # Add the following lines to your /etc/hosts file, replacing <IP_ADDRESS> with the output from the command above
+   <IP_ADDRESS> jaeger.softsys.com
+   <IP_ADDRESS> otel-collector.softsys.com
+   ```
 
-kubectl create namespace traefik
-helm install traefik traefik/traefik \
-  --namespace traefik
+### Part 2: Deploying the Observability Backend
+1. **Create Namespace:**
+   ```bash
+   kubectl create namespace observability
+   ```
 
-# export IP for external
-./metallb.sh # OR minikube tunnel
+2. **Install Elasticsearch:**
+   This will install Elasticsearch from the Elastic Helm charts, using the provided configuration.
+   ```bash
+   cd infrastructure
+   helm repo add elastic https://helm.elastic.co
+   helm install elasticsearch elastic/elasticsearch -n observability -f value_elasticsearch.yaml
+   ```
 
-```
+3. **Create Jaeger Secrets:**
+   Create secrets for Jaeger to securely connect to Elasticsearch.
+   ```bash
+   # Get the Elasticsearch CA certificate
+   kubectl get secret elasticsearch-master-certs -n observability -o jsonpath="{.data['ca\.crt']}" | base64 --decode > ca.crt
+   kubectl create secret generic jaeger-es-ca --from-file=ca.crt=./ca.crt -n observability
+   # to get password
+   kubectl get secret -n observability elasticsearch-master-credentials -o yaml
+   # Create the secret with Elasticsearch credentials
+   kubectl create secret generic jaeger-es-creds -n observability \
+     --from-literal=ES_USERNAME=elastic \
+     --from-literal=ES_PASSWORD='rVXiXmQvz9lCk2qZ'
+   ```
 
-### Jaeger along with Elasticsearch
-#### elasticsearch setting
-```bash
-cd infrastructure
-helm repo add elastic https://helm.elastic.co
-kubectl create namespace observability
+4. **Deploy Collectors and Jaeger:**
+   Deploy the OpenTelemetry Collector, Jaeger Collector, and Jaeger Query services.
+   ```bash
+   cd ../deployment
+   kubectl apply -f .
+   ```
 
-helm install elasticsearch elastic/elasticsearch -n observability -f value_elasticsearch.yaml
+### Part 3: Deploying the Application
+1. **Deploy the "Cloud" Services:**
+   Deploy the `ensemble` and inference services to your Kubernetes cluster.
+   ```bash
+   cd ../application/cluster
+   kubectl apply -f .
+   ```
 
-kubectl get secret elasticsearch-master-certs -n observability -o jsonpath="{.data['ca\.crt']}" | base64 --decode > ca.crt
+2. **Deploy the "Edge" Service:**
+   In a new terminal, start the `preprocessing` service using Docker Compose.
+   ```bash
+   cd ../edge
+   docker compose up -d
+   ```
 
-kubectl get secret -n observability elasticsearch-master-credentials -o yaml
+### Part 4: Running a Test
+1. **Generate a request:**
+   From the `03-cluster-kubernetes-tracing` directory, run the client script to send a request to the edge service.
+   ```bash
+   # Make sure you have the necessary python packages installed (requests, etc.)
+   python ../loadgen/client_processing.py --url http://localhost:5010/preprocessing
+   ```
 
-kubectl create secret generic jaeger-es-ca \
-  --from-file=ca.crt=./ca.crt \
-  -n observability
+2. **Visualize the trace:**
+   Open your browser and navigate to `http://jaeger.softsys.com`. You should see the Jaeger UI. Search for traces for the `preprocessing` service to see the full, end-to-end trace that includes spans from both the Docker container and the Kubernetes pods.
 
-# create username and password
- kubectl create secret generic jaeger-es-creds -n observability \
-  --from-literal=ES_USERNAME=elastic \
-  --from-literal=ES_PASSWORD='lDpWEaFcMHsJvKe7'
-```
+## Cleanup
+1. **Stop the edge service:**
+   ```bash
+   cd application/edge
+   docker-compose down
+   ```
 
-#### Collectors and query
-- apply tracing configuration
-```bash
-cd deployment
+2. **Delete Kubernetes resources:**
+   ```bash
+   kubectl delete -f application/cluster/
+   kubectl delete -f deployment/
+   helm delete elasticsearch -n observability
+   kubectl delete namespace observability
+   ```
 
-kubectl apply -f .
-```
-
-
-#### Application setting
-- apply application 
-```bash
-cd application/cluster
-
-kubectl apply -f .
-
-cd application/edge
-
-docker compose up -d 
-```
-
-#### Test 
-- source venv first
-- remember execute at image/
-> python client_processing.py --url http://preprocessing:5010/preprocessing
-
-
-## Further investigation
-```yaml
-                +------------------+
-                |     User/UI      |
-                +------------------+
-                        ↑
-                        | HTTP Query
-                        |
-                +------------------+
-                |  Jaeger Query    |
-                |   (UI/Backend)   |
-                +------------------+
-                        ↑
-                        | HTTP/gRPC
-                        |
-                +------------------+
-                |  Jaeger Collector |
-                |  (Elasticsearch)  |
-                +------------------+
-                        ↑
-        ----------------|-----------------
-        |               |                 |
-        |               |                 |
-+---------------+  +---------------+   +----------------+
-| OTel Sidecar  |  |  Envoy Proxy  |   |  Application   |
-| (Daemon/Side) |  | (Istio sidecar)|   |  (instrumented |
-|               |  |               |   |   with SDK)    |
-+---------------+  +---------------+   +----------------+
-        ↑                  ↑                  ↑
-        |                  |                  |
-   OTLP/HTTP/gRPC       OTLP/HTTP/gRPC      SDK spans
-   (forwarding)         (forwarding)        (business logic)
-        |                  |                  |
-        |                  |                  |
-    App network        Service network      DB/HTTP calls, etc.
-    traces only        traces only
-
-
-```
-## 3. Jaeger with Istio and Envoy
-### Flowchart
-```yaml
-App Pod
-  ↓   (traffic)
-Envoy Sidecar (Istio Proxy) 
-  |   1. Envoy generates traces
-  ↓   2. (Telemetry API) OTLP gRPC 4317
-Jaeger Collector (in istio-system)
-  ↓   SPAN_STORAGE_TYPE=badger
-Badger Storage (in /badger data) -- Could change to ElasticSearch/cassandra/clickhouse
-  ↑
-Jaeger Query (UI :16686, Service "tracing")
-  ↓  (HTTP 16686)
-User/UI
-
-```
-1. Minikube or cluster
-2. Istio and enable label
-3. deploy [Jaeger](https://istio.io/latest/docs/tasks/observability/distributed-tracing/jaeger/) and OPA yml
-4. Apply external provider for Jaeger and OPA
-5. enable label for OPA and apply [tracing](https://istio.io/latest/docs/tasks/observability/telemetry/) (this file allow to config with various sampling rate and other tags)
-6. application
-
-```bash
-istioctl install --set profile=default -y; kubectl label namespace default istio-injection=enabled
-
-kubectl apply -f jaeger-istio.yml
-```
-
-1. Envoy generates traces (This tells Istio all Envoy proxies in the mesh to generate spans and send them to Jaeger.)
-  - sampling 100%
-```yaml
-apiVersion: telemetry.istio.io/v1
-kind: Telemetry
-metadata:
-  name: mesh-default
-  namespace: istio-system
-spec:
-  tracing:
-    - providers:
-        - name: jaeger
-          customTags: # exampe for custom tag for span
-            environment:
-              literal:
-                value: production
-            team:
-              literal:
-                value: payments
-      randomSamplingPercentage: 100
-
-```
-2. Envoy knows how to forward OTLP to Jaeger collector
-```yaml
-apiVersion: install.istio.io/v1alpha1
-kind: IstioOperator
-spec:
-  meshConfig:
-    enableTracing: true
-    defaultConfig:
-      tracing: {} # disable legacy MeshConfig tracing options
-    extensionProviders:
-      - name: jaeger
-        opentelemetry:
-          service: jaeger-collector.istio-system.svc.cluster.local
-          port: 4317
-```
-| Concept                     | YAML Section                       | Port / Protocol                |
-| --------------------------- | ---------------------------------- | ------------------------------ |
-| App traffic → Envoy sidecar | Telemetry CRD (`mesh-default`)     | n/a (sidecar generates spans)  |
-| Envoy → Jaeger Collector    | IstioOperator `extensionProviders` | 4317 OTLP gRPC, 4318 OTLP HTTP |
-| Collector → Badger storage  | Jaeger Deployment env vars         | `/badger/data`                 |
-| Query UI → User             | Service `tracing`                  | 80 → 16686                     |
-| Zipkin API support          | Service `zipkin`                   | 9411 → 9411                    |
-
-# Multi-conitumm tracing
-- Setup ingress via traefik for the collector and query
-```bash
-kubectl apply -f - <<EOF
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: jaeger-ingress
-  namespace: observability
-spec:
-  ingressClassName: traefik
-  rules:
-    - host: jaeger.hong3nguyen.com
-      http:
-        paths:
-          - path: /v1/traces
-            pathType: Prefix
-            backend:
-              service:
-                name: jaeger-collector
-                port:
-                  number: 4318  # HTTP port of collector
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: jaeger-query
-                port:
-                  number: 16686
-EOF
-```
-
-
-
-
+3. **Stop Minikube:**
+   ```bash
+   minikube stop
+   ```
