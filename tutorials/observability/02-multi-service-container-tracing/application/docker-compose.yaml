@@ -37,7 +37,7 @@ services:
       - otel-net
 
   ensemble:
-    image: hongtringuyen/ensemble
+    image: rdsea/ensemble
     container_name: ensemble
     environment:
       DOCKER: "true"
