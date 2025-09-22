@@ -12,7 +12,7 @@ services:
   otelcol:
     image: otel/opentelemetry-collector-contrib:0.133.0
     volumes:
-      - .config/collector-config.yaml:/etc/otelcol/config.yaml
+      - ../config/otel-collector-config.yaml:/etc/otelcol/config.yaml
     command: ["--config", "/etc/otelcol/config.yaml"]
     ports:
       - "4317:4317" # publish Collector's OTLP gRPC to host
