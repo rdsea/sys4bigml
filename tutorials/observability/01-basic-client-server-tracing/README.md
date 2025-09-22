@@ -1,6 +1,6 @@
 # 01-basic-client-server-tracing
 
-# Study goals
+## Study goals
 - Give an example/feeling of setting an end-to-end trace from client-server application
   - Architecture for an end-to-end trace
   - Introduce various instrumentations:
@@ -11,208 +11,150 @@
     - setting and components
   - Distributed tracing backbend with Jaeger
 
-## Application
-The material from this hand-on is mostly from Flask-based client and server [OpenTelemetry Python documentation](https://opentelemetry.io/docs/zero-code/python/)
+## Prerequisites
+Before you begin, ensure you have the following installed:
+- Python 3.8+
+- Docker and Docker Compose
+- `virtualenv` (or use `python -m venv`)
 
-## Workflow
-- Client side sends requests to server 
-- Trace data is generated from instrumentation step
-  - to Console
-  - to TracingBackend
+## Tools and Technologies
+This tutorial uses the following tools and technologies:
+- **Python**: The programming language for the application.
+  - **Flask**: A micro web framework for the server.
+  - **Requests**: A library for making HTTP requests for the client.
+- **OpenTelemetry**: An observability framework for generating and collecting telemetry data (traces, metrics, logs).
+- **Jaeger**: A distributed tracing system for monitoring and troubleshooting microservices-based distributed systems.
+- **Docker**: A platform for developing, shipping, and running applications in containers.
 
-### Virtual env setting
-- We need to create virtualenv and then dependencies.
+## Application Overview
+The [example application from opentelemetry-python](https://github.com/open-telemetry/opentelemetry-python/tree/main/docs/examples/auto-instrumentation) consists of a simple client and server:
+- `application/client.py`: A Python script that sends requests to the server.
+- `application/server_automatic.py`, `application/server_manual.py`, `application/server_programmatic.py`: Three versions of a Flask-based server, each demonstrating a different way to instrument with OpenTelemetry.
 
-#### UV
-- Could some issues with "opentelemetry-bootstrap -a install", please check this [troubleshooting](https://opentelemetry.io/docs/zero-code/python/troubleshooting/#bootstrap-using-uv)
+## Hands-on Steps
 
-#### virtualenv
+### Part 1: Initial Setup
+1. **Create and activate a virtual environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   ```
 
-- Create virtualenv 
-```bash
-mkdir auto-instrumetation
-cd auto-instrumetation
-python -m venv venv
-source ./venv/bin/activate
-```
+2. **Install dependencies:**
+   ```bash
+   pip install opentelemetry-distro opentelemetry-exporter-otlp flask requests
+   opentelemetry-bootstrap -a install
+   ```
+   **Note on `uv`:** If you are using `uv`, you might encounter issues with `opentelemetry-bootstrap -a install`. Please check this [troubleshooting guide](https://opentelemetry.io/docs/zero-code/python/troubleshooting/#bootstrap-using-uv).
 
-- Install requirements
-```bash
-pip install opentelemetry-distro opentelemetry-exporter-otlp
-opentelemetry-bootstrap -a install
+### Part 2: Tracing to the Console
+This part demonstrates how to generate traces and print them to the console using different instrumentation methods.
 
-pip install flask requests
-```
+#### Method A: Zero-Code Instrumentation (Automatic)
+This method requires no code changes to the application.
 
+1. **Start the server:**
+   ```bash
+   opentelemetry-instrument \
+       --traces_exporter console \
+       --service_name server-auto \
+       python application/server_automatic.py
+   ```
 
-## Tracing with Flask-based client-server 
+2. **In a separate terminal, run the client:**
+   ```bash
+   python application/client.py "hello"
+   ```
+   You should see trace information printed to the console where the server is running.
 
-### To console
+#### Method B: Programmatic Instrumentation (With a library)
+This method uses the `FlaskInstrumentor` library to automatically instrument the Flask application.
 
-#### Zero-code
-- Start a server with auto-instrumetation
+1. **Start the server:**
+   ```bash
+   python application/server_programmatic.py
+   ```
 
-```bash
-opentelemetry-instrument \
-    --traces_exporter console,otlp \
-    --metrics_exporter console \
-    --service_name your-service-name \
-    --exporter_otlp_endpoint 0.0.0.0:4317 \
-    python <server_python>.py
+2. **In a separate terminal, run the client:**
+   ```bash
+   python application/client.py "world"
+   ```
+   Again, you will see trace information in the server's console.
 
-# E.g., from opentelemetry-python
-# python auto-instrumentation/client.py yolo 
-opentelemetry-instrument \
-    --traces_exporter console,otlp \
-    --metrics_exporter console \
-    --service_name your-service-name \
-    --exporter_otlp_endpoint 0.0.0.0:4317 \
-    python server_automatic.py
+#### Method C: Manual Instrumentation (SDK)
+This method demonstrates how to manually create spans and traces using the OpenTelemetry SDK.
 
-```
+1. **Start the server:**
+   ```bash
+   python application/server_manual.py
+   ```
 
-- Start the client to interact with the server
-```bash 
-python <client_python>.py <any_text>
+2. **In a separate terminal, run the client:**
+   ```bash
+   python application/client.py "manual"
+   ```
+   Traces will be printed to the server's console.
 
-# E.g., from opentelemetry-python
-python auto-instrumentation/client.py hong3nguyen 
-```
+### Part 3: Tracing with Jaeger
+Now, let's send the traces to a Jaeger backend instead of the console.
 
-#### With code
+1. **Start Jaeger:**
+   Run the following command to start a Jaeger container. You can access the Jaeger UI at `http://localhost:16686`.
+   ```bash
+   docker run --rm --name jaeger \
+     -p 16686:16686 \
+     -p 4317:4317 \
+     -p 4318:4318 \
+     cr.jaegertracing.io/jaegertracing/all-in-one:latest
+   ```
 
-##### Manual trace
-- Setup full manual/SDK instrumentation (spans, tracer/exporters)
-- Start a server
-  - 
-```bash
-python server_manual.py
-```
+2. **Run the application with the OTLP exporter:**
+   Now, run the application again, but this time configure it to send traces to Jaeger via the OTLP (OpenTelemetry Protocol) exporter.
 
-- Start a client
-```bash
-python client.py 
-```
+   **For Zero-Code Instrumentation:**
+   ```bash
+   opentelemetry-instrument \
+       --traces_exporter otlp \
+       --exporter_otlp_endpoint "http://localhost:4318" \
+       --service_name server-auto \
+       python application/server_automatic.py
+   ```
 
-##### Instrumentation libs
+   **For Manual/Programmatic Instrumentation:**
+   You will need to modify the server code to use the `OTLPSpanExporter`. In `server_manual.py` or `server_programmatic.py`, add the following:
+   ```python
+   from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+   from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
-- Use an instrumentation library (e.g. FlaskInstrumentor) to add instrumentation with minimal changes
-- Start a server
-  - 
-```bash
-python server_programmatic.py
-```
+   # ... (inside the setup code)
+   provider = TracerProvider()
+   set_tracer_provider(provider)
 
-- Start a client
-```bash
-python client.py 
-```
+   # Export to Jaeger
+   otlp_exporter = OTLPSpanExporter(endpoint="http://localhost:4318/v1/traces")
+   provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
+   ```
+   Then run the client. You should be able to see the traces in the Jaeger UI.
 
-### Collector 
+### Part 4: Using the OpenTelemetry Collector
+In a production environment, it's common to use an OpenTelemetry Collector to receive, process, and export telemetry data.
 
-#### Otel 
+1. **Configure the Collector:**
+   The configuration for the collector is in `config/otel-collector-config.yaml`. This collector is configured to receive OTLP data and export it to Jaeger.
 
-```bash
-docker pull otel/opentelemetry-collector-contrib:0.133.0
-docker run otel/opentelemetry-collector-contrib:0.133.0
-```
+2. **Start the Collector:**
+   ```bash
+   docker run --rm --name otelcol \
+     -v "$(pwd)/config/otel-collector-config.yaml":/etc/otelcol-contrib/config.yaml \
+     -p 4317:4317 -p 4318:4318 \
+     otel/opentelemetry-collector-contrib:latest \
+     --config /etc/otelcol-contrib/config.yaml
+   ```
 
-#### Jaeger
-- 
-```bash
-docker run --rm --name jaeger \
-  -p 16686:16686 \
-  -p 4317:4317 \
-  -p 4318:4318 \
-  -p 5778:5778 \
-  -p 9411:9411 \
-  cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
-```
+3. **Run Jaeger (if not already running):**
+   Ensure your Jaeger instance is running.
 
-#### Update Auto and manual
+4. **Run the application:**
+   Now, your application can send traces to the OpenTelemetry Collector (running on port 4317/4318), which will then forward them to Jaeger. The application configuration is the same as in Part 3.
 
-##### Auto
-- Then need to change configuration for auto-instrumetation
-- However, still [issues](https://github.com/open-telemetry/opentelemetry-collector/issues/6363)
-
-```bash
-python application/server_automatic.py \
-opentelemetry-instrument \
-  --traces_exporter otlp_proto_grpc \
-  --exporter_otlp_endpoint localhost:4317 
-
-```
-
-##### Manual
-- add those and comments TracerProvider 
-```python
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
-
-# set_tracer_provider(TracerProvider())
-# get_tracer_provider().add_span_processor(
-#     BatchSpanProcessor(ConsoleSpanExporter())
-# )
-
-provider = TracerProvider()
-set_tracer_provider(provider)
-
-# Exporter to collector
-otlp_exporter = OTLPSpanExporter(endpoint="http://localhost:4318/v1/traces")
-provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
-```
-
-
-### Collector
-#### To OpenTelemetry Collector before Jaeger Collector
-- add a collector configuration 
-
-```yaml
-receivers:
-  otlp:
-    protocols:
-      grpc:
-        endpoint: 0.0.0.0:4317
-      http:
-        endpoint: 0.0.0.0:4318
-
-processors:
-  batch:
-    send_batch_size: 2 # export spans in batches of 10
-    timeout: 1000ms # send batch every 1 second if not full
-    send_batch_max_size: 10 # max spans per batch
-
-exporters:
-  # use the OTLP exporter instance that targets Jaeger OTLP gRPC
-  otlp/jaeger:
-    endpoint: "jaeger:4317" # if running in same Docker network use service name
-    tls:
-      insecure: true # fine for local testing
-
-service:
-  pipelines:
-    traces:
-      receivers: [otlp]
-      processors: [batch]
-      exporters: [otlp/jaeger]
-```
-
-- start OpenTelemetry Collector
-```bash
-
-docker run --rm --name otelcol  \
-  -v "./config/otel-collector-config.yaml":/etc/otelcol-contrib/config.yaml \
-  -p 4317:4317 -p 4318:4318 \
-  otel/opentelemetry-collector-contrib:0.133.0 \
-  --config /etc/otelcol-contrib/config.yaml
-
-```
-### backbend
-
-- Jaeger
-```bash
-docker run --rm --name jaeger  \
-  -e COLLECTOR_OTLP_ENABLED=true \
-  -p 16686:16686 \
-  cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
-
-```
+   Run the client a few times, and you should see the traces appearing in the Jaeger UI. The service name will be whatever you configured (e.g., `server-auto`).
