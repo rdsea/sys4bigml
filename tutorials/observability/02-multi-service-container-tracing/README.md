@@ -67,7 +67,7 @@ In this part, we will run the application and have all services send traces dire
 5. **Observe traces in Jaeger:**
    Open your web browser and navigate to `http://localhost:16686`. You should see the Jaeger UI. In the "Service" dropdown, you should find the services from our application (e.g., `preprocessing`, `ensemble`). Select one and click "Find Traces" to see the distributed traces.
 
-   ![An example for a trace tree (DAG) with spans](doc/img/trace_spans.png)
+   ![An example for a trace tree (DAG) with spans](doc/img/aTrace_DAG.svg)
 
 ### Part 2 (Optional): Introducing the OpenTelemetry Collector
 It is a best practice to use an OpenTelemetry Collector to manage telemetry data. The provided `docker-compose.yaml` also includes an `otelcol` service.
