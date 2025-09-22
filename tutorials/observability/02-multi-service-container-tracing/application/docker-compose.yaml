@@ -31,8 +31,8 @@ services:
     environment:
       DOCKER: "true"
       MANUAL_TRACING: true
-      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+      #OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
     networks:
       - otel-net
 
@@ -42,8 +42,8 @@ services:
     environment:
       DOCKER: "true"
       MANUAL_TRACING: true
-      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+      #OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
     networks:
       - otel-net
 
@@ -54,8 +54,8 @@ services:
     environment:
       DOCKER: "true"
       MANUAL_TRACING: true
-      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+      #OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
     networks:
       - otel-net
 
@@ -66,8 +66,8 @@ services:
     environment:
       DOCKER: "true"
       MANUAL_TRACING: true
-      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+      #OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
     networks:
       - otel-net
 
