@@ -120,7 +120,7 @@ This tutorial implements a hybrid architecture:
 1. **Stop the edge service:**
    ```bash
    cd application/edge
-   docker-compose down
+   docker compose down
    ```
 
 2. **Delete Kubernetes resources:**
