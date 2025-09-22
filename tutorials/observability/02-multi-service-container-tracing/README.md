@@ -1,203 +1,84 @@
 # 02-multi-service-container-tracing
 
-## Study goals
-- Give an example for an end-to-end trace setting in service-based applications
-  - Instrumentation
-    - Lib-based instrumentation
-  - Collector
-    - receive - process - export
-  - Backends of tracing
+## Study Goals
+This tutorial will guide you through setting up end-to-end tracing for a distributed, multi-service application. You will learn how to:
+- Use Docker Compose to run a multi-container application.
+- Configure microservices to send traces to Jaeger, a distributed tracing backend.
+- Generate load and visualize the resulting traces in the Jaeger UI.
+- (Optional) Introduce an OpenTelemetry Collector into your setup to receive, process, and export telemetry data.
 
-The traditional setting for a distributed tracing in an example for our ML system as figure:
+## Prerequisites
+- Docker and Docker Compose
+- Python 3.8+ (for the load generator)
+
+## Application Architecture
+The application is a simplified machine learning system for object classification, consisting of four services:
+- `preprocessing`: Receives an image and prepares it for the model.
+- `ensemble`: Manages the different inference models.
+- `efficientnetb0` & `mobilenetv2`: Two different models for performing inference.
+
+These services are containerized and defined in `deployment/docker-compose.yaml`. They are already instrumented with OpenTelemetry.
+
+The overall architecture is depicted below:
 ![A traditional setting with distributed tracing](doc/img/traditional_tracing_sys.png)
 
-This work is an example for a manual setting tracing data.
-![An example for a trace tree (DAG) with spans](doc/img/trace_spans.png)
+## Hands-on Steps
 
-## Assumption for edge-cloud environment setting
-- The world network on a single machine
-- Services are presented by docker-based containers
+### Part 1: Running the Application with Jaeger
+In this part, we will run the application and have all services send traces directly to Jaeger.
 
-## Application
-The material from this hand-on is mostly from [Object-classification respository](https://github.com/rdsea/object_classification_v2.git)
+1. **Review the Docker Compose setup:**
+   The `deployment/docker-compose.yaml` file has been set up to run all the necessary services, including Jaeger. By default, the application services are configured to send traces directly to the Jaeger container (`http://jaeger:4318`).
 
-## Requirement
+2. **Start the application:**
+   Open a terminal and run the following command from the `02-multi-service-container-tracing` directory:
+   ```bash
+   docker-compose -f deployment/docker-compose.yaml up -d
+   ```
+   This will start all the services in the background.
 
-### Edit in source code
-- We use an object classification application from my colleague or any service-based applications 
+3. **Generate load:**
+   The `application/loadgen` directory contains a script to send requests to the application.
 
-- If you use your own application, please carefully check those 
-```python
+   a. **Create a virtual environment and install dependencies:**
+      ```bash
+      cd application/loadgen
+      python -m venv venv
+      source venv/bin/activate
+      pip install requests numpy pillow PyYAML aiohttp locust
+      ```
 
-from fastapi import FastAPI, Request
-import aiohttp
-import logging
-from opentelemetry import trace, propagate
-from opentelemetry.trace import StatusCode
+   b. **Run the load generator:**
+      The following command will send an image to the `preprocessing` service.
+      ```bash
+      python client_processing.py --url http://localhost:5010/preprocessing
+      ```
 
-# --- Exporter imports (use distinct names; do NOT import both into the same name) ---
-# HTTP OTLP exporter (sends to collector via HTTP /v1/traces)
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
-    OTLPSpanExporter as OTLPHTTPSpanExporter,
-)
-# gRPC OTLP exporter (sends to collector via gRPC)
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
-    OTLPSpanExporter as OTLPGRPCSpanExporter,
-)
+4. **Observe traces in Jaeger:**
+   Open your web browser and navigate to `http://localhost:16686`. You should see the Jaeger UI. In the "Service" dropdown, you should find the services from our application (e.g., `preprocessing`, `ensemble`). Select one and click "Find Traces" to see the distributed traces.
 
-# --- SDK components ---
-from opentelemetry.sdk.resources import SERVICE_NAME, Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
+   ![An example for a trace tree (DAG) with spans](doc/img/trace_spans.png)
 
-# --- Instrumentations (don't call .instrument() until after provider installed) ---
-from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+### Part 2 (Optional): Introducing the OpenTelemetry Collector
+It is a best practice to use an OpenTelemetry Collector to manage telemetry data. The provided `docker-compose.yaml` also includes an `otelcol` service.
 
-# ---------- Configuration (tweak these per environment) ----------
-SERVICE_NAME_VALUE = "my-fastapi-service"  # change me
-# Prefer using env var OTEL_EXPORTER_OTLP_ENDPOINT in production, but show inline here:
-OTLP_HTTP_ENDPOINT = "http://otel-collector:4318/v1/traces"  # use collector host in your network
-OTLP_GRPC_ENDPOINT = "otel-collector:4317"                   # if you prefer gRPC
+1. **Switch the exporter endpoint:**
+   To use the collector, we need to tell the application services to send traces to the `otelcol` container instead of `jaeger`.
 
-# ---------- 1) Create Resource (service metadata) ----------
-# Service name is required by most backends and appears in UIs.
-resource = Resource(attributes={
-    SERVICE_NAME: SERVICE_NAME_VALUE,
-    "service.version": "0.1.0",               # optional
-    "deployment.environment": "development",  # optional
-})
+   Stop the running services and restart them with the `OTEL_EXPORTER_OTLP_ENDPOINT` environment variable set to the collector's address:
+   ```bash
+   # Stop the services
+   docker-compose -f deployment/docker-compose.yaml down
 
-# ---------- 2) Create TracerProvider with the Resource ----------
-# Install provider *before* calling any instrumentations.
-trace_provider = TracerProvider(resource=resource)
-# (We will set the provider as global below after adding processors.)
+   # Restart with the collector as the endpoint
+   OTEL_EXPORTER_OTLP_ENDPOINT="http://otelcol:4318" docker-compose -f deployment/docker-compose.yaml up -d
+   ```
 
-# ---------- 3) Choose and create an exporter ----------
-# Pick one exporter type (HTTP or gRPC). Don't instantiate both unless you know what you're doing.
-# HTTP exporter (use endpoint like http://COLLECTOR:4318/v1/traces)
-otlp_exporter = OTLPHTTPSpanExporter(endpoint=OTLP_HTTP_ENDPOINT)
+2. **Generate load and observe traces:**
+   Run the load generator again as in Part 1. The traces will now flow from the application services to the OpenTelemetry Collector, and then be exported to Jaeger. You can view them in the Jaeger UI as before.
 
-# If you prefer gRPC, use:
-# otlp_exporter = OTLPGRPCSpanExporter(endpoint=OTLP_GRPC_ENDPOINT)
-
-# ---------- 4) Create and attach a BatchSpanProcessor ----------
-# BatchSpanProcessor is recommended for production (buffers & sends asynchronously).
-span_processor = BatchSpanProcessor(
-    otlp_exporter,
-    # optional tuning:
-    # max_queue_size=2048,
-    # schedule_delay_millis=500,   # how often to send batches (ms)
-    # exporter_timeout_millis=30000,
-)
-trace_provider.add_span_processor(span_processor)
-
-# ---------- 5) Install the global provider ----------
-trace.set_tracer_provider(trace_provider)
-
-# ---------- 6) Now instrument libraries (they will pick up the installed provider) ----------
-# Instrument aiohttp client (auto-creates client spans for outgoing HTTP calls)
-AioHttpClientInstrumentor().instrument()
-# Instrument FastAPI app later after app creation (below)
-
-# ---------- 7) Create the app and instrument it ----------
-app = FastAPI()
-FastAPIInstrumentor.instrument_app(app, exclude_spans=["send", "receive"])
-# exclude_spans = avoid noisy low-level framework spans; adjust if you want more detail
-
-# ---------- 8) Get a tracer for manual spans ----------
-tracer = trace.get_tracer(__name__)
-
-
-
-
-
-############# 
-from opentelemetry import trace
-
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-
-
-from opentelemetry.sdk.resources import SERVICE_NAME, Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-
-from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
-AioHttpClientInstrumentor().instrument()
-
-# Service name is required for most backends
-# Define RESOURCE
-resource = Resource(attributes={SERVICE_NAME: "NAME_YOUR_SERVICE"})
-trace_provider = TracerProvider(resource=resource)
-# Define EXPORTER
-otlp_exporter = OTLPSpanExporter(endpoint="http://localhost:4318/v1/traces")
-# Define PROCESSOR
-processor = BatchSpanProcessor(otlp_exporter)
-trace_provider.add_span_processor(processor)
-
-trace.set_tracer_provider(trace_provider)
-
-tracer = trace.get_tracer(__name__)
-
-app = FastAPI()
-# instrumentation Lib
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-
-FastAPIInstrumentor.instrument_app(app, exclude_spans=["send", "receive"])
-```
-
-- Specify process if really want
-```python
-provider.add_span_processor(
-    BatchSpanProcessor(
-        otlp_exporter,
-        max_export_batch_size=5,
-        schedule_delay_millis=1000,  # 1 second
-    )
-)
-
-```
-
-### Collector and Tracing backends
-
-#### Single Jaeger runs as the collector and tracing backend of the trace data
-- **Jaeger**
+## Cleanup
+To stop and remove all the containers, run:
 ```bash
-docker run --rm --name jaeger \
-  -p 16686:16686 \
-  cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
+docker-compose -f deployment/docker-compose.yaml down
 ```
-
-<!-- NOTE: --> NOTE: remember to connect jaeger to the network of the docker-compose 
-> docker network connect deployment_default jaeger
-
-#### Collector with Otel and tracing backend with Jaeger
-- **Otel-Collector and Jaeger**
-
-```bash
-# Jaeger
-docker run --rm --name jaeger  \
-  -e COLLECTOR_OTLP_ENABLED=true \
-  -p 16686:16686 \
-  cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
-
-# OpenTelemetry Collector
-docker run --rm --name otelcol  \
-  -v "./config/otel-collector-config.yaml":/etc/otelcol-contrib/config.yaml \
-  otel/opentelemetry-collector-contrib:0.133.0 \
-  --config /etc/otelcol-contrib/config.yaml
-
-```
-<!-- NOTE: --> NOTE: remember to connect jaeger to the network of the docker-compose 
-> docker network connect deployment_default jaeger
-
-> docker network connect deployment_default otelcol
-
-#### Test
-- run this script at image/ to load image before sending to preprocessing service
-
-> python client_processing.py --url http://preprocessing:5010/preprocessing
-
-## Further investigation
-- How can you extension this tutorial to further various 
