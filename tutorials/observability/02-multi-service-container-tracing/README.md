@@ -39,7 +39,7 @@ In this part, we will run the application and have all services send traces dire
 
 3. **Start Jaeger to collect spans**
    ```bash
-   docker run --rm --name jaeger \
+   docker run --rm --name jaeger --network otel-net \
      -p 16686:16686 \
      -p 4317:4317 \
      -p 4318:4318 \
