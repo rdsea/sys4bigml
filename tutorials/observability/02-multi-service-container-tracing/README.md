@@ -20,7 +20,7 @@ The application is a simplified machine learning system for object classificatio
 These services are containerized and defined in `deployment/docker-compose.yaml`. They are already instrumented with OpenTelemetry.
 
 The overall architecture is depicted below:
-![A traditional setting with distributed tracing](doc/img/full-tracing.svg)
+![A traditional setting with distributed tracing](doc/img/distributed_tracing_obj_classi.svg)
 
 ## Hands-on Steps
 
