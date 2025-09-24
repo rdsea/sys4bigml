@@ -1,0 +1,76 @@
+services:
+  # jaeger:
+  #   image: jaegertracing/all-in-one:latest
+  #   container_name: jaeger
+  #   ports:
+  #     - "16686:16686" # Jaeger UI
+  #     - "4317:4317"   # OTLP gRPC
+  #     - "4318:4318"   # OTLP HTTP
+  #   networks:
+  #     - tracing-net
+  #
+  # otelcol:
+  #   image: otel/opentelemetry-collector-contrib:latest
+  #   container_name: otelcol
+  #   command: ["--config=/etc/otelcol-contrib/config.yaml"]
+  #   volumes:
+  #     - ./../config/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+  #   ports:
+  #     - "4317:4317" # OTLP gRPC receiver
+  #     - "4318:4318" # OTLP HTTP receiver
+  #   networks:
+  #     - tracing-net
+  #   depends_on:
+  #     - jaeger
+
+  preprocessing:
+    image: hongtringuyen/preprocessing
+    container_name: preprocessing
+    ports:
+      - "5010:5010"
+    environment:
+      DOCKER: "true"
+      MANUAL_TRACING: true
+      #OTEL_ENDPOINT: "http://otelcol:4318/v1/traces"
+      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+    networks:
+      - otel-net
+
+  ensemble:
+    image: hongtringuyen/ensemble_nollm
+    container_name: ensemble
+    environment:
+      DOCKER: "true"
+      MANUAL_TRACING: true
+      #OTEL_ENDPOINT: "http://otelcol:4318/v1/traces"
+      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+    networks:
+      - otel-net
+
+  efficientnetb0:
+    image: hongtringuyen/inference
+    container_name: efficientnetb0
+    command: ["--model", "EfficientNetB0"]
+    environment:
+      DOCKER: "true"
+      MANUAL_TRACING: true
+      #OTEL_ENDPOINT: "http://otelcol:4318/v1/traces"
+      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+    networks:
+      - otel-net
+
+  mobilenetv2:
+    image: hongtringuyen/inference
+    container_name: mobilenetv2
+    command: ["--model", "MobileNetV2"]
+    environment:
+      DOCKER: "true"
+      MANUAL_TRACING: true
+      #OTEL_ENDPOINT: "http://otelcol:4318/v1/traces"
+      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+    networks:
+      - otel-net
+
+networks:
+  otel-net:
+    external: true

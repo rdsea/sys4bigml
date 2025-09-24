@@ -1,0 +1,13 @@
+services:
+  preprocessing:
+    image: hongtringuyen/preprocessing
+    container_name: preprocessing
+    network_mode: "host" # add this one for presenting the host machine
+    # ports:
+    #   - 5010:5010
+    environment:
+      #DOCKER: "true"
+      MANUAL_TRACING: true
+      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+      OTEL_ENDPOINT: "http://otel-collector.softsys.com/v1/traces"
+      ENSEMBLE_ENDPOINT: "http://ensemble/ensemble_service"
