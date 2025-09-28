@@ -15,12 +15,14 @@ from opentelemetry import trace, metrics
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
+import aiohttp
 # Prometheus metrics
 from opentelemetry.exporter.prometheus import PrometheusMetricReader
-from opentelemetry.sdk.metrics import MeterProvider, Counter
+from opentelemetry.sdk.metrics import MeterProvider
 # Mount /metrics endpoint
 from starlette.middleware.wsgi import WSGIMiddleware
 from prometheus_client import make_asgi_app
@@ -35,14 +37,17 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL")
 OLLAMA_HOST = os.getenv("OLLAMA_HOST")
 OLLAMA_PORT = int(os.getenv("OLLAMA_PORT"))
 # OTEL environment variables
-OTEL_ENDPOINT = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT_HTTP")
+OTEL_ENDPOINT = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT_GRPC")
 SERVICE_NAME = os.getenv("AGENT_OTEL_SERVICE_NAME")
 # --------------------------
 # OpenTelemetry Tracing Setup
 # --------------------------
+AioHttpClientInstrumentor().instrument()
 resource = Resource(attributes={"service.name": SERVICE_NAME})
 tracer_provider = TracerProvider(resource=resource)
-span_processor = BatchSpanProcessor(OTLPSpanExporter(endpoint=OTEL_ENDPOINT))
+span_processor = BatchSpanProcessor(
+    OTLPSpanExporter(endpoint=OTEL_ENDPOINT, insecure=True)
+)
 tracer_provider.add_span_processor(span_processor)
 trace.set_tracer_provider(tracer_provider)
 tracer = trace.get_tracer(__name__)
@@ -75,7 +80,6 @@ external_service_counter = meter.create_counter(
 app = FastAPI(title=SERVICE_NAME)
 app.mount("/metrics", make_asgi_app())
 
-# Instrument FastAPI and requests
 FastAPIInstrumentor.instrument_app(app)
 RequestsInstrumentor().instrument()
 
@@ -120,15 +124,21 @@ else:
 langfuse_handler = CallbackHandler()
 
 @app.get("/greet")
-def greet_user():
+async def greet_user():
     request_counter.add(1)  # Increment metric
     with tracer.start_as_current_span("greet_user"):
         try:
             # Fetch spots
-            resp = requests.get(PARAGLIDABLE_SERVICE_URL, timeout=5)
-            external_service_counter.add(1)  # Increment metric
-            resp.raise_for_status()
-            spots = resp.json().get("spots", [])
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                async with session.get(PARAGLIDABLE_SERVICE_URL) as resp:
+                    if resp.status != 200:
+                        raise HTTPException(
+                            status_code=503,
+                            detail=f"Failed to fetch spots, status={resp.status}"
+                        )
+                    data = await resp.json()
+            external_service_counter.add(1)
+            spots = data.get("spots", [])
             spot_names = [s['name'] for s in spots]
         except Exception as e:
             raise HTTPException(status_code=503, detail=f"Failed to fetch spots: {e}")
@@ -158,15 +168,18 @@ def greet_user():
         return {"message": greeting}
 
 @app.post("/plan")
-def plan_paragliding(user_input: dict):
+async def plan_paragliding(user_input: dict):
     request_counter.add(1)  # Increment metric
     with tracer.start_as_current_span("plan_paragliding"):
         try:
             # 1. Fetch spots from paraglidable_service
-            resp = requests.get(PARAGLIDABLE_SERVICE_URL, timeout=5)
-            external_service_counter.add(1)  # Increment metric
-            resp.raise_for_status()
-            spots = resp.json().get("spots", [])
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                async with session.get(PARAGLIDABLE_SERVICE_URL) as resp:
+                    if resp.status != 200:
+                        raise HTTPException(status_code=503, detail="Failed to fetch spots")
+                    data = await resp.json()
+            external_service_counter.add(1)
+            spots = data.get("spots", [])
         except Exception as e:
             raise HTTPException(status_code=503, detail=f"Failed to fetch spots: {e}")
 
@@ -200,14 +213,12 @@ def plan_paragliding(user_input: dict):
 
         # 4. Ask human review service to validate/refine the suggestion
         try:
-            review_response = requests.post(
-                HUMAN_SERVICE_URL,
-                json={"llm_suggestion": llm_suggestion},
-                timeout=5
-            )
-            external_service_counter.add(1)  # Increment metric
-            review_response.raise_for_status()
-            expert_review = review_response.json()
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                async with session.post(HUMAN_SERVICE_URL, json={"llm_suggestion": llm_suggestion}) as resp:
+                    if resp.status != 200:
+                        raise Exception(f"Status {resp.status}")
+                    expert_review = await resp.json()
+            external_service_counter.add(1)
         except Exception as e:
             expert_review = {"error": f"Human review service unavailable: {e}"}
 

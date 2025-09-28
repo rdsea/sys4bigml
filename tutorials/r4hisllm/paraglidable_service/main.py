@@ -1,6 +1,6 @@
 # FASTAPI imports
-from fastapi import FastAPI
-import requests, datetime, os
+from fastapi import FastAPI, HTTPException
+import datetime, os
 from dotenv import load_dotenv
 
 # OpenTelemetry imports
@@ -11,7 +11,8 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
-
+from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
+import aiohttp
 # Prometheus metrics
 from opentelemetry.exporter.prometheus import PrometheusMetricReader
 from opentelemetry.sdk.metrics import MeterProvider, Counter
@@ -34,6 +35,7 @@ processor = BatchSpanProcessor(
 tracer_provider.add_span_processor(processor)
 trace.set_tracer_provider(tracer_provider)
 tracer = trace.get_tracer(__name__)
+AioHttpClientInstrumentor().instrument()
 
 # Configure OTEL Metrics (Prometheus)
 metric_reader = PrometheusMetricReader()
@@ -58,31 +60,60 @@ CACHE = {"timestamp": None, "data": None}
 CACHE_TTL_SECONDS = 3600
 
 @app.get("/spots")
-def get_spots():
+async def get_spots():
     # Increment Prometheus counter
     spots_counter.add(1)
 
     with tracer.start_as_current_span("get_spots"):
-        now = datetime.datetime.utcnow()
+        now = datetime.datetime.now()
 
         if CACHE["data"] and CACHE["timestamp"]:
             if (now - CACHE["timestamp"]).seconds < CACHE_TTL_SECONDS:
                 return {"spots": CACHE["data"]}
 
         url = f"https://api.paraglidable.com/?key={PARAGLIDABLE_KEY}&format=JSON"
-        api_data = requests.get(url).json()
-        all_spots = []
+        try:
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                async with session.get(url) as resp:
+                    if resp.status != 200:
+                        raise HTTPException(status_code=503, detail="Failed to fetch spots")
+                    data = await resp.json()
 
-        for date, spots in api_data.items():
-            for s in spots:
-                all_spots.append({
-                    "name": s.get("name"),
-                    "lat": s.get("lat"),
-                    "lon": s.get("lon"),
-                    "forecast": s.get("forecast"),
-                    "date": date
-                })
+            # If response is a dict with "spots"
+                    if isinstance(data, dict) and "spots" in data:
+                        api_data = data["spots"]
+                    else:
+                        api_data = data  # fallback if it's already a list
 
-        CACHE["data"] = all_spots
-        CACHE["timestamp"] = now
-        return {"spots": all_spots}
+                    all_spots = []
+
+                    if isinstance(api_data, dict):
+                        # case: dict of {date: [spots]}
+                        for date, spots in api_data.items():
+                            for s in spots:
+                                all_spots.append({
+                                    "name": s.get("name"),
+                                    "lat": s.get("lat"),
+                                    "lon": s.get("lon"),
+                                    "forecast": s.get("forecast"),
+                                    "date": date
+                                })
+
+                    elif isinstance(api_data, list):
+                        # case: already a list of spots
+                        for s in api_data:
+                            all_spots.append({
+                                "name": s.get("name"),
+                                "lat": s.get("lat"),
+                                "lon": s.get("lon"),
+                                "forecast": s.get("forecast"),
+                                "date": s.get("date")  # might already exist in the item
+                            })
+                    else:
+                        raise HTTPException(status_code=500, detail=f"Unexpected API format: {type(api_data)}")
+
+            CACHE["data"] = all_spots
+            CACHE["timestamp"] = now
+            return {"spots": all_spots}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error fetching spots: {e}")
