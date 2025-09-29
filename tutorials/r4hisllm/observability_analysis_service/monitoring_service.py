@@ -2,13 +2,13 @@
 from fastapi import FastAPI, HTTPException
 import aiohttp
 import os
-from collections import defaultdict
 
 app = FastAPI(title="HIS-LLM Interaction Monitor")
 
 JAEGER_API = os.getenv("JAEGER_API", "http://host.docker.internal:16686/api/traces")
+INTERACTION_TYPES = ["S2S", "H2S", "H2H"]
 
-# --- Fetch traces ---
+# Fetch traces from Jaeger for a single service
 async def fetch_traces(service_name: str, limit: int = 50):
     params = {"service": service_name, "limit": limit}
     async with aiohttp.ClientSession() as session:
@@ -21,56 +21,40 @@ async def fetch_traces(service_name: str, limit: int = 50):
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error fetching traces for {service_name}: {e}")
 
-# --- Build pairwise interaction table ---
-def process_interactions(traces):
-    edge_counts = defaultdict(int)
-
+# Process spans and group by interaction_type
+def process_traces(traces):
+    summary = {itype: {"count": 0, "total_duration_ms": 0.0} for itype in INTERACTION_TYPES}
     for trace in traces:
-        processes = trace.get("processes", {})
-        process_map = {pid: p.get("serviceName") for pid, p in processes.items()}
-
         for span in trace.get("spans", []):
-            service_name = process_map.get(span.get("processID"))
-            parent_refs = span.get("references", [])
+            tags_list = span.get("tags", [])
+            tags = {tag.get("key"): tag.get("value") for tag in tags_list if "key" in tag and "value" in tag}
+            itype = tags.get("interaction_type", "Unknown")
+            if itype in INTERACTION_TYPES:
+                summary[itype]["count"] += 1
+                duration_ms = span.get("duration", 0) / 1e6  # ns → ms
+                summary[itype]["total_duration_ms"] += duration_ms
+    # Compute average duration
+    for itype, stats in summary.items():
+        count = stats["count"]
+        stats["avg_duration_ms"] = stats["total_duration_ms"] / count if count else 0.0
+        stats.pop("total_duration_ms")
+    return summary
 
-            # If span has a parent, link services
-            for ref in parent_refs:
-                parent_span_id = ref.get("spanID")
-                # find parent span’s service
-                parent_service = None
-                for s in trace.get("spans", []):
-                    if s.get("spanID") == parent_span_id:
-                        parent_service = process_map.get(s.get("processID"))
-                        break
-
-                if parent_service and service_name:
-                    edge_counts[(parent_service, service_name)] += 1
-
-    # Convert to table
-    table = []
-    for (svc1, svc2), count in edge_counts.items():
-        table.append({
-            "Service_1": svc1,
-            "Service_2": svc2,
-            "Interaction_Counts": count
-        })
-    return table
-
-# --- API endpoint ---
-@app.get("/interaction-table")
-async def get_interaction_table(services: str = "", limit: int = 50):
+# Fetch and summarize multiple services at once
+@app.get("/interactions")
+async def get_all_interactions(services: str = ""):
     """
-    Example:
-    /interaction-table?services=agent_service,human_service,paraglidable_service
+    Query multiple services as a comma-separated list:
+    /interactions?services=agent_service,human_service,paraglidable_service
     """
     if not services:
         raise HTTPException(status_code=400, detail="Please provide at least one service name")
     
     service_list = [s.strip() for s in services.split(",")]
-    all_traces = []
-    for svc in service_list:
-        traces = await fetch_traces(svc, limit)
-        all_traces.extend(traces)
+    results = {}
 
-    table = process_interactions(all_traces)
-    return {"interaction_table": table}
+    for svc in service_list:
+        traces = await fetch_traces(svc)
+        results[svc] = process_traces(traces)
+
+    return {"interaction_summary": results}
