@@ -64,7 +64,8 @@ async def get_spots():
     # Increment Prometheus counter
     spots_counter.add(1)
 
-    with tracer.start_as_current_span("get_spots"):
+    with tracer.start_as_current_span("get_spots") as fetch_span:
+        fetch_span.set_attribute("interaction_type", "S2S")  # Service-to-Service
         now = datetime.datetime.now()
 
         if CACHE["data"] and CACHE["timestamp"]:
@@ -73,44 +74,46 @@ async def get_spots():
 
         url = f"https://api.paraglidable.com/?key={PARAGLIDABLE_KEY}&format=JSON"
         try:
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
-                async with session.get(url) as resp:
-                    if resp.status != 200:
-                        raise HTTPException(status_code=503, detail="Failed to fetch spots")
-                    data = await resp.json()
+            with tracer.start_as_current_span("fetch_external_api") as api_span:
+                api_span.set_attribute("interaction_type", "S2S")  # external API fetch as service call
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                    async with session.get(url) as resp:
+                        if resp.status != 200:
+                            raise HTTPException(status_code=503, detail="Failed to fetch spots")
+                        data = await resp.json()
 
-            # If response is a dict with "spots"
-                    if isinstance(data, dict) and "spots" in data:
-                        api_data = data["spots"]
-                    else:
-                        api_data = data  # fallback if it's already a list
+                # If response is a dict with "spots"
+                        if isinstance(data, dict) and "spots" in data:
+                            api_data = data["spots"]
+                        else:
+                            api_data = data  # fallback if it's already a list
 
-                    all_spots = []
+                        all_spots = []
 
-                    if isinstance(api_data, dict):
-                        # case: dict of {date: [spots]}
-                        for date, spots in api_data.items():
-                            for s in spots:
+                        if isinstance(api_data, dict):
+                            # case: dict of {date: [spots]}
+                            for date, spots in api_data.items():
+                                for s in spots:
+                                    all_spots.append({
+                                        "name": s.get("name"),
+                                        "lat": s.get("lat"),
+                                        "lon": s.get("lon"),
+                                        "forecast": s.get("forecast"),
+                                        "date": date
+                                    })
+
+                        elif isinstance(api_data, list):
+                            # case: already a list of spots
+                            for s in api_data:
                                 all_spots.append({
                                     "name": s.get("name"),
                                     "lat": s.get("lat"),
                                     "lon": s.get("lon"),
                                     "forecast": s.get("forecast"),
-                                    "date": date
+                                    "date": s.get("date")  # might already exist in the item
                                 })
-
-                    elif isinstance(api_data, list):
-                        # case: already a list of spots
-                        for s in api_data:
-                            all_spots.append({
-                                "name": s.get("name"),
-                                "lat": s.get("lat"),
-                                "lon": s.get("lon"),
-                                "forecast": s.get("forecast"),
-                                "date": s.get("date")  # might already exist in the item
-                            })
-                    else:
-                        raise HTTPException(status_code=500, detail=f"Unexpected API format: {type(api_data)}")
+                        else:
+                            raise HTTPException(status_code=500, detail=f"Unexpected API format: {type(api_data)}")
 
             CACHE["data"] = all_spots
             CACHE["timestamp"] = now

@@ -60,15 +60,22 @@ RequestsInstrumentor().instrument()
 def review_spots(data: dict):
     # Increment Prometheus counter
     review_counter.add(1)
-    
-    with tracer.start_as_current_span("review_spots"):
+
+    with tracer.start_as_current_span("review_spots") as root_span:
+        root_span.set_attribute("interaction_type", "H2H")  # Human-to-Human via service
         suggestions = data.get("llm_suggestion", "")
         experts = ["expert1", "expert2", "expert3"]
         votes = []
 
         for e in experts:
-            vote = random.choice(["approve", "reject"])
-            comment = f"{e} says: {vote} for suggestion."
-            votes.append({"expert": e, "vote": vote, "comment": comment})
+            with tracer.start_as_current_span(f"vote_by_{e}") as vote_span:
+                # Mark this sub-span as H2H as well
+                vote_span.set_attribute("interaction_type", "H2H")
+                vote_span.set_attribute("expert", e)
+
+                # Simulate voting logic
+                vote = random.choice(["approve", "reject"])
+                comment = f"{e} says: {vote} for suggestion."
+                votes.append({"expert": e, "vote": vote, "comment": comment})
 
         return {"votes": votes}

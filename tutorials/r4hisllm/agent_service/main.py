@@ -126,17 +126,20 @@ langfuse_handler = CallbackHandler()
 @app.get("/greet")
 async def greet_user():
     request_counter.add(1)  # Increment metric
-    with tracer.start_as_current_span("greet_user"):
+    with tracer.start_as_current_span("greet_user") as call_service_span:
+        call_service_span.set_attribute("interaction_type", "H2S")  # human invoking service
         try:
+            with tracer.start_as_current_span("fetch_spots", kind=trace.SpanKind.INTERNAL) as fetch_spots_span:
+                fetch_spots_span.set_attribute("interaction_type", "S2S")
             # Fetch spots
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
-                async with session.get(PARAGLIDABLE_SERVICE_URL) as resp:
-                    if resp.status != 200:
-                        raise HTTPException(
-                            status_code=503,
-                            detail=f"Failed to fetch spots, status={resp.status}"
-                        )
-                    data = await resp.json()
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                    async with session.get(PARAGLIDABLE_SERVICE_URL) as resp:
+                        if resp.status != 200:
+                            raise HTTPException(
+                                status_code=503,
+                                detail=f"Failed to fetch spots, status={resp.status}"
+                            )
+                        data = await resp.json()
             external_service_counter.add(1)
             spots = data.get("spots", [])
             spot_names = [s['name'] for s in spots]
@@ -145,22 +148,26 @@ async def greet_user():
 
         try:
             # Step 1: Ask LLM for city
-            city_prompt = PromptTemplate(
-                template="Given the spots: {spots}, what is the city they belong to? Only respond with the city name.",
-                input_variables=["spots"]
-            )
-            output_parser = StrOutputParser()
-            chain_city = RunnableSequence(city_prompt | llm | output_parser)
-            llm_request_counter.add(1)  # Increment metric
-            city = chain_city.invoke({"spots": spot_names}, config={"callbacks": [langfuse_handler]})
+            with tracer.start_as_current_span("llm_city_inference") as llm_span:
+                llm_span.set_attribute("interaction_type", "S2S")
+                city_prompt = PromptTemplate(
+                    template="Given the spots: {spots}, what is the city they belong to? Only respond with the city name.",
+                    input_variables=["spots"]
+                )
+                output_parser = StrOutputParser()
+                chain_city = RunnableSequence(city_prompt | llm | output_parser)
+                llm_request_counter.add(1)  # Increment metric
+                city = chain_city.invoke({"spots": spot_names}, config={"callbacks": [langfuse_handler]})
 
             # Step 2: Generate friendly greeting mentioning the city
-            greeting_prompt = PromptTemplate(
-                template="Generate a friendly greeting for a user who will go to paragliding there and mention that the spots are available in {city}. Keep it short.",
-                input_variables=["city"]
-            )
-            chain_greeting = RunnableSequence(greeting_prompt | llm | output_parser)
-            greeting = chain_greeting.invoke({"city": city.strip()}, config={"callbacks": [langfuse_handler]})
+            with tracer.start_as_current_span("llm_generate_greeting") as llm_greet_span:
+                llm_greet_span.set_attribute("interaction_type", "S2S")
+                greeting_prompt = PromptTemplate(
+                    template="Generate a friendly greeting for a user who will go to paragliding there and mention that the spots are available in {city}. Keep it short.",
+                    input_variables=["city"]
+                )
+                chain_greeting = RunnableSequence(greeting_prompt | llm | output_parser)
+                greeting = chain_greeting.invoke({"city": city.strip()}, config={"callbacks": [langfuse_handler]})
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"LLM processing error: {e}")
@@ -170,16 +177,19 @@ async def greet_user():
 @app.post("/plan")
 async def plan_paragliding(user_input: dict):
     request_counter.add(1)  # Increment metric
-    with tracer.start_as_current_span("plan_paragliding"):
+    with tracer.start_as_current_span("plan_paragliding") as call_service_span:
+        call_service_span.set_attribute("interaction_type", "H2S")  # human invoking service
         try:
+            with tracer.start_as_current_span("fetch_spots", kind=trace.SpanKind.INTERNAL) as s2s_span:
+                s2s_span.set_attribute("interaction_type", "S2S")
             # 1. Fetch spots from paraglidable_service
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
-                async with session.get(PARAGLIDABLE_SERVICE_URL) as resp:
-                    if resp.status != 200:
-                        raise HTTPException(status_code=503, detail="Failed to fetch spots")
-                    data = await resp.json()
-            external_service_counter.add(1)
-            spots = data.get("spots", [])
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                    async with session.get(PARAGLIDABLE_SERVICE_URL) as resp:
+                        if resp.status != 200:
+                            raise HTTPException(status_code=503, detail="Failed to fetch spots")
+                        data = await resp.json()
+                external_service_counter.add(1)
+                spots = data.get("spots", [])
         except Exception as e:
             raise HTTPException(status_code=503, detail=f"Failed to fetch spots: {e}")
 
@@ -196,52 +206,59 @@ async def plan_paragliding(user_input: dict):
         spots_text = "; ".join(spots_info)
 
         # 3. Ask LLM to suggest top spots
-        prompt_llm = PromptTemplate(
-            input_variables=["user_input", "spots_text"],
-            template=(
-                "User wants to plan: {user_input}. "
-                "Available spots with forecasts: {spots_text}. "
-                "Suggest the top 3 spots for paragliding based on 'fly' and 'XC' probabilities."
+        with tracer.start_as_current_span("llm_top_spots") as llm_span:
+            llm_span.set_attribute("interaction_type", "S2S")
+            prompt_llm = PromptTemplate(
+                input_variables=["user_input", "spots_text"],
+                template=(
+                    "User wants to plan: {user_input}. "
+                    "Available spots with forecasts: {spots_text}. "
+                    "Suggest the top 3 spots for paragliding based on 'fly' and 'XC' probabilities."
+                )
             )
-        )
-        chain_llm = RunnableSequence(prompt_llm | llm | StrOutputParser())
-        llm_request_counter.add(1)  # Increment metric
-        llm_suggestion = chain_llm.invoke({
-            "user_input": user_input.get("query", ""),
-            "spots_text": spots_text
-        }, config={"callbacks": [langfuse_handler]})
+            chain_llm = RunnableSequence(prompt_llm | llm | StrOutputParser())
+            llm_request_counter.add(1)  # Increment metric
+            llm_suggestion = chain_llm.invoke({
+                "user_input": user_input.get("query", ""),
+                "spots_text": spots_text
+            }, config={"callbacks": [langfuse_handler]})
 
         # 4. Ask human review service to validate/refine the suggestion
         try:
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
-                async with session.post(HUMAN_SERVICE_URL, json={"llm_suggestion": llm_suggestion}) as resp:
-                    if resp.status != 200:
-                        raise Exception(f"Status {resp.status}")
-                    expert_review = await resp.json()
-            external_service_counter.add(1)
+            with tracer.start_as_current_span("human_review", kind=trace.SpanKind.CLIENT) as h2s_span:
+                h2s_span.set_attribute("interaction_type", "H2S")
+            # Call human review service
+                async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=5)) as session:
+                    async with session.post(HUMAN_SERVICE_URL, json={"llm_suggestion": llm_suggestion}) as resp:
+                        if resp.status != 200:
+                            raise Exception(f"Status {resp.status}")
+                        expert_review = await resp.json()
+                external_service_counter.add(1)
         except Exception as e:
             expert_review = {"error": f"Human review service unavailable: {e}"}
 
         # 5. Aggregate results into a final explanation chain
-        prompt_summary = PromptTemplate(
-            input_variables=["llm_suggestion", "expert_review"],
-            template=(
-                "We followed this process:\n"
-                "1. Fetched forecast data for all spots.\n"
-                "2. Generated initial LLM suggestion for top paragliding spots.\n"
-                "3. Sent the suggestion to an expert review service.\n\n"
-                "LLM suggestion:\n{llm_suggestion}\n\n"
-                "Expert review:\n{expert_review}\n\n"
-                "Now please provide the final recommended spots summary for the user, "
-                "integrating both LLM and expert inputs."
+        with tracer.start_as_current_span("final_summary") as summary_span:
+            summary_span.set_attribute("interaction_type", "S2S")
+            prompt_summary = PromptTemplate(
+                input_variables=["llm_suggestion", "expert_review"],
+                template=(
+                    "We followed this process:\n"
+                    "1. Fetched forecast data for all spots.\n"
+                    "2. Generated initial LLM suggestion for top paragliding spots.\n"
+                    "3. Sent the suggestion to an expert review service.\n\n"
+                    "LLM suggestion:\n{llm_suggestion}\n\n"
+                    "Expert review:\n{expert_review}\n\n"
+                    "Now please provide the final recommended spots summary for the user, "
+                    "integrating both LLM and expert inputs."
+                )
             )
-        )
-        chain_summary = RunnableSequence(prompt_summary | llm | StrOutputParser())
-        llm_request_counter.add(1)  # Increment metric
-        final_result = chain_summary.invoke({
-            "llm_suggestion": llm_suggestion,
-            "expert_review": expert_review
-        }, config={"callbacks": [langfuse_handler]})
+            chain_summary = RunnableSequence(prompt_summary | llm | StrOutputParser())
+            llm_request_counter.add(1)  # Increment metric
+            final_result = chain_summary.invoke({
+                "llm_suggestion": llm_suggestion,
+                "expert_review": expert_review
+            }, config={"callbacks": [langfuse_handler]})
 
         # 6. Compute final decision from expert votes
         final_decision = "undecided"
