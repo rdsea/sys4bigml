@@ -1,8 +1,11 @@
-# monitoring_clickhouse_table.py
+# make sure you setup CLICKHOUSE_TRACE_URL
+# CLICKHOUSE_TRACE_URL clickhouse://default:changeme@130.233.195.221:8123/otel
 import argparse
 import asyncio
 from collections import defaultdict
+import os
 from random import choice
+from urllib.parse import urlparse
 from tabulate import tabulate
 import clickhouse_connect  # pip install clickhouse-connect
 
@@ -150,11 +153,6 @@ async def get_trace_table(service_names, client):
 
 async def main():
     parser = argparse.ArgumentParser(description="Observability Analysis CLI (ClickHouse)")
-    parser.add_argument("--clickhouse-host", default="localhost", help="ClickHouse host")
-    parser.add_argument("--clickhouse-port", type=int, default=8123, help="ClickHouse port")
-    parser.add_argument("--clickhouse-user", default="default", help="ClickHouse user")
-    parser.add_argument("--clickhouse-password", default="", help="ClickHouse password")
-    parser.add_argument("--clickhouse-db", default="jaeger", help="ClickHouse database")
     parser.add_argument("--services", required=True, help="Comma-separated service names")
     parser.add_argument(
         "--feature",
@@ -163,13 +161,17 @@ async def main():
         help="Feature to run"
     )
     args = parser.parse_args()
-
+    # make sure you have the right environment setting
+    click_house_url = os.environ['CLICKHOUSE_TRACE_URL']
+    click_house_info = urlparse(click_house_url)
+    # remove the first / to have the database name
+    print(f'Connect to the db={click_house_info.path[1:]}')
     client = clickhouse_connect.get_client(
-        host=args.clickhouse_host,
-        port=args.clickhouse_port,
-        username=args.clickhouse_user,
-        password=args.clickhouse_password,
-        database=args.clickhouse_db,
+        host= click_house_info.hostname,
+        port= click_house_info.port,
+        username=click_house_info.username,
+        password=click_house_info.password,
+        database=click_house_info.path[1:],
     )
 
     services = [s.strip() for s in args.services.split(",")]
