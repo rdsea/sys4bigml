@@ -153,6 +153,7 @@ async def get_trace_table(service_names, client):
 
 async def main():
     parser = argparse.ArgumentParser(description="Observability Analysis CLI (ClickHouse)")
+    parser.add_argument("--db_type", default="clickhouse")
     parser.add_argument("--services", required=True, help="Comma-separated service names")
     parser.add_argument(
         "--feature",
@@ -166,14 +167,16 @@ async def main():
     click_house_info = urlparse(click_house_url)
     # remove the first / to have the database name
     print(f'Connect to the db={click_house_info.path[1:]}')
-    client = clickhouse_connect.get_client(
-        host= click_house_info.hostname,
-        port= click_house_info.port,
-        username=click_house_info.username,
-        password=click_house_info.password,
-        database=click_house_info.path[1:],
-    )
-
+    if args.db_type == "clickhouse":
+        client = clickhouse_connect.get_client(
+            host= click_house_info.hostname,
+            port= click_house_info.port,
+            username=click_house_info.username,
+            password=click_house_info.password,
+            database=click_house_info.path[1:],
+        )
+    else:
+        client =None
     services = [s.strip() for s in args.services.split(",")]
 
     if args.feature == "perservice_interactions":
