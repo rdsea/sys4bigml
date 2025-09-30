@@ -11,10 +11,10 @@ COPY monitoring_service.py /app/
 RUN pip install --no-cache-dir fastapi uvicorn aiohttp python-dotenv
 
 # Expose port
-EXPOSE 8000
+EXPOSE 8008
 
 # Set environment variables (can also override at runtime)
-ENV JAEGER_API=http://localhost:16686/api/traces
+ENV JAEGER_API=http://host.docker.internal:16686/api/traces
 
 # Run FastAPI using Uvicorn
-CMD ["uvicorn", "monitoring_service:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "monitoring_service:app", "--host", "0.0.0.0", "--port", "8008"]
