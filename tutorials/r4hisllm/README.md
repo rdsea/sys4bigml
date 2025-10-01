@@ -100,7 +100,7 @@ How to monitor and quantify robustness in this HIS-LLM system across the edge-cl
 2. Build and Start Services: The repository contains separate folders for each service (agent_service/, paraglidable_service/, human_service/, frontend_service/). Each has a FastAPI app, a Dockerfile, and a requirements.txt.
 To build and start all services, run:
     ```bash
-    docker-compose up --build
+    docker compose -f docker-compose.his.yml up --build
     ```
 This will start all the services defined in the `docker-compose.yml` file:
 - paraglidable_service on port `8000`
@@ -381,13 +381,13 @@ From there we can see what are the interactions happening in the system and how 
 
 ## 5. Next Steps
 You can try to simulate diffrerent scenarios to see how the system behaves and how the interaction metrics change. For example, you can try to:
-- Introduce more load to the system to see how it affects the overall system performance and interaction metrics.
-- Introduce some error with the agent_service to see how it affects the overall system performance and interaction metrics.
-- Introduce latency in the paraglidable_service or human_service to see how it affects the overall system performance and interaction metrics.
-- Introduce errors in the paraglidable_service or human_service to see how it affects the overall system performance and interaction metrics.
-- Change the LLM model in the agent_service to see how it affects the overall system performance and interaction metrics.
-- Add more services to the system to see how it affects the overall system performance and interaction metrics.
-- Change the user input to see how it affects the overall system performance and interaction metrics. Here are some examples of robustness testing:
+- Introduce more load to the system 
+- Introduce some error with the agent_service
+- Introduce latency in the paraglidable_service or human_service
+- Introduce errors in the paraglidable_service or human_service
+- Change the LLM model in the agent_service
+- Add more services to the system
+- Change the user input. Here are some examples of robustness testing:
     - **Robustness from Natural Perturbations**
         - Example of robustness testing with varied user inputs
         Test sensitivity to variations in phrasing, casing, and sentence structure:
@@ -423,7 +423,7 @@ You can try to simulate diffrerent scenarios to see how the system behaves and h
 - How about multi-agent systems?
 
 ## References
-- [Paraglidable API](https://www.paraglidable.com)
+- [Paraglidable](https://github.com/AntoineMeler/Paraglidable)
 - [OpenTelemetry](https://opentelemetry.io/)
 - [Prometheus](https://prometheus.io/)
 - [Jaeger](https://www.jaegertracing.io/)
