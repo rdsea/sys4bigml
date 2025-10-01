@@ -363,11 +363,11 @@ Aggregated interaction summary:
 +--------------------+---------+---------------------+
 | Interaction Type   |   Count |   Avg Duration (ms) |
 +====================+=========+=====================+
-| S2S                |      12 |              15.603 |
+| S2S                |      17 |              11.564 |
 +--------------------+---------+---------------------+
-| H2S                |       6 |              31.27  |
+| H2S                |      19 |              10.301 |
 +--------------------+---------+---------------------+
-| H2H                |      12 |               0     |
+| H2H                |       0 |               0     |
 +--------------------+---------+---------------------+
 ```
 From there we can see what are the interactions happening in the system and how many times they are happening. This can give us insights into the robustness of the system. We can see if there are any bottlenecks or failures in the interactions or we can see what are the most common interactions happening in the system; what is our system is relying on the most H2S, S2S, or H2H.
