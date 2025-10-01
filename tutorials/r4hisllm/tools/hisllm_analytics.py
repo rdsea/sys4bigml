@@ -89,7 +89,7 @@ async def get_trace_table(service_names, jaeger_api):
                 callee = tags.get("callee_service") or span.get("operationName") or "Unknown"
                 input_data = tags.get("input") or "Unknown"
                 output_data = tags.get("output") or "Unknown"
-                duration_ms = span.get("duration", 0) / 1000
+                duration_ms = span.get("duration", 0) / 1e6
                 key = (caller, input_data, callee, output_data)
                 agg[key]["count"] += 1
                 agg[key]["total_duration_ms"] += duration_ms
