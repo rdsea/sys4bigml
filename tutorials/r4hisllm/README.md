@@ -61,7 +61,14 @@ How to monitor and quantify robustness in this HIS-LLM system across the edge-cl
     This will start Langfuse server on port `3000`. You can access the Langfuse UI at `http://localhost:3000` in your web browser.
     Then follow the instructions to create an account and get your public and secret keys. In a self-hosted Langfuse environment, the `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` are project-specific and can be retrieved from the Langfuse dashboard under the Project —> Settings page.
 
-3. Set Environment Variables: Create a `.env` file in the root directory with the following content (replace placeholders with your actual keys):
+3. Get Paraglidable API key from [Paraglidable](https://www.paraglidable.com). Try to choose the spot from the same country as a group of spots (e.g., Switzerland) to ensure the agent can find suitable locations. 
+- 1) Place spots
+        - Click on the map to add a spot
+        - Click on a spot to change its name or remove it
+- 2) Get the key
+    - After placing the spots, you can retrieve the API key from the Paraglidable by giving your email address to the textbox below.
+
+4. Set Environment Variables: Create a `.env` file in the root directory with the following content (replace placeholders with your actual keys):
     ```env
     # Praglidable API key
     PARAGLIDABLE_KEY= your_paraglidable_api_key_here
@@ -372,16 +379,53 @@ Aggregated interaction summary:
 ```
 From there we can see what are the interactions happening in the system and how many times they are happening. This can give us insights into the robustness of the system. We can see if there are any bottlenecks or failures in the interactions or we can see what are the most common interactions happening in the system; what is our system is relying on the most H2S, S2S, or H2H.
 
+## 5. Next Steps
+You can try to simulate diffrerent scenarios to see how the system behaves and how the interaction metrics change. For example, you can try to:
+- Introduce more load to the system to see how it affects the overall system performance and interaction metrics.
+- Introduce some error with the agent_service to see how it affects the overall system performance and interaction metrics.
+- Introduce latency in the paraglidable_service or human_service to see how it affects the overall system performance and interaction metrics.
+- Introduce errors in the paraglidable_service or human_service to see how it affects the overall system performance and interaction metrics.
+- Change the LLM model in the agent_service to see how it affects the overall system performance and interaction metrics.
+- Add more services to the system to see how it affects the overall system performance and interaction metrics.
+- Change the user input to see how it affects the overall system performance and interaction metrics. Here are some examples of robustness testing:
+    - **Robustness from Natural Perturbations**
+        - Example of robustness testing with varied user inputs
+        Test sensitivity to variations in phrasing, casing, and sentence structure:
+
+        **Test Inputs:**  
+        1. Where should I go paragliding in Switzerland next weekend?  
+        2. Where should I go paragliding in Switzerland next weekend  
+        3. Where should I go paragliding in Switzerland next weekend?  
+        4. WHERE SHOULD I GO PARAGLIDING IN SWITZERLAND NEXT WEEKEND?  
+        5. Can you suggest where I should go paragliding in Switzerland next weekend?  
+        6. Any recommendations for paragliding in Switzerland next weekend?  
+        7. Where could I go for paragliding in Switzerland next weekend?  
+        8. Where should I plan to go paragliding in Switzerland next weekend?  
+        9. Where is a good place to paraglide in Switzerland next weekend?  
+        10. I want to go paragliding in Switzerland next weekend — where should I go?  
+
+        **Expected Output:**  
+        - "Based on the current weather conditions and paragliding site data, I recommend going to [Site Name] in Switzerland next weekend."
+
+    - **Robustness from Out-of-Scope Requests**
+        - Example of robustness testing with varied user inputs
+            - To assess how well the `agent_service` handles inputs outside its knowledge domain (only Swiss paragliding sites are available):
+
+            **Test Inputs:**  
+            - "Where should I go paragliding in California next weekend?"  
+            - "Is it safe to paraglide in the Alps in July?"  
+
+            **Expected Output:**  
+            - "I can only provide paragliding recommendations for sites in Switzerland. Please specify a location within Switzerland."  
 ---
 ## Open questions
 - How about multi-modal inputs (e.g., text + images)?
 - How about multi-agent systems?
 
 ## References
+- [Paraglidable API](https://www.paraglidable.com)
 - [OpenTelemetry](https://opentelemetry.io/)
 - [Prometheus](https://prometheus.io/)
 - [Jaeger](https://www.jaegertracing.io/)
 - [Grafana](https://grafana.com/)
 - [Langfuse Documentation](https://docs.langfuse.com/)
-
-## Contributions
