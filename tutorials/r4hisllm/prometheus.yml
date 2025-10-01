@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel-collector:8889']  # OTEL collector Prometheus receiver
+
+  - job_name: 'paraglidable_service'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['paraglidable_service:8000']  # Paraglidable FastAPI metrics endpoint
+
+  - job_name: 'agent_service'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['agent_service:8001']  # Agent FastAPI metrics endpoint
+
+  - job_name: 'human_service'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['human_service:8002']  # Human review FastAPI metrics endpoint
