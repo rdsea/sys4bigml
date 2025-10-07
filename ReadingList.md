@@ -1,7 +1,7 @@
 ## Reading List for Advanced Topics in Software Systems 
 
 ### Multi-Continuum Computing
-* Hong-Linh Truong,Kostas Magoutis, [A Multi-Continuum View for Swarm-Edge-Cloud Service-based Applications](), Working paper, 2025
+* Hong-Linh Truong,Kostas Magoutis, [A Multi-Continuum View for Swarm-Edge-Cloud Service-based Applications](https://research.aalto.fi/files/198061514/multicontinuum.pdf), Working paper, 2025
 * [The computing continuum: Past, present, and future](https://www.sciencedirect.com/science/article/abs/pii/S1574013725000589), 2025
 * [The Compute Continuum: Trends and Challenges](https://ieeexplore.ieee.org/document/10896925)
 * [A Unified Model for the Mobile-Edge-Cloud Continuum](https://doi.org/10.1145/3226644)
