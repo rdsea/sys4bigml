@@ -69,7 +69,7 @@ Date|Place|Content|Lead person
 30.10.2026 | | [Lecture 5 - Coordination, Trustworthiness, Sovereignty, and Performance Assurance](slides/)| Linh Truong
 07.10.2026 |  |Topic Introduction/discussion| All
 21.10.2026 | | Project progress presentation| All
-28.10.2026 |flexible, R030A133 T5| Project topic discussion| All
+28.10.2026 |flexible| Project topic discussion| All
 04.11.2026 |  | Checkpoint 1: Topic progress discussion |  All
 11.11.2026 |flexible | discussion about project progress| All
 18.11.2026 | |Checkpoint 2: Topic progress presentation  | All
