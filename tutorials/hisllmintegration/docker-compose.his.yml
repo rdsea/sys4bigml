@@ -1,0 +1,129 @@
+services:
+  # ----------------------
+  # HIS Services
+  # ----------------------
+  detection_service:
+    build: ./detection_service
+    container_name: detection_service
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT_GRPC:-http://otel-collector:4317}
+      OTEL_SERVICE_NAME: ${DETECTION_OTEL_SERVICE_NAME:-detection_service}
+      # Prometheus scrapes /metrics every few seconds and each scrape is an
+      # HTTP request FastAPI would trace, burying the mission traces.
+      # See "The low-level data underneath" in the README.
+      OTEL_PYTHON_EXCLUDED_URLS: ${OTEL_PYTHON_EXCLUDED_URLS:-metrics}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - otel-collector
+    networks:
+      - his_network
+
+  agent_service:
+    build: ./agent_service
+    container_name: agent_service
+    environment:
+      # Leave OLLAMA_HOST/OLLAMA_MODEL unset to run on the deterministic
+      # mock LLM (zero-setup). Set them (e.g. in .env) for real inference.
+      OLLAMA_HOST: ${OLLAMA_HOST:-}
+      OLLAMA_PORT: ${OLLAMA_PORT:-11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT_GRPC:-http://otel-collector:4317}
+      OTEL_SERVICE_NAME: ${AGENT_OTEL_SERVICE_NAME:-agent_service}
+      # Keep scrape traffic out of the traces (see detection_service above).
+      OTEL_PYTHON_EXCLUDED_URLS: ${OTEL_PYTHON_EXCLUDED_URLS:-metrics}
+      DETECTION_SERVICE_API_URL: ${DETECTION_SERVICE_API_URL:-http://detection_service:8000}
+      HUMAN_SERVICE_API_URL: ${HUMAN_SERVICE_API_URL:-http://human_service:8002/review}
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+      LANGFUSE_HOST: ${LANGFUSE_HOST:-http://host.docker.internal:3000}
+    ports:
+      - "8001:8001"
+    depends_on:
+      - detection_service
+      - human_service
+      - otel-collector
+    networks:
+      - his_network
+
+  human_service:
+    build: ./human_service
+    container_name: human_service
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT_GRPC:-http://otel-collector:4317}
+      OTEL_SERVICE_NAME: ${HUMAN_OTEL_SERVICE_NAME:-human_service}
+      # Keep scrape traffic out of the traces (see detection_service above).
+      OTEL_PYTHON_EXCLUDED_URLS: ${OTEL_PYTHON_EXCLUDED_URLS:-metrics}
+    ports:
+      - "8002:8002"
+    depends_on:
+      - otel-collector
+    networks:
+      - his_network
+
+  frontend_service:
+    build: ./frontend_service
+    container_name: frontend_service
+    ports:
+      - "3100:80"
+    depends_on:
+      - agent_service
+    networks:
+      - his_network
+
+  # ----------------------
+  # Observability
+  # ----------------------
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.104.0
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./assets/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+    depends_on:
+      - jaeger
+    networks:
+      - his_network
+    restart: always
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    container_name: jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686" # UI
+    networks:
+      - his_network
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9092:9090"
+    depends_on:
+      - otel-collector
+    networks:
+      - his_network
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - his_network
+
+networks:
+  his_network:
+    driver: bridge
