@@ -56,7 +56,7 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
 
 * Responsible teacher: [Hong-Linh Truong](https://users.aalto.fi/~truongh4/)
 *  Other teacher/assistant: [Hong-Tri Nguyen](https://hong3nguyen.github.io/) and [Korawit Rupanya](https://korawitrupanya.github.io/)
-*  [Basic course management]()
+*  [Basic course management](slides/cse4660-management-2026.pdf)
 
 ### Tentative slots
 
