@@ -31,6 +31,19 @@ The [example application from opentelemetry-python](https://github.com/open-tele
 - Create `application/` and copy client-server* application from opentelemetry-python example to
 - `application/client.py`: A Python script that sends requests to the server.
 - `application/server_automatic.py`, `application/server_manual.py`, `application/server_programmatic.py`: Three versions of a Flask-based server, each demonstrating a different way to instrument with OpenTelemetry.
+  ```
+  mkdir application
+  git clone --filter=blob:none --no-checkout https://github.com/open-telemetry/opentelemetry-python.git temp-otel
+  cd temp-otel
+
+  git sparse-checkout init --cone
+  git sparse-checkout set docs/examples/auto-instrumentation
+  git checkout main
+
+  cp -r docs/examples/auto-instrumentation/* ../application/
+  cd ..
+  rm -rf temp-otel
+  ```
 
 ## Hands-on Steps
 
