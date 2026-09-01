@@ -39,7 +39,7 @@ for Software Modernization and New Developments](https://ieeexplore.ieee.org/doc
 ### Monitoring
 
 * [Towards Observability Data Management at Scale](https://sigmodrecord.org/publications/sigmodRecord/2012/pdfs/05_Vision_Karumuri.pdf)
-*  https://www.sysml.cc/doc/2019/199.pdf
+* https://www.sysml.cc/doc/2019/199.pdf
 * https://monitorml.com/index.html
 * https://dl.acm.org/doi/pdf/10.5555/1251203.1251209
 * https://github.com/rdsea/bigdataincidentanalytics/tree/reasoning
@@ -77,3 +77,14 @@ An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 * https://cloud.google.com/solutions/machine-learning/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning
 * https://research.google/pubs/pub43146/
 
+### Observability
+- [Majors, Charity, Liz Fong-Jones, and George Miranda. Observability engineering: achieving production excellence. " O'Reilly Media, Inc.", 2026.](https://learning.oreilly.com/library/view/observability-engineering-2nd/9781098179915/)
+- Zhang, Lei, et al. "The benefit of hindsight: Tracing {Edge-Cases} in distributed systems." 20th USENIX Symposium on Networked Systems Design and Implementation (NSDI 23). 2023.
+- Reichelt, David Georg, et al. "Benchmarking the overhead of distributed tracing agents." Proceedings of the 17th ACM/SPEC International Conference on Performance Engineering. 2026.
+
+
+### Experimentation framework
+- Kohavi, Ron, Diane Tang, and Ya Xu. Trustworthy online controlled experiments: A practical guide to a/b testing. Cambridge University Press, 2020.
+- Speth, Sandro, et al. "Supporting Architecture-Level Resilience Analysis with an Integrated Chaos and Load Experimentation Framework." 2026 IEEE 23rd International Conference on Software Architecture (ICSA). IEEE, 2026.
+- Karrer, Brian, et al. "Network experimentation at scale." Proceedings of the 27th acm sigkdd conference on knowledge discovery & data mining. 2021.
+- Werner, Sebastian, et al. "A comprehensive experimentation framework for energy-efficient design of cloud-native applications." 2025 IEEE 22nd International Conference on Software Architecture (ICSA). IEEE, 2025.
