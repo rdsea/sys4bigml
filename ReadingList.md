@@ -6,6 +6,15 @@
 * [The Compute Continuum: Trends and Challenges](https://ieeexplore.ieee.org/document/10896925)
 * [A Unified Model for the Mobile-Edge-Cloud Continuum](https://doi.org/10.1145/3226644)
 
+### Hybrid Intelligence Software with LLMs
+* [Evaluation and Benchmarking of LLM Agents: A Survey](https://doi.org/10.1145/3711896.3736570)
+* [Design Principles and Guidelines for LLM Observability: Insights from Developers](https://doi.org/10.1145/3706599.3719914)
+* [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
+* [Toward a Quality Model for Hybrid Intelligence Teams](https://www.scopus.com/pages/publications/85196358874)
+* [On Coordinating LLMs and Platform Knowledge
+for Software Modernization and New Developments](https://ieeexplore.ieee.org/document/10664288)
+* [Hybrid Intelligence - Combining the Human in the Loop with the Computer in the Loop: A Systematic Literature Review](https://www.researchgate.net/publication/356209722_Hybrid_Intelligence_-_Combining_the_Human_in_the_Loop_with_the_Computer_in_the_Loop_A_Systematic_Literature_Review)
+* 
 ### Robustness, Reliability, Resilience and Elasticity
 
 * [SysML: The New Frontier of Machine Learning Systems](https://arxiv.org/abs/1904.03257)
@@ -52,16 +61,8 @@
 Advanced Analytics](https://shivaram.org/publications/keystoneml-icde17.pdf)
 * [Demystifying Parallel and Distributed Deep Learning:
 An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
-
-### Reactive ML Systems
 * Jeff Smith. 2018. Machine Learning Systems: Designs that scale (1st. ed.). Manning Publications Co., USA.https://www.manning.com/books/machine-learning-systems
 
-### Serving with different models:
-  * Prediction-Serving Systems, https://queue.acm.org/detail.cfm?id=3210557
-  * Ryan Chard, Logan Ward, Zhuozhao Li, Yadu Babuji, Anna Woodard, Steven Tuecke, Kyle Chard, Ben Blaiszik, and Ian Foster. 2019. Publishing and Serving Machine Learning Models with DLHub. In Proceedings of the Practice and Experience in Advanced Research Computing on Rise of the Machines (learning) (PEARC ’19). Association for Computing Machinery, New York, NY, USA, Article 73, 1–7. DOI:https://doi.org/10.1145/3332186.3332246
-  * https://cloud.google.com/ml-engine/docs/custom-prediction-routines
-  * https://predictionio.apache.org/
-  * https://github.com/EthicalML/awesome-production-machine-learning#model-deployment-and-orchestration-frameworks
 
 ### Edge ML
 
@@ -76,11 +77,3 @@ An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 * https://cloud.google.com/solutions/machine-learning/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning
 * https://research.google/pubs/pub43146/
 
-### Hybrid Intelligence Software with LLMs
-* [Evaluation and Benchmarking of LLM Agents: A Survey](https://doi.org/10.1145/3711896.3736570)
-* [Design Principles and Guidelines for LLM Observability: Insights from Developers](https://doi.org/10.1145/3706599.3719914)
-* [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
-* [Toward a Quality Model for Hybrid Intelligence Teams](https://www.scopus.com/pages/publications/85196358874)
-* [On Coordinating LLMs and Platform Knowledge
-for Software Modernization and New Developments](https://ieeexplore.ieee.org/document/10664288)
-* [Hybrid Intelligence - Combining the Human in the Loop with the Computer in the Loop: A Systematic Literature Review](https://www.researchgate.net/publication/356209722_Hybrid_Intelligence_-_Combining_the_Human_in_the_Loop_with_the_Computer_in_the_Loop_A_Systematic_Literature_Review)
