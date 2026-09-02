@@ -6,7 +6,7 @@
 * [The Compute Continuum: Trends and Challenges](https://ieeexplore.ieee.org/document/10896925)
 * [A Unified Model for the Mobile-Edge-Cloud Continuum](https://doi.org/10.1145/3226644)
 
-### Hybrid Intelligence Software with LLMs
+### Hybrid Intelligence Software
 * [Evaluation and Benchmarking of LLM Agents: A Survey](https://doi.org/10.1145/3711896.3736570)
 * [Design Principles and Guidelines for LLM Observability: Insights from Developers](https://doi.org/10.1145/3706599.3719914)
 * [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
@@ -14,6 +14,7 @@
 * [On Coordinating LLMs and Platform Knowledge
 for Software Modernization and New Developments](https://ieeexplore.ieee.org/document/10664288)
 * [Hybrid Intelligence - Combining the Human in the Loop with the Computer in the Loop: A Systematic Literature Review](https://www.researchgate.net/publication/356209722_Hybrid_Intelligence_-_Combining_the_Human_in_the_Loop_with_the_Computer_in_the_Loop_A_Systematic_Literature_Review)
+  
 ### Observability
 - [Majors, Charity, Liz Fong-Jones, and George Miranda. Observability engineering: achieving production excellence. " O'Reilly Media, Inc.", 2026.](https://learning.oreilly.com/library/view/observability-engineering-2nd/9781098179915/)
 - Zhang, Lei, et al. "The benefit of hindsight: Tracing {Edge-Cases} in distributed systems." 20th USENIX Symposium on Networked Systems Design and Implementation (NSDI 23). 2023.
