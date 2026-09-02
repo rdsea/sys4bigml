@@ -35,14 +35,11 @@ for Software Modernization and New Developments](https://ieeexplore.ieee.org/doc
 * [Tutorial: Safe and Reliable Machine Learning](https://arxiv.org/pdf/1904.07204.pdf)
 * [On the Resilience of LLM-Based Multi-Agent Collaboration with Faulty Agents](https://arxiv.org/pdf/2408.00989)
 
-### Benchmarking
+### Benchmarking  and QoA Tradeoffs analysis
 
 * [MLPERF TRAINING BENCHMARK](https://arxiv.org/pdf/1910.01500.pdf)
 * https://mlperf.org/training-overview
 * https://aimatrix.ai/en-us/
-
-###  QoA Tradeoffs analysis
-
 * https://www.microsoft.com/en-us/research/blog/reliability-in-reinforcement-learning/
 * https://dzone.com/articles/qa-how-reliable-are-your-machine-learning-systems
 * https://dl.acm.org/doi/10.1145/3352020.3352024
@@ -56,8 +53,6 @@ for Software Modernization and New Developments](https://ieeexplore.ieee.org/doc
 * https://github.com/rdsea/bigdataincidentanalytics/tree/reasoning
 * https://www.alibabacloud.com/blog/using-alibaba-cloud-tsdb-in-big-data-cluster-monitoring-scenarios_595164
 * https://chromium.googlesource.com/external/github.com/tensorflow/tensorflow/+/r0.10/tensorflow/g3doc/tutorials/monitors/index.md
-
-### Data Monitoring and Validation:
 * [DATA VALIDATION FOR MACHINE LEARNING](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
 * https://github.com/tensorflow/data-validation
 * https://towardsdatascience.com/hands-on-tensorflow-data-validation-61e552f123d7
@@ -66,6 +61,7 @@ for Software Modernization and New Developments](https://ieeexplore.ieee.org/doc
 * https://cloud.google.com/blog/products/gcp/improving-data-quality-for-machine-learning-and-analytics-with-cloud-dataprep
 
 ### Orchestration and Pipelines
+
 * [Orchestrating Big Data Analysis Workflows in the Cloud: Research Challenges, Survey, and Future Directions](https://dl.acm.org/doi/fullHtml/10.1145/3332301)
 * https://docs.microsoft.com/en-us/azure/machine-learning/concept-ml-pipelines
 * [KeystoneML: Optimizing Pipelines for Large-Scale
