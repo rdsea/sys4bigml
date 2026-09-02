@@ -1,32 +1,38 @@
 ## Reading List for Advanced Topics in Software Systems 
 
 ### Multi-Continuum Computing
+
 * Hong-Linh Truong,Kostas Magoutis, [A Multi-Continuum View for Swarm-Edge-Cloud Service-based Applications](https://research.aalto.fi/files/198061514/multicontinuum.pdf), Working paper, 2025
 * [The computing continuum: Past, present, and future](https://www.sciencedirect.com/science/article/abs/pii/S1574013725000589), 2025
 * [The Compute Continuum: Trends and Challenges](https://ieeexplore.ieee.org/document/10896925)
 * [A Unified Model for the Mobile-Edge-Cloud Continuum](https://doi.org/10.1145/3226644)
 
 ### Hybrid Intelligence Software
-* [Evaluation and Benchmarking of LLM Agents: A Survey](https://doi.org/10.1145/3711896.3736570)
-* [Design Principles and Guidelines for LLM Observability: Insights from Developers](https://doi.org/10.1145/3706599.3719914)
-* [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
-* [Toward a Quality Model for Hybrid Intelligence Teams](https://www.scopus.com/pages/publications/85196358874)
-* [On Coordinating LLMs and Platform Knowledge
-for Software Modernization and New Developments](https://ieeexplore.ieee.org/document/10664288)
+
+* [Hybrid Intelligence](https://link.springer.com/article/10.1007/s12599-019-00595-2)
+* [A Programming Model for Hybrid Collaborative Adaptive Systems](https://doi.org/10.1109/TETC.2017.2702578)
+* [On Coordinating LLMs and Platform Knowledge for Software Modernization and New Developments](https://ieeexplore.ieee.org/document/10664288)
 * [Hybrid Intelligence - Combining the Human in the Loop with the Computer in the Loop: A Systematic Literature Review](https://www.researchgate.net/publication/356209722_Hybrid_Intelligence_-_Combining_the_Human_in_the_Loop_with_the_Computer_in_the_Loop_A_Systematic_Literature_Review)
+* [Toward a Quality Model for Hybrid Intelligence Teams](https://www.scopus.com/pages/publications/85196358874)
+* [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
   
 ### Observability
+
 - [Majors, Charity, Liz Fong-Jones, and George Miranda. Observability engineering: achieving production excellence. " O'Reilly Media, Inc.", 2026.](https://learning.oreilly.com/library/view/observability-engineering-2nd/9781098179915/)
 - [Zhang, Lei, et al. "The benefit of hindsight: Tracing {Edge-Cases} in distributed systems." 20th USENIX Symposium on Networked Systems Design and Implementation (NSDI 23). 2023.](https://www.usenix.org/conference/nsdi23/presentation/zhang-lei)
 - [Reichelt, David Georg, et al. "Benchmarking the overhead of distributed tracing agents." Proceedings of the 17th ACM/SPEC International Conference on Performance Engineering. 2026.](https://dl.acm.org/doi/abs/10.1145/3777884.3797004)
+- [Evaluation and Benchmarking of LLM Agents: A Survey](https://doi.org/10.1145/3711896.3736570)
+- [Design Principles and Guidelines for LLM Observability: Insights from Developers](https://doi.org/10.1145/3706599.3719914)
 
 ### Experimentation framework
+
 - [Kohavi, Ron, Diane Tang, and Ya Xu. Trustworthy online controlled experiments: A practical guide to a/b testing. Cambridge University Press, 2020.](https://www.cambridge.org/core/books/trustworthy-online-controlled-experiments/D97B26382EB0EB2DC2019A7A7B518F59)
 - [Speth, Sandro, et al. "Supporting Architecture-Level Resilience Analysis with an Integrated Chaos and Load Experimentation Framework." 2026 IEEE 23rd International Conference on Software Architecture (ICSA). IEEE, 2026.](https://ieeexplore.ieee.org/abstract/document/11613074)
 - [Karrer, Brian, et al. "Network experimentation at scale." Proceedings of the 27th acm sigkdd conference on knowledge discovery & datdkha mining. 2021.](https://dl.acm.org/doi/abs/10.1145/3447548.3467091)
 - [Werner, Sebastian, et al. "A comprehensive experimentation framework for energy-efficient design of cloud-native applications." 2025 IEEE 22nd International Conference on Software Architecture (ICSA). IEEE, 2025.](https://ieeexplore.ieee.org/abstract/document/10978924)
 
 ### Fundamentals Design and Interaction of LLMs
+
 * [Building effective agents (Anthropic)](https://www.anthropic.com/research/building-effective-agents)
 * [A Practical Guide for Designing, Developing, and Deploying Production-Grade Agentic AI Workflows](https://arxiv.org/abs/2512.08769)
 * [From Static Templates to Dynamic Runtime Graphs: A Survey of Workflow Optimization for LLM Agents](https://arxiv.org/abs/2603.22386)
