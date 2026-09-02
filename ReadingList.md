@@ -76,13 +76,6 @@ An In-depth Concurrency Analysis](https://dl.acm.org/doi/pdf/10.1145/3320060)
 * https://cloud.google.com/solutions/machine-learning/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning
 * https://research.google/pubs/pub43146/
 
-### Fundamentals Design and Interaction of LLMs
-* [Building effective agents (Anthropic)](https://www.anthropic.com/research/building-effective-agents)
-* [A Practical Guide for Designing, Developing, and Deploying Production-Grade Agentic AI Workflows](https://arxiv.org/abs/2512.08769)
-* [From Static Templates to Dynamic Runtime Graphs: A Survey of Workflow Optimization for LLM Agents](https://arxiv.org/abs/2603.22386)
-* [Observability and Fault Injection for LLM-Based Multi-Agent Systems in Software Engineering](https://arxiv.org/abs/2608.24271v1)
-* [AI Observability for Large Language Model Systems: A Multi-Layer Analysis of Monitoring Approaches from Confidence Calibration to Infrastructure Tracing](https://arxiv.org/abs/2604.26152)
-
 ### Hybrid Intelligence Software with LLMs
 * [Evaluation and Benchmarking of LLM Agents: A Survey](https://doi.org/10.1145/3711896.3736570)
 * [Design Principles and Guidelines for LLM Observability: Insights from Developers](https://doi.org/10.1145/3706599.3719914)
