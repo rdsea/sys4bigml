@@ -62,7 +62,7 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
 
 Date|Place|Content|Lead person
 ---|---|---|---
-02.09.2026 |U402  |[Lecture 1 - Service-based Hybrid Intelligence Software Systems ](slides/) | Linh Truong
+02.09.2026 |U402  |[Lecture 1 - Service-based Hybrid Intelligence Software Systems ](slides/cs-e4660-lecture1-multicontinuum_v0.8.pdf) | Linh Truong
 09.09.2026 | U402 |[Lecture 2 - Observability and Analytics Experimentation](slides/) | Hong-Tri Nguyen
 16.09.2026 |U402  | [Lecture 3 - Hands-on on Observability and Scenario-based Analytics Experimentation]() | Hong-Tri Nguyen, Korawit Rupanya
 23.09.2026 | U402  | [Lecture 4 - Fundamental Design and Integration of LLM Workflows and Agentic AI](slides/)| Korawit Rupanya - Hong Tri Nguyen
