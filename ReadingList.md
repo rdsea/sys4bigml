@@ -17,14 +17,14 @@ for Software Modernization and New Developments](https://ieeexplore.ieee.org/doc
   
 ### Observability
 - [Majors, Charity, Liz Fong-Jones, and George Miranda. Observability engineering: achieving production excellence. " O'Reilly Media, Inc.", 2026.](https://learning.oreilly.com/library/view/observability-engineering-2nd/9781098179915/)
-- Zhang, Lei, et al. "The benefit of hindsight: Tracing {Edge-Cases} in distributed systems." 20th USENIX Symposium on Networked Systems Design and Implementation (NSDI 23). 2023.
-- Reichelt, David Georg, et al. "Benchmarking the overhead of distributed tracing agents." Proceedings of the 17th ACM/SPEC International Conference on Performance Engineering. 2026.
+- [Zhang, Lei, et al. "The benefit of hindsight: Tracing {Edge-Cases} in distributed systems." 20th USENIX Symposium on Networked Systems Design and Implementation (NSDI 23). 2023.](https://www.usenix.org/conference/nsdi23/presentation/zhang-lei)
+- [Reichelt, David Georg, et al. "Benchmarking the overhead of distributed tracing agents." Proceedings of the 17th ACM/SPEC International Conference on Performance Engineering. 2026.](https://dl.acm.org/doi/abs/10.1145/3777884.3797004)
 
 ### Experimentation framework
-- Kohavi, Ron, Diane Tang, and Ya Xu. Trustworthy online controlled experiments: A practical guide to a/b testing. Cambridge University Press, 2020.
-- Speth, Sandro, et al. "Supporting Architecture-Level Resilience Analysis with an Integrated Chaos and Load Experimentation Framework." 2026 IEEE 23rd International Conference on Software Architecture (ICSA). IEEE, 2026.
-- Karrer, Brian, et al. "Network experimentation at scale." Proceedings of the 27th acm sigkdd conference on knowledge discovery & data mining. 2021.
-- Werner, Sebastian, et al. "A comprehensive experimentation framework for energy-efficient design of cloud-native applications." 2025 IEEE 22nd International Conference on Software Architecture (ICSA). IEEE, 2025.
+- [Kohavi, Ron, Diane Tang, and Ya Xu. Trustworthy online controlled experiments: A practical guide to a/b testing. Cambridge University Press, 2020.](https://www.cambridge.org/core/books/trustworthy-online-controlled-experiments/D97B26382EB0EB2DC2019A7A7B518F59)
+- [Speth, Sandro, et al. "Supporting Architecture-Level Resilience Analysis with an Integrated Chaos and Load Experimentation Framework." 2026 IEEE 23rd International Conference on Software Architecture (ICSA). IEEE, 2026.](https://ieeexplore.ieee.org/abstract/document/11613074)
+- [Karrer, Brian, et al. "Network experimentation at scale." Proceedings of the 27th acm sigkdd conference on knowledge discovery & datdkha mining. 2021.](https://dl.acm.org/doi/abs/10.1145/3447548.3467091)
+- [Werner, Sebastian, et al. "A comprehensive experimentation framework for energy-efficient design of cloud-native applications." 2025 IEEE 22nd International Conference on Software Architecture (ICSA). IEEE, 2025.](https://ieeexplore.ieee.org/abstract/document/10978924)
 
 ### Robustness, Reliability, Resilience and Elasticity
 
