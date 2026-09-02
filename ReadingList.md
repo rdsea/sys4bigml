@@ -14,6 +14,8 @@
 * [On Coordinating LLMs and Platform Knowledge for Software Modernization and New Developments](https://ieeexplore.ieee.org/document/10664288)
 * [Hybrid Intelligence - Combining the Human in the Loop with the Computer in the Loop: A Systematic Literature Review](https://www.researchgate.net/publication/356209722_Hybrid_Intelligence_-_Combining_the_Human_in_the_Loop_with_the_Computer_in_the_Loop_A_Systematic_Literature_Review)
 * [Hybrid collective intelligence in a human–AI society](https://link.springer.com/article/10.1007/s00146-020-01005-y)
+* [Disentangling Human-AI Hybrids](https://link.springer.com/article/10.1007/s12599-023-00810-1)
+* [A Unified Framework for Human–AI Collaboration in Security Operations Centers with Trusted Autonomy](https://dl.acm.org/doi/pdf/10.1145/3837073)
 * [Toward a Quality Model for Hybrid Intelligence Teams](https://www.scopus.com/pages/publications/85196358874)
 
   
