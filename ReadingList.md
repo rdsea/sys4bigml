@@ -26,6 +26,13 @@ for Software Modernization and New Developments](https://ieeexplore.ieee.org/doc
 - [Karrer, Brian, et al. "Network experimentation at scale." Proceedings of the 27th acm sigkdd conference on knowledge discovery & datdkha mining. 2021.](https://dl.acm.org/doi/abs/10.1145/3447548.3467091)
 - [Werner, Sebastian, et al. "A comprehensive experimentation framework for energy-efficient design of cloud-native applications." 2025 IEEE 22nd International Conference on Software Architecture (ICSA). IEEE, 2025.](https://ieeexplore.ieee.org/abstract/document/10978924)
 
+### Fundamentals Design and Interaction of LLMs
+* [Building effective agents (Anthropic)](https://www.anthropic.com/research/building-effective-agents)
+* [A Practical Guide for Designing, Developing, and Deploying Production-Grade Agentic AI Workflows](https://arxiv.org/abs/2512.08769)
+* [From Static Templates to Dynamic Runtime Graphs: A Survey of Workflow Optimization for LLM Agents](https://arxiv.org/abs/2603.22386)
+* [Observability and Fault Injection for LLM-Based Multi-Agent Systems in Software Engineering](https://arxiv.org/abs/2608.24271v1)
+* [AI Observability for Large Language Model Systems: A Multi-Layer Analysis of Monitoring Approaches from Confidence Calibration to Infrastructure Tracing](https://arxiv.org/abs/2604.26152)
+
 ### Robustness, Reliability, Resilience and Elasticity
 
 * [SysML: The New Frontier of Machine Learning Systems](https://arxiv.org/abs/1904.03257)
