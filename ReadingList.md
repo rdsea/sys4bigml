@@ -13,6 +13,7 @@
 * [A Programming Model for Hybrid Collaborative Adaptive Systems](https://doi.org/10.1109/TETC.2017.2702578)
 * [On Coordinating LLMs and Platform Knowledge for Software Modernization and New Developments](https://ieeexplore.ieee.org/document/10664288)
 * [Hybrid Intelligence - Combining the Human in the Loop with the Computer in the Loop: A Systematic Literature Review](https://www.researchgate.net/publication/356209722_Hybrid_Intelligence_-_Combining_the_Human_in_the_Loop_with_the_Computer_in_the_Loop_A_Systematic_Literature_Review)
+* [Hybrid collective intelligence in a human–AI society](https://link.springer.com/article/10.1007/s00146-020-01005-y)
 * [Toward a Quality Model for Hybrid Intelligence Teams](https://www.scopus.com/pages/publications/85196358874)
 * [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
   
