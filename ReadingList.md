@@ -15,7 +15,7 @@
 * [Hybrid Intelligence - Combining the Human in the Loop with the Computer in the Loop: A Systematic Literature Review](https://www.researchgate.net/publication/356209722_Hybrid_Intelligence_-_Combining_the_Human_in_the_Loop_with_the_Computer_in_the_Loop_A_Systematic_Literature_Review)
 * [Hybrid collective intelligence in a human–AI society](https://link.springer.com/article/10.1007/s00146-020-01005-y)
 * [Toward a Quality Model for Hybrid Intelligence Teams](https://www.scopus.com/pages/publications/85196358874)
-* [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
+
   
 ### Observability
 
@@ -39,12 +39,13 @@
 * [From Static Templates to Dynamic Runtime Graphs: A Survey of Workflow Optimization for LLM Agents](https://arxiv.org/abs/2603.22386)
 * [Observability and Fault Injection for LLM-Based Multi-Agent Systems in Software Engineering](https://arxiv.org/abs/2608.24271v1)
 * [AI Observability for Large Language Model Systems: A Multi-Layer Analysis of Monitoring Approaches from Confidence Calibration to Infrastructure Tracing](https://arxiv.org/abs/2604.26152)
+* [A.I. Robustness: a Human-Centered Perspective on Technological Challenges and Opportunities](https://doi.org/10.1145/3665926)
 
 ### Robustness, Reliability, Resilience and Elasticity
 
 * [SysML: The New Frontier of Machine Learning Systems](https://arxiv.org/abs/1904.03257)
 * [Data Validation for Machine Learning](https://mlsys.org/Conferences/2019/doc/2019/167.pdf)
-* [ Coordination-aware assurance for end-to-end machine learning systems: the R3E approach](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
+* [Coordination-aware assurance for end-to-end machine learning systems: the R3E approach](https://www.researchgate.net/publication/341762862_R3E_-An_Approach_to_Robustness_Reliability_Resilience_and_Elasticity_Engineering_for_End-to-End_Machine_Learning_Systems)
 * https://ai.googleblog.com/2019/12/improving-out-of-distribution-detection.html
 * [Tutorial: Safe and Reliable Machine Learning](https://arxiv.org/pdf/1904.07204.pdf)
 * [On the Resilience of LLM-Based Multi-Agent Collaboration with Faulty Agents](https://arxiv.org/pdf/2408.00989)
