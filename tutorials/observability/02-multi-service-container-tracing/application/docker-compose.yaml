@@ -24,7 +24,7 @@ services:
   #     - jaeger
 
   preprocessing:
-    image: hongtringuyen/preprocessing
+    image: hongtringuyen/preprocessing:sys4bigml
     container_name: preprocessing
     ports:
       - "5010:5010"
@@ -32,42 +32,44 @@ services:
       DOCKER: "true"
       MANUAL_TRACING: true
       #OTEL_ENDPOINT: "http://otelcol:4318/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      OTEL_ENDPOINT: "http://jaeger:4317" #/v1/traces"
+      #ENSEMBLE_SERVICE_URL: "http://ensemble:5011/ensemble_service"
     networks:
       - otel-net
 
   ensemble:
-    image: hongtringuyen/ensemble_nollm
+    #image: hongtringuyen/ensemble_nollm
+    image: hongtringuyen/ensemble:sys4bigml
     container_name: ensemble
     environment:
       DOCKER: "true"
       MANUAL_TRACING: true
       #OTEL_ENDPOINT: "http://otelcol:4318/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      OTEL_ENDPOINT: "http://jaeger:4317" #/v1/traces"
     networks:
       - otel-net
 
   efficientnetb0:
-    image: hongtringuyen/inference
+    image: hongtringuyen/inference:sys4bigml
     container_name: efficientnetb0
     command: ["--model", "EfficientNetB0"]
     environment:
       DOCKER: "true"
       MANUAL_TRACING: true
       #OTEL_ENDPOINT: "http://otelcol:4318/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      OTEL_ENDPOINT: "http://jaeger:4317" #/v1/traces"
     networks:
       - otel-net
 
   mobilenetv2:
-    image: hongtringuyen/inference
+    image: hongtringuyen/inference:sys4bigml
     container_name: mobilenetv2
     command: ["--model", "MobileNetV2"]
     environment:
       DOCKER: "true"
       MANUAL_TRACING: true
       #OTEL_ENDPOINT: "http://otelcol:4318/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      OTEL_ENDPOINT: "http://jaeger:4317" #/v1/traces"
     networks:
       - otel-net
 
