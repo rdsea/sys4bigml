@@ -33,6 +33,8 @@ In this part, we will run the application and have all services send traces dire
 2. **Start the application:**
    Open a terminal and run the following command from the `02-multi-service-container-tracing` directory:
    ```bash
+
+   docker network create otel-net
    docker compose -f application/docker-compose.yaml up -d
    ```
    This will start all the service-based application in the background.
