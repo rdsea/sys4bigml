@@ -1,0 +1,83 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #10151c;
+  color: #dce3ec;
+  line-height: 1.5;
+  padding: 2rem 1rem 4rem;
+}
+
+header { max-width: 720px; margin: 0 auto 2rem; }
+h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+.subtitle { color: #8b98a9; font-size: 0.95rem; }
+
+main { max-width: 720px; margin: 0 auto; display: grid; gap: 1.25rem; }
+
+.card {
+  background: #1a212b;
+  border: 1px solid #2a3442;
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+.card h2 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+.card p { color: #a6b1c0; font-size: 0.9rem; margin-bottom: 0.75rem; }
+
+textarea {
+  width: 100%;
+  background: #10151c;
+  color: #dce3ec;
+  border: 1px solid #2a3442;
+  border-radius: 6px;
+  padding: 0.6rem;
+  font: inherit;
+  margin-bottom: 0.75rem;
+}
+
+button {
+  background: #2f6feb;
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 0.55rem 1.1rem;
+  font: inherit;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.5; cursor: wait; }
+
+.row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+select {
+  flex: 1 1 20rem;
+  background: #10151c;
+  color: #dce3ec;
+  border: 1px solid #2a3442;
+  border-radius: 6px;
+  padding: 0.55rem;
+  font: inherit;
+}
+button:hover:not(:disabled) { background: #3d7bff; }
+
+.output {
+  margin-top: 0.9rem;
+  background: #0b0f14;
+  border: 1px solid #2a3442;
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 24rem;
+  overflow-y: auto;
+}
+
+.links ul { list-style: none; }
+.links li { margin: 0.3rem 0; }
+.links a { color: #6ea8ff; }
+code { color: #9ecbff; font-size: 0.85em; }
