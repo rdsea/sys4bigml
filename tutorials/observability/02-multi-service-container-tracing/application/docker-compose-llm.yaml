@@ -17,8 +17,8 @@ services:
       DOCKER: "true"
       LOG_LEVEL: "WARNING"
       MANUAL_TRACING: "true"
-      OTEL_ENDPOINT: "http://otelcol:4317"
-      # OTEL_ENDPOINT: "http://jaeger:4317"
+      # OTEL_ENDPOINT: "http://otelcol:4317"
+      OTEL_ENDPOINT: "http://jaeger:4317"
     # depends_on:
     #   - otel-collector
     networks:
@@ -33,8 +33,8 @@ services:
       # additionally logs the full per-backend result payload.
       LOG_LEVEL: "${LOG_LEVEL:-INFO}"
       MANUAL_TRACING: "true"
-      OTEL_ENDPOINT: "http://otelcol:4317"
-      # OTEL_ENDPOINT: "http://jaeger:4317"
+      # OTEL_ENDPOINT: "http://otelcol:4317"
+      OTEL_ENDPOINT: "http://jaeger:4317"
       SEND_TO_QUEUE: "false"
       # Ensemble members as name=kind=url. Edit here to add/remove/repoint a
       # backend without rebuilding. kind is "cnn" (raw RGB buffer) or "llm"
@@ -58,8 +58,8 @@ services:
     environment:
       LOG_LEVEL: "WARNING"
       MANUAL_TRACING: "true"
-      OTEL_ENDPOINT: "http://otelcol:4317"
-      # OTEL_ENDPOINT: "http://jaeger:4317"
+      # OTEL_ENDPOINT: "http://otelcol:4317"
+      OTEL_ENDPOINT: "http://jaeger:4317"
     # depends_on:
     #   - otel-collector
     networks:
@@ -71,8 +71,8 @@ services:
     environment:
       LOG_LEVEL: "WARNING"
       MANUAL_TRACING: "true"
-      OTEL_ENDPOINT: "http://otelcol:4317"
-      # OTEL_ENDPOINT: "http://jaeger:4317"
+      # OTEL_ENDPOINT: "http://otelcol:4317"
+      OTEL_ENDPOINT: "http://jaeger:4317"
     # depends_on:
     #   - otel-collector
     networks:
@@ -90,8 +90,8 @@ services:
       LLM_PROMPT: "${LLM_PROMPT:-Describe this image.}"
       LOG_LEVEL: "INFO"
       MANUAL_TRACING: "true"
-      OTEL_ENDPOINT: "http://otelcol:4317"
-      #OTEL_ENDPOINT: "http://jaeger:4317"
+      # OTEL_ENDPOINT: "http://otelcol:4317"
+      OTEL_ENDPOINT: "http://jaeger:4317"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     # depends_on:
@@ -108,8 +108,8 @@ services:
       LLM_PROMPT: "${LLM_PROMPT:-Describe this image.}"
       LOG_LEVEL: "INFO"
       MANUAL_TRACING: "true"
-      OTEL_ENDPOINT: "http://otelcol:4317"
-      # OTEL_ENDPOINT: "http://jaeger:4317"
+      # OTEL_ENDPOINT: "http://otelcol:4317"
+      OTEL_ENDPOINT: "http://jaeger:4317"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     # depends_on:
