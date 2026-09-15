@@ -4,66 +4,195 @@
 #     driver: bridge
 # $ docker network connect tracing-net jaeger
 
+networks:
+  otel-net:
+    external: true
+
 services:
   preprocessing:
-    image: hongtringuyen/preprocessing
-    container_name: preprocessing
-    # networks:
-    #   - tracing-net
+    image: hongtringuyen/preprocessing:llm
     ports:
-      - 5010:5010
+      - "${PREPROCESSING_PORT:-5010}:5010"
     environment:
       DOCKER: "true"
-      MANUAL_TRACING: true
-      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      LOG_LEVEL: "WARNING"
+      MANUAL_TRACING: "true"
+      OTEL_ENDPOINT: "http://otelcol:4317"
+      # OTEL_ENDPOINT: "http://jaeger:4317"
+    # depends_on:
+    #   - otel-collector
+    networks:
+      - otel-net
 
   ensemble:
-    image: hongtringuyen/ensemble
-    container_name: ensemble
-    #restart: unless-stopped
-    # networks:
-    #   - tracing-net
+    image: hongtringuyen/ensemble:llm
     environment:
       DOCKER: "true"
-      MANUAL_TRACING: true
-      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
-      SEND_TO_QUEUE: false
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      # INFO so the resolved backend list is logged at startup -- that line is how
+      # you confirm an INFERENCE_BACKENDS edit actually took effect. LOG_LEVEL=DEBUG
+      # additionally logs the full per-backend result payload.
+      LOG_LEVEL: "${LOG_LEVEL:-INFO}"
+      MANUAL_TRACING: "true"
+      OTEL_ENDPOINT: "http://otelcol:4317"
+      # OTEL_ENDPOINT: "http://jaeger:4317"
+      SEND_TO_QUEUE: "false"
+      # Ensemble members as name=kind=url. Edit here to add/remove/repoint a
+      # backend without rebuilding. kind is "cnn" (raw RGB buffer) or "llm"
+      # (JPEG-encoded). Omit to fall back to src/ensemble/ensemble_service.yaml.
+      INFERENCE_BACKENDS: >-
+        mobilenetv2=cnn=http://mobilenetv2:5012/inference,
+        efficientnetb0=cnn=http://efficientnetb0:5012/inference,
+        moondream=llm=http://moondream-service:5012/inference
+      RABBITMQ_URL: "gateway.cloud-1.svc:30072"
+      RABBITMQ_QUEUE_NAME: "object_detection_result"
+      RABBITMQ_USERNAME: "admin"
+      RABBITMQ_PASSWORD: "adminadminadmin"
+    # depends_on:
+    #   - otel-collector
+    networks:
+      - otel-net
 
   efficientnetb0:
-    image: hongtringuyen/inference
-    container_name: efficientnetb0
-    # networks:
-    #   - tracing-net
+    image: hongtringuyen/inference:llm_cpu
     command: ["--model", "EfficientNetB0"]
     environment:
-      MANUAL_TRACING: true
-      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      LOG_LEVEL: "WARNING"
+      MANUAL_TRACING: "true"
+      OTEL_ENDPOINT: "http://otelcol:4317"
+      # OTEL_ENDPOINT: "http://jaeger:4317"
+    # depends_on:
+    #   - otel-collector
+    networks:
+      - otel-net
 
   mobilenetv2:
-    image: hongtringuyen/inference
-    container_name: mobilenetv2
-    # networks:
-    #   - tracing-net
-    restart: unless-stopped
+    image: hongtringuyen/inference:llm_cpu
     command: ["--model", "MobileNetV2"]
     environment:
-      MANUAL_TRACING: true
-      #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      LOG_LEVEL: "WARNING"
+      MANUAL_TRACING: "true"
+      OTEL_ENDPOINT: "http://otelcol:4317"
+      # OTEL_ENDPOINT: "http://jaeger:4317"
+    # depends_on:
+    #   - otel-collector
+    networks:
+      - otel-net
 
-  llm-llava:
-    image: hongtringuyen/llm_service
-    container_name: llava
-    # ports:
-    #   - 5012:5012
-    #command: [""]
+  # Adapter exposing an Ollama/vLLM model on the same /inference contract as the
+  # CNN services. Talks to an Ollama on the host by default; overlay
+  # deployment/llm/docker-compose.ollama.yaml to run the engine in a container.
+  llava-service:
+    image: hongtringuyen/llm_service:llm
     environment:
-      OLLAMA_HOST: "http://host.docker.internal:11434"
+      LLM_BACKEND: "ollama"
+      LLM_BASE_URL: "http://host.docker.internal:11434"
       LLM_MODEL: "llava:7b"
-      MANUAL_TRACING: true
-      OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+      LOG_LEVEL: "INFO"
+      MANUAL_TRACING: "true"
+      OTEL_ENDPOINT: "http://otelcol:4317"
+      #OTEL_ENDPOINT: "http://jaeger:4317"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    # depends_on:
+    #   - otel-collector
+    networks:
+      - otel-net
+
+  moondream-service:
+    image: hongtringuyen/llm_service:llm
+    environment:
+      LLM_BACKEND: "ollama"
+      LLM_BASE_URL: "http://host.docker.internal:11434"
+      LLM_MODEL: "${LLM_MODEL:-moondream-fast}"
+      LOG_LEVEL: "INFO"
+      MANUAL_TRACING: "true"
+      OTEL_ENDPOINT: "http://otelcol:4317"
+      # OTEL_ENDPOINT: "http://jaeger:4317"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # depends_on:
+    #   - otel-collector
+    networks:
+      - otel-net
+
+  # otelcol:
+  #   image: otel/opentelemetry-collector-contrib:latest
+  #   restart: unless-stopped
+  #   command: ["--config=/etc/otel-collector-config.yaml"]
+  #   volumes:
+  #     - ../config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+  #   ports:
+  #     - "1888:1888" # pprof extension
+  #     - "8888:8888" # Prometheus metrics exposed by the collector
+  #     - "8889:8889" # Prometheus exporter metrics
+  #     - "13133:13133" # health_check extension
+  #     - "4317:4317" # OTLP gRPC receiver
+  #     # - "4318:4318" # OTLP HTTP receiver
+  #     - "55679:55679" # zpages extension
+  #   networks:
+  #     - otel-net
+  #
+# services:
+#   preprocessing:
+#     image: hongtringuyen/preprocessing
+#     container_name: preprocessing:sys4bigml
+#     # networks:
+#     #   - tracing-net
+#     ports:
+#       - 5010:5010
+#     environment:
+#       DOCKER: "true"
+#       MANUAL_TRACING: true
+#       #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+#       OTEL_ENDPOINT: "http://jaeger:4317" #/v1/traces"
+#
+#   ensemble:
+#     image: hongtringuyen/ensemble_llm:sys4bigml
+#     container_name: ensemble
+#     #restart: unless-stopped
+#     # networks:
+#     #   - tracing-net
+#     environment:
+#       DOCKER: "true"
+#       MANUAL_TRACING: true
+#       #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+#       SEND_TO_QUEUE: false
+#       #OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+#       OTEL_ENDPOINT: "http://jaeger:4317" #/v1/traces"
+#
+#   efficientnetb0:
+#     image: hongtringuyen/inference
+#     container_name: efficientnetb0
+#     # networks:
+#     #   - tracing-net
+#     command: ["--model", "EfficientNetB0"]
+#     environment:
+#       MANUAL_TRACING: true
+#       #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+#       OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+#
+#   mobilenetv2:
+#     image: hongtringuyen/inference
+#     container_name: mobilenetv2
+#     # networks:
+#     #   - tracing-net
+#     restart: unless-stopped
+#     command: ["--model", "MobileNetV2"]
+#     environment:
+#       MANUAL_TRACING: true
+#       #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
+#       OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+#
+#   llm-llava:
+#     image: hongtringuyen/llm_service
+#     container_name: llava
+#     # ports:
+#     #   - 5012:5012
+#     #command: [""]
+#     environment:
+#       OLLAMA_HOST: "http://host.docker.internal:11434"
+#       LLM_MODEL: "llava:7b"
+#       MANUAL_TRACING: true
+#       OTEL_ENDPOINT: "http://jaeger:4318/v1/traces"
+#     extra_hosts:
+#       - "host.docker.internal:host-gateway"

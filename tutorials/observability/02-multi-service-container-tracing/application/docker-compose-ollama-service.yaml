@@ -1,0 +1,127 @@
+# Containerized Ollama engine + the model-pull step, replacing the previous
+# "Ollama runs on the host, reach it via host.docker.internal" arrangement.
+#
+#   docker compose -f docker-compose.yml -f deployment/llm/docker-compose.ollama.yaml up
+#
+# Change the served model without rebuilding anything:
+#   LLM_MODEL=qwen2.5vl:3b docker compose ... up
+
+networks:
+  otel-net:
+    external: true
+
+services:
+  ollama:
+    image: ollama/ollama:${OLLAMA_VERSION:-latest}
+    restart: unless-stopped
+    volumes:
+      # Named volume so pulled weights survive `down` and are not re-downloaded.
+      - ollama-models:/root/.ollama
+    ports:
+      # Exposed for `ollama` CLI / curl debugging from the host. Not needed by the
+      # pipeline itself, which reaches it over the compose network.
+      - "${OLLAMA_PORT:-11434}:11434"
+    environment:
+      # OLLAMA_KEEP_ALIVE: "${OLLAMA_KEEP_ALIVE:-5m}"
+      OLLAMA_KEEP_ALIVE: "-1"
+      # Number of models held in VRAM/RAM at once.
+      # OLLAMA_MAX_LOADED_MODELS: "${OLLAMA_MAX_LOADED_MODELS:-1}"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      # dont split ctx across slots
+      OLLAMA_NUM_PARALLEL: "1" 
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      - otel-net
+
+  # One-shot: pulls the model, then exits. The adapter waits for it to complete,
+  # so the first request never races an unpulled model.
+  # ollama-pull:
+  #   image: ollama/ollama:${OLLAMA_VERSION:-latest}
+  #   depends_on:
+  #     ollama:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ollama-models:/root/.ollama
+  #   environment:
+  #     OLLAMA_HOST: "http://ollama:11434"
+  #   entrypoint: ["/bin/sh", "-c"]
+  #   command:
+  #     - |
+  #       set -e
+  #       for model in $$(echo "${LLM_MODELS:-${LLM_MODEL:-llava:7b}}" | tr ',' ' '); do
+  #         echo "Pulling $$model ..."
+  #         ollama pull "$$model"
+  #       done
+  #       echo "All models pulled."
+  #   restart: "no"
+  #   networks:
+  #     - otel-net
+  #
+
+  ollama-pull:
+    image: ollama/ollama:${OLLAMA_VERSION:-latest}
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ollama-models:/root/.ollama
+    environment:
+      OLLAMA_HOST: "http://ollama:11434"
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -e
+        BASE="${LLM_BASE_MODEL:-moondream:1.8b}"
+        ollama pull "$$BASE"
+        printf "FROM $$BASE\nPARAMETER num_predict ${LLM_NUM_PREDICT:-48}\n" > /tmp/Modelfile
+        ollama create "${LLM_MODEL:-moondream-fast}" -f /tmp/Modelfile
+        echo "Ready: ${LLM_MODEL:-moondream-fast}"
+    restart: "no"
+    networks:
+      - otel-net
+  # The adapter that speaks the ensemble's /inference contract.
+  # Overrides the llava-service defined in docker-compose.yml so it points at
+  # the containerized engine instead of the host.
+  llava-service:
+    depends_on:
+      ollama-pull:
+        condition: service_completed_successfully
+    environment:
+      LLM_BACKEND: "ollama"
+      LLM_BASE_URL: "http://ollama:11434"
+      LLM_NUM_PREDICT: "48"
+      LLM_MODEL: "${LLM_MODEL:-llava:7b}"
+      MODEL_CALL_TIMEOUT: "60"
+      LOG_LEVEL: "${LOG_LEVEL:-INFO}"
+      MANUAL_TRACING: "true"
+      #OTEL_ENDPOINT: "${OTEL_ENDPOINT:-http://otelcol:4317}"
+      OTEL_ENDPOINT: "http://otelcol:4317"
+      #OTEL_ENDPOINT: "http://jaeger:4317"
+    networks:
+      - otel-net
+
+  moondream-service:
+    depends_on:
+      ollama-pull:
+        condition: service_completed_successfully
+    environment:
+      LLM_BACKEND: "ollama"
+      LLM_BASE_URL: "http://ollama:11434"
+      LLM_NUM_PREDICT: "48"
+      LLM_MODEL: "${LLM_MODEL:-moondream-fast}"
+      MODEL_CALL_TIMEOUT: "60"
+      LOG_LEVEL: "${LOG_LEVEL:-INFO}"
+      MANUAL_TRACING: "true"
+      #OTEL_ENDPOINT: "${OTEL_ENDPOINT:-http://otelcol:4317}"
+      OTEL_ENDPOINT: "http://otelcol:4317"
+      #OTEL_ENDPOINT: "http://jaeger:4317"
+    networks:
+      - otel-net
+volumes:
+  ollama-models:
+
