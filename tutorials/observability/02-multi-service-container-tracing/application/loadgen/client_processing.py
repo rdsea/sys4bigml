@@ -79,7 +79,7 @@ async def main():
         default="./image/",
     )
     parser.add_argument(
-        "--rate", type=int, help="Number of requests per second", default=1
+        "--rate", type=int, help="the request interval", default=1
     )
     parser.add_argument(
         "--device_id", type=str, help="Specify device ID", default="aaltosea_cam_01"
@@ -101,7 +101,8 @@ async def main():
 
     files = os.listdir(ds_path)
     jpeg_images_list = [file for file in files if file.lower().endswith(".jpeg")]
-    requesting_interval = 1.0 / req_rate
+    #requesting_interval = 1.0 / req_rate
+    requesting_interval = req_rate
     device_id = "drone_1"
     await send_request(url, jpeg_images_list, requesting_interval, device_id)
 
