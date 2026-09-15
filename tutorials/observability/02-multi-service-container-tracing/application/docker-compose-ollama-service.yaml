@@ -94,7 +94,6 @@ services:
     environment:
       LLM_BACKEND: "ollama"
       LLM_BASE_URL: "http://ollama:11434"
-      LLM_NUM_PREDICT: "48"
       LLM_MODEL: "${LLM_MODEL:-llava:7b}"
       MODEL_CALL_TIMEOUT: "60"
       LOG_LEVEL: "${LOG_LEVEL:-INFO}"
@@ -112,7 +111,6 @@ services:
     environment:
       LLM_BACKEND: "ollama"
       LLM_BASE_URL: "http://ollama:11434"
-      LLM_NUM_PREDICT: "48"
       LLM_MODEL: "${LLM_MODEL:-moondream-fast}"
       MODEL_CALL_TIMEOUT: "60"
       LOG_LEVEL: "${LOG_LEVEL:-INFO}"
