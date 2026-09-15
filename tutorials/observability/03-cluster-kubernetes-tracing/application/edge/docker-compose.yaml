@@ -1,6 +1,6 @@
 services:
   preprocessing:
-    image: hongtringuyen/preprocessing
+    image: hongtringuyen/preprocessing:sys4bigml
     container_name: preprocessing
     network_mode: "host" # add this one for presenting the host machine
     # ports:
@@ -9,5 +9,6 @@ services:
       #DOCKER: "true"
       MANUAL_TRACING: true
       #OTEL_ENDPOINT: "http://otelcol:4318" #/v1/traces"
-      OTEL_ENDPOINT: "http://otel-collector.softsys.com/v1/traces"
+      # OTEL_ENDPOINT: "http://otel-collector.softsys.com/v1/traces"
+      OTEL_ENDPOINT: "http://otel-collector.observability.svc.cluster.local:4317"
       ENSEMBLE_ENDPOINT: "http://ensemble/ensemble_service"

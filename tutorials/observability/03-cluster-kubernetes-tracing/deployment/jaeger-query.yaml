@@ -22,7 +22,7 @@ spec:
             - "--es.tls.enabled=true"
             - "--es.tls.ca=/etc/certs/ca.crt"
             - "--es.username=elastic"
-            - "--es.password=lDpWEaFcMHsJvKe7"
+            - "--es.password=ACvu1NTrMxt6lZFc"
           #image: cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
           # env:
           #   - name: SPAN_STORAGE_TYPE
