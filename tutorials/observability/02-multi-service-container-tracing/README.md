@@ -36,6 +36,8 @@ In this part, we will run the application and have all services send traces dire
 
    docker network create otel-net
    docker compose -f application/docker-compose.yaml up -d
+   # OR with LLM
+   docker compose -f application/docker-compose-llm.yaml  -f application/docker-compose-ollama-service.yaml up -d
    ```
    This will start all the service-based application in the background.
 
