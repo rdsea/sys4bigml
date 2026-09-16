@@ -117,7 +117,6 @@ Now, let's send the traces to a Jaeger backend instead of the console.
    ```bash
    docker run --rm --name jaeger \
      -p 16686:16686 \
-     -p 4317:4317 \
      -p 4318:4318 \
      cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
    #cr.jaegertracing.io/jaegertracing/all-in-one:latest
@@ -163,7 +162,7 @@ It's common to use an OpenTelemetry Collector to receive, process, and export te
    ```bash
    docker run --rm --name otelcol \
      -v "$(pwd)/config/otel-collector-config.yaml":/etc/otelcol-contrib/config.yaml \
-     -p 4317:4317 -p 4318:4318 \
+     -p 4317:4317  \
      otel/opentelemetry-collector-contrib:latest \
      --config /etc/otelcol-contrib/config.yaml
    ```
