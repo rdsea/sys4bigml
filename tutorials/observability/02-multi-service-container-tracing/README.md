@@ -83,7 +83,7 @@ It is a best practice to use an OpenTelemetry Collector to manage telemetry data
    docker compose -f deployment/otel-jaeger.yaml up -d
 
    # Restart with the application docker compose with different endpoint
-   OTEL_ENDPOINT="http://otelcol:4318/v1/traces" 
+   OTEL_ENDPOINT="http://otelcol:4317" 
 
    docker-compose -f application/docker-compose.yaml up -d
    ```
