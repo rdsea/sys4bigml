@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAR Mission Console — HIS-LLM Tutorial</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Search-and-Rescue Mission Console</h1>
+    <p class="subtitle">LLM workflows &amp; agentic AI in a hybrid intelligence
+      system — drones · LLM agent · human experts</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>1 · Greet the agent</h2>
+      <p>Smoke test: one plain LLM call through the agent service.</p>
+      <button id="greet-btn">Greet</button>
+      <pre id="greet-out" class="output" hidden></pre>
+    </section>
+
+    <section class="card">
+      <h2>2 · Triage a field report</h2>
+      <p>Routing workflow: one classify call picks the handler queue
+        (<code>medical · structural · logistics · ignore</code>).</p>
+      <textarea id="report-input" rows="3">Two people trapped under a collapsed wall on Oak Street, one is bleeding badly.</textarea>
+      <button id="triage-btn">Triage report</button>
+      <pre id="triage-out" class="output" hidden></pre>
+    </section>
+
+    <section class="card">
+      <h2>3 · Run the mission</h2>
+      <p>The full agent loop: survey all sectors, build a victim map, submit
+        to the human expert panel, react to their feedback, resubmit.</p>
+      <p>Who counts the victims? Run it both ways and diff the maps.</p>
+      <div class="row">
+        <select id="mission-mode">
+          <option value="model">model-derived counts — the LLM filters and
+            counts; the validator catches it when it can't</option>
+          <option value="grounded">grounded counts — code filters and counts;
+            the LLM only writes the sentence</option>
+        </select>
+        <button id="mission-btn">Run mission</button>
+      </div>
+      <pre id="mission-out" class="output" hidden></pre>
+    </section>
+
+    <section class="card links">
+      <h2>Observability</h2>
+      <ul>
+        <li><a href="http://localhost:16686" target="_blank">Jaeger</a> — traces (service: <code>agent_service</code>)</li>
+        <li><a href="http://localhost:9092" target="_blank">Prometheus</a> — metrics (<code>agent_llm_requests_total</code>, …)</li>
+        <li><a href="http://localhost:3001" target="_blank">Grafana</a> — dashboards</li>
+        <li><a href="http://localhost:3000" target="_blank">Langfuse</a> — LLM interaction logs (optional)</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
