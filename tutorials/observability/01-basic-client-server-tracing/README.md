@@ -155,6 +155,8 @@ Now, let's send the traces to a Jaeger backend instead of the console.
 ### Part 4: Using the OpenTelemetry Collector
 It's common to use an OpenTelemetry Collector to receive, process, and export telemetry data.
 
+More information of the configuration setting is from [here](https://opentelemetry.io/docs/collector/configuration/#processors)
+
 1. **Configure the Collector:**
    The configuration for the collector is in `config/otel-collector-config.yaml`. This collector is configured to receive OTLP data and export it to Jaeger.
 
