@@ -162,13 +162,20 @@ It's common to use an OpenTelemetry Collector to receive, process, and export te
    ```bash
    docker run --rm --name otelcol \
      -v "$(pwd)/config/otel-collector-config.yaml":/etc/otelcol-contrib/config.yaml \
-     -p 4317:4317  \
+     -p 4318:4318  \
      otel/opentelemetry-collector-contrib:latest \
      --config /etc/otelcol-contrib/config.yaml
    ```
 
 3. **Run Jaeger (if not already running):**
    - Ensure your Jaeger instance is running.
+   ```bash
+   docker run --rm --name jaeger \
+     -p 16686:16686 \
+     -p 4317:4317 \
+     cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
+   #cr.jaegertracing.io/jaegertracing/all-in-one:latest
+   ```
    - Ensure the docker network is the same between otel-collector and jaeger. O.w can use a docker compose file `deployment/app-otel-jaeger.yaml`
 
 4. **Run the application:**
