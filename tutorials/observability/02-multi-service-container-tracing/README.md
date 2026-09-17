@@ -33,7 +33,11 @@ In this part, we will run the application and have all services send traces dire
 2. **Start the application:**
    Open a terminal and run the following command from the `02-multi-service-container-tracing` directory:
    ```bash
+
+   docker network create otel-net
    docker compose -f application/docker-compose.yaml up -d
+   # OR with LLM
+   docker compose -f application/docker-compose-llm.yaml  -f application/docker-compose-ollama-service.yaml up -d
    ```
    This will start all the service-based application in the background.
 
@@ -81,7 +85,7 @@ It is a best practice to use an OpenTelemetry Collector to manage telemetry data
    docker compose -f deployment/otel-jaeger.yaml up -d
 
    # Restart with the application docker compose with different endpoint
-   OTEL_ENDPOINT="http://otelcol:4318/v1/traces" 
+   OTEL_ENDPOINT="http://otelcol:4317" 
 
    docker-compose -f application/docker-compose.yaml up -d
    ```

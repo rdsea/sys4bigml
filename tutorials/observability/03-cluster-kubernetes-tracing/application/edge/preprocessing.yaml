@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: preprocessing
-          image: hongtringuyen/preprocessing
+          image: hongtringuyen/preprocessing:sys4bigml
           ports:
             - containerPort: 5010
           env:

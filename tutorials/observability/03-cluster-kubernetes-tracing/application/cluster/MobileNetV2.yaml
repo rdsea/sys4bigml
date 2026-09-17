@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: mobilenetv2
-          image: hongtringuyen/inference
+          image: hongtringuyen/inference:sys4bigml
           ports:
             - containerPort: 5012
           args: ["--model", "MobileNetV2"]
@@ -30,7 +30,8 @@ spec:
             - name: MANUAL_TRACING
               value: "true"
             - name: OTEL_ENDPOINT
-              value: "http://otel-collector.observability.svc.cluster.local:4318/v1/traces"
+              #value: "http://otel-collector.observability.svc.cluster.local:4318/v1/traces"
+              value: "http://otel-collector.observability.svc.cluster.local:4317"
           resources:
             requests:
               cpu: "1500m"

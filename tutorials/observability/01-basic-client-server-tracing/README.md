@@ -31,6 +31,19 @@ The [example application from opentelemetry-python](https://github.com/open-tele
 - Create `application/` and copy client-server* application from opentelemetry-python example to
 - `application/client.py`: A Python script that sends requests to the server.
 - `application/server_automatic.py`, `application/server_manual.py`, `application/server_programmatic.py`: Three versions of a Flask-based server, each demonstrating a different way to instrument with OpenTelemetry.
+  ```
+  mkdir application
+  git clone --filter=blob:none --no-checkout https://github.com/open-telemetry/opentelemetry-python.git temp-otel
+  cd temp-otel
+
+  git sparse-checkout init --cone
+  git sparse-checkout set docs/examples/auto-instrumentation
+  git checkout main
+
+  cp -r docs/examples/auto-instrumentation/* ../application/
+  cd ..
+  rm -rf temp-otel
+  ```
 
 ## Hands-on Steps
 
@@ -104,7 +117,6 @@ Now, let's send the traces to a Jaeger backend instead of the console.
    ```bash
    docker run --rm --name jaeger \
      -p 16686:16686 \
-     -p 4317:4317 \
      -p 4318:4318 \
      cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
    #cr.jaegertracing.io/jaegertracing/all-in-one:latest
@@ -143,6 +155,8 @@ Now, let's send the traces to a Jaeger backend instead of the console.
 ### Part 4: Using the OpenTelemetry Collector
 It's common to use an OpenTelemetry Collector to receive, process, and export telemetry data.
 
+More information of the configuration setting is from [here](https://opentelemetry.io/docs/collector/configuration/#processors)
+
 1. **Configure the Collector:**
    The configuration for the collector is in `config/otel-collector-config.yaml`. This collector is configured to receive OTLP data and export it to Jaeger.
 
@@ -150,13 +164,20 @@ It's common to use an OpenTelemetry Collector to receive, process, and export te
    ```bash
    docker run --rm --name otelcol \
      -v "$(pwd)/config/otel-collector-config.yaml":/etc/otelcol-contrib/config.yaml \
-     -p 4317:4317 -p 4318:4318 \
+     -p 4318:4318  \
      otel/opentelemetry-collector-contrib:latest \
      --config /etc/otelcol-contrib/config.yaml
    ```
 
 3. **Run Jaeger (if not already running):**
    - Ensure your Jaeger instance is running.
+   ```bash
+   docker run --rm --name jaeger \
+     -p 16686:16686 \
+     -p 4317:4317 \
+     cr.jaegertracing.io/jaegertracing/jaeger:2.9.0
+   #cr.jaegertracing.io/jaegertracing/all-in-one:latest
+   ```
    - Ensure the docker network is the same between otel-collector and jaeger. O.w can use a docker compose file `deployment/app-otel-jaeger.yaml`
 
 4. **Run the application:**

@@ -22,14 +22,15 @@ spec:
     spec:
       containers:
         - name: ensemble
-          image: hongtringuyen/ensemble_nollm
+          image: hongtringuyen/ensemble:sys4bigml
           ports:
             - containerPort: 5011
           env:
             - name: MANUAL_TRACING
               value: "true"
             - name: OTEL_ENDPOINT
-              value: "http://otel-collector.observability.svc.cluster.local:4318/v1/traces"
+              #value: "http://otel-collector.observability.svc.cluster.local:4318/v1/traces"
+              value: "http://otel-collector.observability.svc.cluster.local:4317"
             - name: SEND_TO_QUEUE
               value: "false"
             - name: RABBITMQ_URL
