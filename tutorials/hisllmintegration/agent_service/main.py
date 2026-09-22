@@ -61,10 +61,10 @@ external_service_counter = meter.create_counter(
     "agent_external_requests_total",
     description="Total requests to external services")
 
-# LLM backend (Ollama when configured, deterministic mock otherwise)
+# LLM backend (local Ollama inference)
 llm = get_llm()
 langfuse = get_langfuse()
-MODEL_NAME = os.getenv("OLLAMA_MODEL", "mock-llm")
+MODEL_NAME = os.getenv("OLLAMA_MODEL")
 
 # FastAPI app
 app = FastAPI(title=SERVICE_NAME)
@@ -92,8 +92,8 @@ def llm_complete(prompt, task):
 # ---------------------------------------------------------------------------
 # The integration layer: the model returns TEXT; the mission needs DATA.
 # parse liberally -> validate strictly -> retry with the error quoted,
-# under a bounded budget. Every defense here fires against the mock AND
-# against a real Ollama model.
+# under a bounded budget. Every defense here fires against whichever
+# Ollama model is configured.
 # ---------------------------------------------------------------------------
 
 FEEDBACK = ("\nYour previous reply was invalid: {error}. "

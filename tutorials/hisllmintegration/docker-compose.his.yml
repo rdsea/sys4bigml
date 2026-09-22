@@ -23,11 +23,11 @@ services:
     build: ./agent_service
     container_name: agent_service
     environment:
-      # Leave OLLAMA_HOST/OLLAMA_MODEL unset to run on the deterministic
-      # mock LLM (zero-setup). Set them (e.g. in .env) for real inference.
-      OLLAMA_HOST: ${OLLAMA_HOST:-}
+      # Local Ollama inference is required; override in .env to point at
+      # another host or model.
+      OLLAMA_HOST: ${OLLAMA_HOST:-host.docker.internal}
       OLLAMA_PORT: ${OLLAMA_PORT:-11434}
-      OLLAMA_MODEL: ${OLLAMA_MODEL:-}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2}
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT_GRPC:-http://otel-collector:4317}
       OTEL_SERVICE_NAME: ${AGENT_OTEL_SERVICE_NAME:-agent_service}
       # Keep scrape traffic out of the traces (see detection_service above).

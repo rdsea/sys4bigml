@@ -1,27 +1,27 @@
-# Hands-on Tutorial: Fundamental Design and Integration of LLM Workflows and Agentic AI in a Hybrid Intelligence System
+# Hands-on Tutorial: Fundamental Design and Integration of LLM Agent in Hybrid Intelligence System
 
 ## Study goal
 The purpose of this hands-on tutorial is to learn:
-- Designing the integration layer that turns an LLM into a dependable software component: structured outputs (parse → validate → retry), tool use with a controlled dispatcher, workflow patterns (routing, parallelization), and an agentic loop with a human approval gate.
+- Designing the integration layer that turns an LLM agent into a dependable software component.
 
 - Composing these patterns into a Hybrid Intelligence Software system with LLMs (HIS-LLM), where humans, an LLM agent, and software services collaborate on one task across an edge–cloud continuum and observing the result end-to-end (traces, metrics, LLM interaction logs).
 
-- Reasoning about what the integration *costs*: the security and performance risks a model brings into the system, the side effects of wiring it to tools, humans and services, the mechanisms that manage each risk and, honestly, which *guarantees remain and which never existed*.
+- Reasoning about what the integration *costs*: the security and performance risks a model brings into the system, the side effects of wiring it to tools, humans and services, the mechanisms that manage each risk.
 
-- Treating the observability setup itself as changeable software: where the interaction taxonomy, the metrics and the pipeline are defined, and how to swap or extend each without breaking the consumers downstream.
+- Treating the observability setup itself as changeable software: where the interaction taxonomy, the metrics and the pipeline are defined, and how to swap or extend.
 
-!!! An LLM consumes text and produces text; nothing about the return value is guaranteed. Even when a call returns HTTP 200 in 800 ms, the payload can be prose-wrapped JSON, a missing field, a label outside the vocabulary you asked for, or a call to a tool that does not exist. Every design decision in this tutorial follows from treating model output as **untrusted input**: the model suggests, your code decides what becomes real. Observability then makes those decisions inspectable: every model call, tool dispatch, retry and human decision in this tutorial is a span you need to observe to understand the system's behavior.
+!!! An LLM consumes text and produces text; nothing about the return value is guaranteed. Even when a call returns HTTP 200 in 800 ms, the payload can be prose-wrapped JSON, a missing field, a label outside the vocabulary you asked for, or a call to a tool that does not exist. Every design decision in this tutorial follows from treating model output as **untrusted input**: the model suggests, your code decides what to use. Observability then makes those decisions inspectable: every model call, tool dispatch, retry and human decision in this tutorial is a span you need to observe to understand the system's behavior.
 
 ## Prerequisite
 * [Docker](https://docs.docker.com/get-docker/)
-* [Ollama](https://ollama.com/) — *optional*, for real local LLM inference. Without it, the stack runs on a built-in deterministic **mock LLM** that has the failure surface of a real one, so the whole tutorial works with zero setup and every run is reproducible.
+* [Ollama](https://ollama.com/), for real local LLM inference.
 
 ## Scenario: Search-and-Rescue Mission Planning in HIS-LLM
 A disaster area is divided into six sectors (A1–B3), covered by three drones with on-board detectors. An LLM agent must deliver a **victim map** that a panel of human experts signs off on before it reaches rescuers. The HIS-LLM workflow illustrates a multi-continuum architecture, where computation and decision-making occur across:
 
 1. **AI (Cloud):**
     - LLM agent (`agent_service`) → coordinates reasoning: summarizes sector evidence, triages field reports, builds the victim map, reacts to human feedback.
-    - The LLM backend is either a local Ollama model or the deterministic mock (`agent_service/llm.py`).
+    - The LLM backend is a local Ollama model (`agent_service/llm.py`).
 
     **How we emulate the multi-continuum:**
     - The `agent_service` runs in the cloud (simulated by a local Docker container) and reaches the edge only through REST tools.
@@ -49,12 +49,12 @@ flowchart LR
     subgraph cloud [Cloud]
         A[agent_service<br/>:8001<br/>LLM workflows + agent loop]
         H[human_service<br/>:8002<br/>expert panel review]
-        L[(Ollama or MockLLM)]
+        L[(Ollama)]
     end
     F[frontend_service :3100] -->|/greet /triage /mission| A
-    A -->|A2L: complete| L
-    A -->|A2S: tool calls| D
-    A -->|A2H: review request| H
+    A -->|S2S ai_to_ai: complete| L
+    A -->|S2S ai_to_service: tool calls| D
+    A -->|H2S: review request| H
     A & D & H -->|OTLP| C[otel-collector] --> J[Jaeger :16686]
     A & D & H -->|/metrics| P[Prometheus :9092] --> G[Grafana :3001]
 ```
@@ -79,9 +79,9 @@ flowchart LR
     ollama pull llama3.2
     ```
 
-4. Set Environment Variables: copy `.env.example` to `.env` and uncomment what you use (skip this step entirely to run fully self-contained):
+4. Set Environment Variables: copy `.env.example` to `.env` and adjust the Ollama settings if your setup differs (the values below are the defaults):
     ```env
-    # Ollama config (real LLM inference; omit to use the mock LLM)
+    # Ollama config (real LLM inference)
     OLLAMA_HOST=host.docker.internal
     OLLAMA_PORT=11434
     OLLAMA_MODEL=llama3.2
@@ -164,7 +164,7 @@ curl -X POST http://localhost:8001/mission -H 'Content-Type: application/json' \
 | Counts come from | the LLM, checked by `validate_summary` | `victim_counts()` |
 | The LLM's job | filter, count, minimum, *and* one sentence | one sentence |
 | Can fail on arithmetic | yes — 502 after 3 attempts | no: exact by construction |
-| Missions approved (`llama3.2`, 3 runs) | **1 / 3** | **3 / 3** |
+| Missions approved (`llama3.2`, 12 runs) | **2 / 12** | **12 / 12** |
 
 Both modes emit the identical map shape, so the human panel, the feedback loop and the traces cannot tell them apart — the only difference is which component was trusted with the arithmetic. The `model` mode is kept as the default *because* it fails: a 502 that says `min_confidence must be 0.84` is the system refusing to task rescuers off a number nobody checked, and that refusal is worth watching happen.
 
@@ -215,8 +215,8 @@ Everything else — JSON extraction, validation, retries, the tool dispatcher, t
 
 - **The contract is text, nothing more.** No structure, no vocabulary, no truthfulness is promised at the interface. That is why every guarantee in this tutorial is enforced *outside* the model, on our side of the interface.
 - **The model is stateless.** There is no hidden session: the tool loop replays the whole conversation (observations, errors) into each prompt. Consequence: prompts grow with every step, which is a token cost and everything the model "knows" is inspectable in the prompt.
-- **Accounting is part of the integration.** Both backends track `calls` / `prompt_tokens` / `completion_tokens` the way an API bill would; `/mission` returns them. A model you cannot meter is a model you cannot budget.
-- **Swapping the model must not change the architecture.** Mock ↔ `llama3.2` ↔ a bigger model changes the failure *statistics* (retry rate, latency, cost), never the failure *modes* — the defenses stay identical. If replacing the model forces you to rewrite the integration layer, the layer was overfitted to one model's quirks.
+- **Accounting is part of the integration.** The backend tracks `calls` / `prompt_tokens` / `completion_tokens` the way an API bill would; `/mission` returns them. A model you cannot meter is a model you cannot budget.
+- **Swapping the model must not change the architecture.** `llama3.2` ↔ a bigger model changes the failure *statistics* (retry rate, latency, cost), never the failure *modes* — the defenses stay identical. If replacing the model forces you to rewrite the integration layer, the layer was overfitted to one model's quirks.
 
 ## 2. Security: an untrusted component inside your trust boundary
 
@@ -253,16 +253,15 @@ The integration layer buys reliability with retries. The consequences are struct
 
 - **Worst-case cost is computable by construction.** Every loop is bounded: a summary costs ≤ 3 completions, the tool loop ≤ 7 steps + ≤ 3 attempts at the forced final answer = ≤ 10, a mission ≤ 4 iterations of (survey + review + investigation). Multiply the budgets and you have a hard ceiling on model calls per mission *before* running anything. The guarantee is **bounded cost and termination**. Note how the ceiling moved when the terminal answer gained its own retry budget: adding a defense is adding cost, and the ceiling has to be recomputed, not assumed.
 - **Every cross-boundary hop has a timeout** (tools 10 s, human review 30 s, Ollama 120 s). A hung dependency becomes a loud 502 inside a finished trace, never a silently stuck mission.
-- **Gates are ordered by cost.** `map_valid` runs before `request_review` (้human attention); the panel votes once per map, not once per sector. On the mock stack, A2H averages ~1.3 s while A2L
-  averages ~3 ms — the human is the bottleneck, and the design spends that budget deliberately.
-- **The interaction mix inverts with a real model.** Switch to Ollama and A2L jumps from milliseconds to seconds — suddenly the *model*, not the human, may dominate wall time, and parallelizing `survey_all` starts to pay. Measure (`summary_interactions`) before optimizing.
+- **Gates are ordered by cost.** `map_valid` runs before `request_review` (human attention); the panel votes once per map, not once per sector — the cheap check runs first so the expensive one is spent only on maps worth reviewing.
+- **Count matters more than per-call latency.** Measured on `llama3.2` over 4 missions: a single review request is slower than a single model call (~1283 ms vs ~1021 ms), and which of the two wins flips between individual runs. But there are 45 `S2S:ai_to_ai` calls to 8 review requests, so the model accounts for roughly 4.5× more wall time overall — the *model* is the bottleneck, and parallelizing `survey_all` is what pays. Averages alone would have pointed at the human; always read count alongside duration (`summary_interactions`).
 - **Retry rate is the leading indicator.** `agent_llm_retries_total / agent_llm_requests_total` is the price of model unreliability; watch it after every prompt edit or model swap.
 
 ## 4. What is guaranteed — and what is not
 
 | Risk | Where it shows up here | Managing mechanism | Resulting guarantee |
 |---|---|---|---|
-| Malformed / prose-wrapped output | mock's chatty JSON, dropped fields | parse liberally → validate strictly → retry with the error quoted | anything that crosses into system state is schema-valid and typed |
+| Malformed / prose-wrapped output | chatty JSON, dropped fields | parse liberally → validate strictly → retry with the error quoted | anything that crosses into system state is schema-valid and typed |
 | Out-of-vocabulary answers | triage label `"urgent"` | closed vocabulary + membership validation | routing only ever selects a handler that exists |
 | Invented or abusive tool calls | `get_detection_check` | allow-list dispatcher, read-only tools, `ERROR:` feedback | only pre-declared, side-effect-free calls execute |
 | Runaway loops / cost explosion | endless retry or tool spiral | budgets at every level, then fail notification (502) | bounded calls, bounded latency, guaranteed termination |
@@ -282,11 +281,12 @@ Observability is structured around a holistic view of interactions in the HIS-LL
 
 | Label | Meaning | Where it comes from |
 |---|---|---|
-| `A2L` | agent → LLM completion | span named `llm.complete` |
-| `A2S` | agent → software service (tool call) | client span, callee is `detection_service` |
-| `A2H` | agent → human (review request) | client span, callee is `human_service` |
-| `H2S` | human decision recorded by a service (expert vote) | span named `vote_by_*` |
-| `S2S` | service → service | *never occurs here* — see "Analyze Interaction Metrics" |
+| `S2S` | **software service ↔ software service** — anything between computational components: the agent, the model, and the services. Split into three sub-kinds, because they fail and cost differently: |  |
+| &nbsp;&nbsp;`ai_to_ai` | LLM-to-LLM / AI-to-AI: the agent asking a model for a completion | span named `llm.complete` |
+| &nbsp;&nbsp;`ai_to_service` | AI-to-service: the agent calling a supporting module (detection, retrieval, a simulation engine) | client span, callee is `detection_service` |
+| &nbsp;&nbsp;`orchestration` | service orchestration and choreography: workflow-driven calls or events between two plain services | client span, neither end is the agent — *never occurs here* |
+| `H2S` | **human ↔ software service** — prompting, monitoring, feedback. Both the agent asking the panel to review, and each expert's decision coming back. | client span whose callee is `human_service`; span named `vote_by_*` |
+| `H2H` | **human ↔ human, mediated by a service** | *never occurs here* — the three experts vote independently; see "Analyze Interaction Metrics" |
 
 Read the right-hand column carefully, because it is the point: **no service tags its spans with an interaction type.** The label is *derived* from the trace by `tools/mission_analytics.py`. A tag would have been a convention every producer had to keep in sync, enforced by nothing; the trace already carries the same information. "The low-level data underneath" shows what the trace holds; "Changing the observability core" shows how the label is computed from it, and what that costs.
 
@@ -331,26 +331,26 @@ Notice what is *absent* from every snippet below: no span declares its interacti
 ### - agent_service
 The three spans that make LLM behavior inspectable — the completion, the tool dispatch, and the human gate:
 ```python
-with tracer.start_as_current_span("llm.complete") as span:        # the name means A2L
+with tracer.start_as_current_span("llm.complete") as span:        # name => S2S:ai_to_ai
     span.set_attribute("llm.task", task)                 # triage / summarize_B1 / tool_loop
     span.set_attribute("llm.is_retry", "previous reply" in prompt)
     span.set_attribute("llm.output.preview", out[:120])  # the payload is part of the signal
 
 with tracer.start_as_current_span(f"tool.{name}") as span:
     span.set_attribute("tool.args", json.dumps(args))
-    resp = requests.get(TOOL_ROUTES[name](args), timeout=10)       # this hop means A2S
+    resp = requests.get(TOOL_ROUTES[name](args), timeout=10)       # hop => S2S:ai_to_service
 
 with tracer.start_as_current_span("human.review") as span:
-    resp = requests.post(HUMAN_API, ...)                           # this hop means A2H
+    resp = requests.post(HUMAN_API, ...)                           # hop => H2S
     span.set_attribute("decision", verdict["decision"])
     span.set_attribute("reason", verdict["reason"])
 ```
 
-`RequestsInstrumentor().instrument()` turns each `requests` call into a child client span carrying `http.url`, and propagates trace context so the callee's server span attaches underneath. That child — not the wrapper span — is what identifies A2S and A2H.
+`RequestsInstrumentor().instrument()` turns each `requests` call into a child client span carrying `http.url`, and propagates trace context so the callee's server span attaches underneath. That child — not the wrapper span — is what identifies `S2S:ai_to_service` and `H2S`.
 
 ### - human_service
 ```python
-with tracer.start_as_current_span(f"vote_by_{name}") as vote_span:  # the name means H2S
+with tracer.start_as_current_span(f"vote_by_{name}") as vote_span:  # name => H2S
     vote_span.set_attribute("expert", name)
     time.sleep(random.uniform(0.2, 0.6))   # span duration IS the decision latency
     vote_span.set_attribute("vote", vote)
@@ -361,7 +361,7 @@ with tracer.start_as_current_span(f"vote_by_{name}") as vote_span:  # the name m
 with tracer.start_as_current_span("get_detections") as span:
     span.set_attribute("sector", sector)
 ```
-Nothing about an interaction type here either — and in this service there would be nothing true to say. `detection_service` calls no one; these spans are the *far end* of the agent's A2S, which is already counted at the near end.
+Nothing about an interaction type here either — and in this service there would be nothing true to say. `detection_service` calls no one; these spans are the *far end* of the agent's `S2S:ai_to_service`, which is already counted at the near end. That it calls no one is also why `S2S:orchestration` is structurally 0 here.
 
 ## 3. Visualize Observability Data
 - **Jaeger** (`http://localhost:16686`): pick service `agent_service` and open the newest `sar_mission` trace after running a mission. The tree shows the whole arc, survey with per-sector `llm.complete` spans (retries flagged with `llm.is_retry=true`), the first `human.review` ending in `decision=reject`, the investigation's tool loop (`tool.get_detections`, `tool.weather`), and the second review's `approve`. Note how much of the mission's wall time is inside `human.review`: the human is a component, and often the bottleneck.
@@ -474,7 +474,7 @@ The rule to teach: **high-cardinality context belongs on spans; a metric label m
 ```
 agent_llm_requests_total{instance="agent_service:8001", job="agent_service"} 11
 ```
-This value only ever increases, and it **resets to zero when the container restarts**. Never read it directly — `rate()` and `increase()` exist because the raw number answers no question you have. The same trap appears on a *span* attribute, where it is easier to miss: open two consecutive `sar_mission` traces in Jaeger and `mission.model_calls` reads 11, then 22, then 33. It is set from `llm.calls`, which the `OllamaLLM`/`MockLLM` instance accumulates for the life of the process — so a span attribute that reads like "this mission cost 22 calls" actually means "this process has made 22 calls so far". Cumulative sources need a delta taken at the point of use, or a name that admits what they are.
+This value only ever increases, and it **resets to zero when the container restarts**. Never read it directly — `rate()` and `increase()` exist because the raw number answers no question you have. The same trap appears on a *span* attribute, where it is easier to miss: open two consecutive `sar_mission` traces in Jaeger and `mission.model_calls` reads 11, then 22, then 33. It is set from `llm.calls`, which the `OllamaLLM` instance accumulates for the life of the process — so a span attribute that reads like "this mission cost 22 calls" actually means "this process has made 22 calls so far". Cumulative sources need a delta taken at the point of use, or a name that admits what they are.
 
 ### Two ways this stack will silently give you nothing
 Both are worth demonstrating live, because "no error, no data" is the characteristic failure of telemetry:
@@ -502,28 +502,29 @@ python3 tools/mission_analytics.py --services=agent_service,human_service,detect
 - `jaeger-api`: URL of the Jaeger API endpoint to fetch traces from.
 - `feature`: the analysis to perform — `summary_interactions`, `per_service_interactions`, `llm_reliability`, `human_reviews`, `detailed_trace_table`, plus `taxonomy_audit` (see "Why the taxonomy is derived, not declared").
 
-Example output after one mission on the mock stack (Jaeger emptied first, so
-the table covers exactly one mission):
+Example output after one `grounded` mission on `llama3.2` (Jaeger emptied
+first, so the table covers exactly one mission):
 ```
 Aggregated interaction summary:
-+------------------+-------+-------------------+
-| Interaction Type | Count | Avg Duration (ms) |
-+==================+=======+===================+
-| A2H              | 2     | 1266.825          |
-| A2L              | 11    | 0.329             |
-| A2S              | 9     | 2.522             |
-| H2S              | 6     | 420.231           |
-+------------------+-------+-------------------+
++-------------+---------------+-------+-------------------+
+| Interaction | Sub-kind      | Count | Avg Duration (ms) |
++=============+===============+=======+===================+
+| S2S         | ai_to_ai      | 11    | 1527.372          |
+| S2S         | ai_to_service | 9     | 18.099            |
+| S2S         | orchestration | 0     | -                 |
+| H2S         | -             | 8     | 627.646           |
+| H2H         | -             | 0     | -                 |
++-------------+---------------+-------+-------------------+
 ```
-Three things are worth reading off this table before trusting any number in it:
-  - **A2H is 2, for two reviews — one row per interaction, not per span.**
-    Each review produces *two* spans: the agent's client span and `human_service`'s server span. They are the same interaction seen from both ends, so only the client side is counted. (Tagging the interaction type at both call sites, which is the obvious way to do this by hand, silently reports 4.)
-  - **There is no S2S row, and that is the correct answer.** No service in this system calls another service; `detection_service` only ever answers. A taxonomy filled in by hand happily reported `S2S: 9` — those were `detection_service`'s own server spans, i.e. the far end of A2S, counted a second time under a different name.
+Four things are worth reading off this table before trusting any number in it:
+  - **Two rows are 0, and both zeros are findings rather than gaps.** `orchestration` is 0 because no plain service in this system calls another: `detection_service` only ever answers, so there is no workflow-driven service-to-service traffic to count. `H2H` is 0 because the three experts never interact — each applies its own policy to the same map and `human_service` computes consensus in code (`approvals == len(votes)`). A panel that deliberated, where one expert's dissent could sway another, would produce H2H; this one does not, and the taxonomy says so rather than quietly implying otherwise. A category the report declares but never fills is the cheapest way to see what your system *isn't* doing.
+  - **H2S is 8, and it blends two different things.** Those are 2 review requests (the agent prompting the panel) plus 6 expert votes coming back — one row per interaction, not per span. Each review produces *two* spans, the agent's client span and `human_service`'s server span; they are the same interaction seen from both ends, so only the client side is counted. (Tagging the interaction type at both call sites, the obvious way to do this by hand, silently reports 4.) The cost of collapsing both directions into one label is that 627 ms is an average over ~1300 ms requests and ~420 ms votes, which describes neither. Use `--feature=per_service_interactions` to split it back by service when the mix matters.
+  - **`ai_to_ai` dominates on both axes.** 11 calls against 8 human interactions, at 1527 ms against 627 ms — so the model, not the panel, is this mission's bottleneck, and parallelizing `survey_all` is what would pay. On a faster model that ordering moves, which is the reason to measure rather than assume.
   - **A trace is returned once per service it touches.** `fetch_spans` therefore dedupes by `(traceID, spanID)`; without that, every span of a mission would be counted once per participating service and all counts here would be 2–3× too high.
 
-Switching `agent_service` to Ollama changes exactly two numbers — A2L's average jumps from 0.3 ms to ~1400 ms, and its count moves with the retry rate. The label itself does not change, even though the mock is a function call and Ollama is an HTTP request to another process. "Why the taxonomy is derived, not declared" explains why that took care.
+Swapping `llama3.2` for a bigger model changes exactly two numbers — `ai_to_ai`'s average duration and its count, which moves with the retry rate. The label itself does not change, even though one model answers in milliseconds and another takes seconds over the same HTTP hop. "Why the taxonomy is derived, not declared" explains why that took care.
 
-From there we can see what the system is relying on the most: which interactions dominate by count (LLM calls) versus by time (human reviews), whether the retry rate (`--feature=llm_reliability`) is drifting after a prompt change, and where the bottlenecks are.
+From there we can see what the system is relying on the most: which interactions dominate by count and by time, whether the retry rate (`--feature=llm_reliability`) is drifting after a prompt change, and where the bottlenecks are.
 
 ## 6. Changing the observability core
 The observability "core" of this tutorial is not one thing — it is three planes with explicit interfaces, and each can be changed independently as long as you know who consumes what:
@@ -549,22 +550,24 @@ llm_latency.record(time.perf_counter() - t0, {"llm_task": task})
 Rebuild (`docker compose -f docker-compose.his.yml up --build agent_service`), run a mission, then query the distribution in Prometheus: `histogram_quantile(0.95, rate(agent_llm_latency_seconds_bucket[5m]))`. The attribute (`llm_task`) becomes a Prometheus label, so you can compare p95 latency of `triage` vs `tool_loop`.
 
 ### Why the taxonomy is derived, not declared
-The obvious way to build an `A2L`/`A2S`/`A2H`/`H2S` taxonomy is to tag each span at the point it happens:
+The obvious way to build an `S2S`/`H2S`/`H2H` taxonomy is to tag each span at the point it happens:
 
 ```python
-span.set_attribute("interaction_type", "A2S")   # ...at every call site
+span.set_attribute("interaction_type", "S2S:ai_to_service")   # ...at every call site
 ```
 
 This tutorial deliberately does not, and the reason generalizes past this example: **a hand-set tag is a claim about a span, while the trace already contains the fact.** The claim can drift from the fact, and nothing will tell you — traces are schema-less, so a wrong or renamed tag flows through the collector and into Jaeger exactly like a right one. `mission_analytics.py` derives the label instead, in two tiers.
 
-**Tier 1 — across a process boundary, read the topology (free).** An interaction between two services is defined by who emitted the span and who they talked to, and auto-instrumentation already records both: `RequestsInstrumentor` emits a client span with `http.url` for every hop, and context propagation attaches the callee's server span underneath. So the entire A2S/A2H half of the taxonomy comes from one table, not N call sites:
+**Tier 1 — across a process boundary, read the topology (free).** An interaction between two services is defined by who emitted the span and who they talked to, and auto-instrumentation already records both: `RequestsInstrumentor` emits a client span with `http.url` for every hop, and context propagation attaches the callee's server span underneath. So the entire `ai_to_service` / `orchestration` / `H2S` half of the taxonomy comes from one table, not N call sites:
 
 ```python
-ROLES = {"agent_service": "A", "detection_service": "S", "human_service": "H"}
+ROLES = {"agent_service": "AI", "detection_service": "S", "human_service": "H"}
 PEER_ROLES = {"11434": "L"}          # peers that emit no spans of their own
 ```
 
-**Tier 2 — inside one process, read the span name (already paid for).** A boundary the code doesn't cross is a boundary topology cannot see: `MockLLM.complete()` is a function call, and an expert deliberating is a `time.sleep`. Neither produces a hop. But both produce a span whose *name* the instrumentation had to choose anyway — `llm.complete`, `vote_by_expert1` — and which `--feature=llm_reliability` and `--feature=human_reviews` already depend on. Reusing that name adds no new convention; a parallel tag would have been a second one to keep in sync with the first.
+The role a service plays is what decides the sub-kind: the same HTTP call is `ai_to_service` when the agent makes it and `orchestration` when a plain service does. Move a capability into or out of the agent and the label follows, without anyone editing a tag.
+
+**Tier 2 — inside one process, read the span name (already paid for).** A boundary the code doesn't cross is a boundary topology cannot see: an expert deliberating is a `time.sleep`, and an in-process model backend would be a plain function call. Neither produces a hop. But both produce a span whose *name* the instrumentation had to choose anyway — `llm.complete`, `vote_by_expert1` — and which `--feature=llm_reliability` and `--feature=human_reviews` already depend on. Reusing that name adds no new convention; a parallel tag would have been a second one to keep in sync with the first.
 
 Be clear-eyed about the difference: tier 1 is an observation, tier 2 is a naming convention. Tier 2 is not free — it is just *already bought*.
 
@@ -572,22 +575,22 @@ Be clear-eyed about the difference: tier 1 is an observation, tier 2 is a naming
 
 | Interaction | Declared (tags) | Derived |
 |---|---|---|
-| A2L | 11 | 11 |
-| A2S | 9 | 9 |
-| H2S | 6 | 6 |
-| A2H | 4 | **2** |
-| S2S | 9 | **0** |
+| `S2S:ai_to_ai` | 11 | 11 |
+| `S2S:ai_to_service` | 9 | 9 |
+| `S2S:orchestration` | 9 | **0** |
+| `H2S` | 10 | **8** |
+| `H2H` | 0 | 0 |
 
-Three exact matches that cost nothing to produce, and two disagreements — in both of which the derived number is the defensible one. A2H was 4 because the agent and `human_service` each tagged the same edge; counting on the client span makes that double-count structurally impossible. S2S was 9 because `detection_service` tagged its own server spans, which are the far end of the agent's A2S; topology says there is no service-to-service call in this system, and topology is right.
+Two exact matches that cost nothing to produce, and two disagreements — in both of which the derived number is the defensible one. `H2S` was 10 because the agent and `human_service` each tagged the same review edge, inflating 2 interactions into 4; counting on the client span makes that double-count structurally impossible. `orchestration` was 9 because `detection_service` tagged its own server spans, which are the far end of the agent's `ai_to_service`; topology says there is no service-to-service call in this system, and topology is right. Today every declared column reads 0 — the tags are gone, which is what the audit is for.
 
-**Where the A2L/A2S distinction earns its keep.** Topologically, an LLM is just another HTTP service — so why does it get its own letter? Because the *failure and cost model* differs, and that is what you analyze:
-  - An A2S call fails as an exception (404, timeout). An A2L call fails as **HTTP 200 containing unusable content** — which is why `reliable_call` wraps every model call and nothing wraps `tool.get_detections`.
-  - A2S is deterministic; A2L is not, so "how often did we retry" is a real question on one and meaningless on the other.
-  - A2L is metered in tokens. That is why `mission.model_calls` is a budget and nobody budgets `/detections/A1`.
+**Why S2S is split by sub-kind.** Topologically, an LLM is just another HTTP service, and both calls are service-to-service — so why separate `ai_to_ai` from `ai_to_service` at all? Because the *failure and cost model* differs, and that is what you analyze:
+  - An `ai_to_service` call fails as an exception (404, timeout). An `ai_to_ai` call fails as **HTTP 200 containing unusable content** — which is why `reliable_call` wraps every model call and nothing wraps `tool.get_detections`.
+  - `ai_to_service` is deterministic; `ai_to_ai` is not, so "how often did we retry" is a real question on one and meaningless on the other.
+  - `ai_to_ai` is metered in tokens. That is why `mission.model_calls` is a budget and nobody budgets `/detections/A1`.
 
-That distinction is real, but notice it lives in the span *name*, not in a tag: every span called `llm.complete` is A2L by definition. Deriving A2L from the name rather than the HTTP hop also makes the label survive a backend swap — switch `agent_service` from Ollama to the mock and A2L stays 11, because the span still exists even though the network call doesn't.
+Collapsing S2S to a single row would hide all three differences behind one average, which is the argument for carrying the sub-kind rather than dropping it. And notice the distinction lives in the span *name*, not in a tag: every span called `llm.complete` is `ai_to_ai` by definition. Deriving it from the name rather than the HTTP hop also makes the label survive a backend swap — replace Ollama with an in-process backend and `ai_to_ai` stays 11, because the span still exists even though the network call doesn't.
 
-**Extending the taxonomy.** To add `L2S` for a future model-triggered streaming channel, you extend `derive_interaction` in `tools/mission_analytics.py` — one function, one place, and it applies retroactively to traces already in Jaeger. Compare that with the tagged approach, where you edit three producers, redeploy them, and get the new label only on traces recorded afterwards.
+**Extending the taxonomy.** To add a sub-kind — say a second agent, making `ai_to_ai` a genuine agent-to-agent hop rather than agent-to-model, or an H2H row once the panel actually deliberates — you add it to `TAXONOMY` and extend `derive_interaction` in `tools/mission_analytics.py`. One list, one function, and it applies retroactively to traces already in Jaeger. Compare that with the tagged approach, where you edit three producers, redeploy them, and get the new label only on traces recorded afterwards.
 
 The cost is that the consumer now depends on span names and service names. That is a real coupling, so treat both as a public API:
 
@@ -625,15 +628,15 @@ def tool_usage(spans):
 
 FEATURES = {..., "tool_usage": tool_usage}   # register it
 ```
-`python3 tools/mission_analytics.py --feature=tool_usage` now shows which tools the agent actually leans on after a `handle_feedback` cycle you should see `tool.get_detections` and ,`tool.weather` for the investigated sector.
+`python3 tools/mission_analytics.py --feature=detailed_trace_table` now shows which tools the agent actually leans on: after a `handle_feedback` cycle you should see `tool.get_detections` and `tool.weather` for the investigated sector.
 
 **The propagation checklist**, whichever plane you touch: the pipeline is transparent to names, so a change in a *producer* (span attribute, metric name, label) must be walked forward by hand to every *consumer*; `mission_analytics.py` features, Grafana panels, saved PromQL, alert rules. Nothing in between will fail on your behalf.
 
 ## 7. Next Steps
 You can try to simulate different scenarios to see how the system behaves and
 how the interaction metrics change. For example, you can try to:
-- Switch between the mock LLM and different Ollama models and compare the retry rate (`agent_llm_retries_total`) — the integration layer stays the same, only the failure statistics move.
-- Raise the mock's failure rates in `agent_service/llm.py` to simulate a degrading model, and watch which defenses absorb it.
+- Switch between different Ollama models (e.g. `llama3.2` and a larger one) and compare the retry rate (`agent_llm_retries_total`) — the integration layer stays the same, only the failure statistics move.
+- Degrade the prompts in `agent_service/main.py` (drop the format instructions, widen the label vocabulary) to push the model into invalid output, and watch which defenses absorb it.
 - Introduce latency or errors in `detection_service` or `human_service` and observe the impact on the `sar_mission` trace.
 - Make `human_service` reject everything and confirm the agent's budget stops the loop (bounded cost is a design requirement).
 - Change the user input. Here are some examples of robustness testing:

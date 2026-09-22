@@ -2,9 +2,9 @@
 """Analyze HIS-LLM interaction metrics from Jaeger tracing data.
 
 Fetches traces from the Jaeger API, walks their spans, and aggregates the
-interaction taxonomy (A2L, A2S, A2H, H2S) plus LLM-specific signals (retry
-rate, per-task volume) and human-gate behavior (decision latency, rejection
-rate).
+interaction taxonomy (S2S with its sub-kinds, H2S, H2H) plus LLM-specific
+signals (retry rate, per-task volume) and human-gate behavior (decision
+latency, rejection rate).
 
 The taxonomy is *derived* from the traces here, not tagged at the call sites —
 see ``derive_interaction`` for how, and why that is the cheaper half of the
@@ -30,7 +30,7 @@ def fetch_spans(jaeger_api, services, limit=200):
 
     - A trace is returned in full by *each* service it touches, so the spans
       of a cross-service trace (every mission) arrive once per service.
-      Without the (traceID, spanID) dedupe below, one mission's A2L calls are
+      Without the (traceID, spanID) dedupe below, one mission's model calls are
       counted twice or three times — the metrics inflate silently.
     - ``span["processID"]`` is only meaningful *within* its trace; the service
       name lives in the trace's ``processes`` map. Resolve it here, once, into
@@ -74,7 +74,7 @@ def tag(span, key, default=None):
 #      who emitted the span and who they talked to, and auto-instrumentation
 #      records both: RequestsInstrumentor emits a client span carrying
 #      `http.url` for every hop, and context propagation links it to the
-#      callee's server span. One table of roles replaces every A2S/A2H tag.
+#      callee's server span. One table of roles replaces every hand-set tag.
 #
 #   2. SPAN NAMES (already paid for). An interaction *inside* one process
 #      crosses no boundary, so topology is blind to it. But `llm.complete` and
@@ -87,8 +87,9 @@ def tag(span, key, default=None):
 # extend this. What it is *not* is an extra one.
 # ---------------------------------------------------------------------------
 
-ROLES = {"agent_service": "A",        # the LLM agent
-         "detection_service": "S",    # a software service
+# The roles a span's service plays in the taxonomy.
+ROLES = {"agent_service": "AI",       # an LLM-driven component
+         "detection_service": "S",    # a plain software service
          "human_service": "H"}        # humans (the expert panel)
 
 # Peers that run no OTel SDK of their own, so they never emit a span: they are
@@ -99,8 +100,23 @@ PEER_ROLES = {"11434": "L",           # Ollama's port
 
 # Tier 2: the in-process interactions, keyed on the span names the rest of this
 # file already treats as load-bearing.
-LLM_SPAN = "llm.complete"             # one model call, mock or remote
+LLM_SPAN = "llm.complete"             # one model call
 VOTE_PREFIX = "vote_by_"              # one expert deliberating
+
+# The taxonomy, declared in full so the report can show a category that this
+# system never exercises. An empty row is a finding, not a gap: `orchestration`
+# and `H2H` below are both structurally 0 here, and the README explains why.
+TAXONOMY = [("S2S", "ai_to_ai"),
+            ("S2S", "ai_to_service"),
+            ("S2S", "orchestration"),
+            ("H2S", None),
+            ("H2H", None)]
+
+
+def label(interaction):
+    """("S2S", "ai_to_ai") -> "S2S:ai_to_ai"; ("H2S", None) -> "H2S"."""
+    category, subkind = interaction
+    return f"{category}:{subkind}" if subkind else category
 
 
 def index_spans(spans):
@@ -129,28 +145,44 @@ def peer_role(span, children):
 
 
 def derive_interaction(span, children):
-    """The X2Y label a span implies, or None if it implies none."""
+    """The (category, sub-kind) a span implies, or None if it implies none.
+
+    S2S covers everything between computational components — the agent, the
+    model and the services — split by sub-kind because the *failure and cost
+    models* differ: an `ai_to_ai` call fails as HTTP 200 carrying unusable
+    content, an `ai_to_service` call fails as a 404 or a timeout. H2S is any
+    interaction that crosses to or from a human. H2H would be humans
+    interacting through a service, which this system does not do.
+    """
     source = ROLES.get(span.get("_service"))
     if source is None:
         return None
     op = span.get("operationName", "")
     # -- tier 2: in-process, recognised by name --
-    if op == LLM_SPAN:
+    if op == LLM_SPAN and source == "AI":
         # Counted here rather than on the HTTP hop underneath, so the label
-        # survives swapping a remote model for an in-process one: MockLLM
-        # emits no client span at all, and this still reports A2L.
-        return f"{source}2L"
+        # survives swapping a remote model for an in-process one: such a
+        # backend emits no client span at all, and this still reports S2S.
+        return ("S2S", "ai_to_ai")
     if op.startswith(VOTE_PREFIX) and source == "H":
-        return "H2S"
+        # An expert's decision, recorded by the service: human -> service.
+        return ("H2S", None)
     # -- tier 1: across a boundary, read off the topology --
     if tag(span, "span.kind") == "client":
         target = peer_role(span, children)
-        if target == "L":
-            return None          # already counted on the llm.complete parent
+        if target is None or target == "L":
+            # The POST to Ollama is already counted on its llm.complete parent.
+            return None
         # Counted on the client side only: one edge, one interaction. The
         # callee's server span is the same interaction seen from the far end,
-        # which is why tagging both ends used to double-count A2H.
-        return f"{source}2{target}" if target else None
+        # which is why tagging both ends used to double-count the human gate.
+        if target == "H" or source == "H":
+            return ("H2S", None)
+        if target == "AI":
+            return ("S2S", "ai_to_ai")
+        # An LLM-agent reaching a supporting module, versus plain
+        # workflow-driven traffic between two services.
+        return ("S2S", "ai_to_service" if source == "AI" else "orchestration")
     return None
 
 
@@ -175,9 +207,12 @@ def summary_interactions(spans):
             stats[itype][0] += 1
             stats[itype][1] += s.get("duration", 0) / 1000.0  # us -> ms
     print("Aggregated interaction summary:")
-    print(table(["Interaction Type", "Count", "Avg Duration (ms)"],
-                [[k, n, f"{total / n:.3f}"]
-                 for k, (n, total) in sorted(stats.items())]))
+    rows = []
+    for itype in TAXONOMY:
+        n, total = stats.get(itype, (0, 0.0))
+        rows.append([itype[0], itype[1] or "-", n,
+                     f"{total / n:.3f}" if n else "-"])
+    print(table(["Interaction", "Sub-kind", "Count", "Avg Duration (ms)"], rows))
 
 
 def per_service_interactions(spans):
@@ -187,8 +222,8 @@ def per_service_interactions(spans):
         itype = derive_interaction(s, children)
         if itype:
             proc = s.get("processID", "?")
-            stats[(s.get("_service", proc), itype)] += 1
-    print(table(["Service/Process", "Interaction Type", "Count"],
+            stats[(s.get("_service", proc), label(itype))] += 1
+    print(table(["Service/Process", "Interaction", "Count"],
                 [[svc, itype, n]
                  for (svc, itype), n in sorted(stats.items())]))
 
@@ -224,7 +259,7 @@ def human_reviews(spans):
 def detailed_trace_table(spans):
     children = index_spans(spans)
     rows = [[s.get("operationName", "?")[:40],
-             derive_interaction(s, children) or "-",
+             label(derive_interaction(s, children) or ("-", None)),
              f"{s.get('duration', 0) / 1000.0:.2f}"]
             for s in sorted(spans, key=lambda s: s.get("startTime", 0))][:60]
     print(table(["Span", "Interaction", "Duration (ms)"], rows))
@@ -241,15 +276,18 @@ def taxonomy_audit(spans):
     declared, derived, disagree = Counter(), Counter(), Counter()
     for s in spans:
         d, g = tag(s, "interaction_type"), derive_interaction(s, children)
+        g = label(g) if g else None
         if d:
             declared[d] += 1
         if g:
             derived[g] += 1
         if d and g and d != g:
             disagree[(s.get("_service"), s.get("operationName"), d, g)] += 1
+    known = [label(i) for i in TAXONOMY]
+    rows = known + sorted((set(declared) | set(derived)) - set(known))
     print(table(["Interaction", "Declared (tags)", "Derived"],
                 [[k, declared.get(k, 0), derived.get(k, 0)]
-                 for k in sorted(set(declared) | set(derived))]))
+                 for k in dict.fromkeys(rows)]))
     if disagree:
         print("\nSpans where the two disagree:")
         print(table(["Service", "Span", "Declared", "Derived"],
