@@ -10,6 +10,7 @@ We have the following hands-on tutorials for practicing some concepts discussed 
 * [Edge ML Pipeline](./edgemodelop)
 * [Common ML Development Activities in Edge Systems](./edgemlcommons)
 * [Observability in term of Robustness for HIS-LLM in Multi continuum System](./r4hisllm)
+* [Fundamental Design and Integration of AI Agent in Hybrid Intelligence Systems(HIS)](./hisllmintegration/)
 
 ## Videos
 Some tutorials have hands-on videos that can be found at:
