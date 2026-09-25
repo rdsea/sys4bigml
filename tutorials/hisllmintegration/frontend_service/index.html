@@ -9,49 +9,104 @@
 <body>
   <header>
     <h1>Search-and-Rescue Mission Console</h1>
-    <p class="subtitle">LLM workflows &amp; agentic AI in a hybrid intelligence
+    <p class="subtitle">LLM workflows &amp; AI agents in a hybrid intelligence
       system — drones · LLM agent · human experts</p>
   </header>
 
   <main>
     <section class="card">
-      <h2>1 · Greet the agent</h2>
-      <p>Smoke test: one plain LLM call through the agent service.</p>
-      <button id="greet-btn">Greet</button>
-      <pre id="greet-out" class="output" hidden></pre>
-    </section>
-
-    <section class="card">
-      <h2>2 · Triage a field report</h2>
-      <p>Routing workflow: one classify call picks the handler queue
-        (<code>medical · structural · logistics · ignore</code>).</p>
-      <textarea id="report-input" rows="3">Two people trapped under a collapsed wall on Oak Street, one is bleeding badly.</textarea>
-      <button id="triage-btn">Triage report</button>
-      <pre id="triage-out" class="output" hidden></pre>
-    </section>
-
-    <section class="card">
-      <h2>3 · Run the mission</h2>
-      <p>The full agent loop: survey all sectors, build a victim map, submit
-        to the human expert panel, react to their feedback, resubmit.</p>
-      <p>Who counts the victims? Run it both ways and diff the maps.</p>
-      <div class="row">
-        <select id="mission-mode">
-          <option value="model">model-derived counts — the LLM filters and
-            counts; the validator catches it when it can't</option>
-          <option value="grounded">grounded counts — code filters and counts;
-            the LLM only writes the sentence</option>
-        </select>
-        <button id="mission-btn">Run mission</button>
+      <h2>The five patterns</h2>
+      <p>Each pattern is an on/off switch. <strong>On</strong> runs the pattern;
+        <strong>off</strong> runs the simple version most people write first.
+        Try it: turn <strong>all patterns off</strong>, run a task, then turn
+        them on one at a time and compare the results.</p>
+      <p>Each card says why the pattern is needed, what on and off do, and what
+        goes wrong without it. Switches that the selected task doesn't use are
+        greyed out.</p>
+      <div class="row ladder-actions">
+        <button id="all-off" class="ghost">All patterns off</button>
+        <button id="all-on" class="ghost">All patterns on</button>
+        <span id="count-readout" class="readout"></span>
       </div>
-      <pre id="mission-out" class="output" hidden></pre>
+      <div id="ladder"></div>
+    </section>
+
+    <section class="card">
+      <h2>Run a task</h2>
+      <div class="row">
+        <select id="task">
+          <option value="mission">mission — sort field reports, survey 6 sectors, build the victim map, get human approval</option>
+          <option value="triage">triage — sort one field report and decide what to do</option>
+          <option value="investigate">investigate — answer one question using the drone data</option>
+        </select>
+      </div>
+
+      <div id="task-mission" class="task-inputs">
+        <label for="mission-mode">Who counts the victims in each sector?</label>
+        <select id="mission-mode">
+          <option value="model">the LLM counts (structured outputs checks its numbers)</option>
+          <option value="grounded">code counts (the LLM only writes a one-sentence description)</option>
+        </select>
+        <p class="hint">This is separate from the five patterns. With “code
+          counts”, the numbers are always exact, because the LLM is never asked
+          for them. With “the LLM counts” and structured outputs on, the mission
+          may stop as <em>aborted</em> if the model keeps getting a number
+          wrong: the check refuses to send a wrong map.</p>
+        <p class="hint">The mission starts by sorting four built-in field
+          reports (medical, structural, logistics, and one junk report). That is
+          where routing runs.</p>
+      </div>
+
+      <div id="task-triage" class="task-inputs" hidden>
+        <label for="report-input">Field report</label>
+        <textarea id="report-input" rows="3">Two people trapped under a collapsed wall on Oak Street, one is bleeding badly.</textarea>
+        <p class="hint">Try a junk report such as “Radio check, testing one two
+          three”. With routing on, it is dropped after one short classify call;
+          with routing off, it still gets a full answer.</p>
+      </div>
+
+      <div id="task-investigate" class="task-inputs" hidden>
+        <label for="question-input">Question</label>
+        <textarea id="question-input" rows="2">How many people are detected in sector A2?</textarea>
+        <p class="hint">Correct answer: A2 has two people (confidence 0.91 and
+          0.84). With the dispatcher on, the agent reads the drone data and
+          llama3.2 answers “2”. With it off, the model guesses (0, 5, 12, or
+          “not enough information”).</p>
+        <p class="hint">Then try a two-part question, e.g. add “…and what is the
+          weather there?”. Small models often answer after the first tool call
+          without fetching the second fact, and sometimes run out of steps.</p>
+      </div>
+
+      <div class="row">
+        <button id="run-btn">Run with these patterns</button>
+        <span id="run-note" class="readout"></span>
+      </div>
+    </section>
+
+    <section class="card" id="result-card" hidden>
+      <h2 id="result-title">Result</h2>
+      <div id="result"></div>
+    </section>
+
+    <section class="card" id="history-card" hidden>
+      <h2>Runs this session</h2>
+      <p>The latest result for each switch combination. Change a switch, run
+        again, and compare the rows.</p>
+      <div id="history"></div>
     </section>
 
     <section class="card links">
       <h2>Observability</h2>
+      <p>Expand “Where to see it” on any pattern above to find what it
+        changes in the traces and metrics. The analytics tool reads the same
+        traces from Jaeger:</p>
+      <pre class="output static">python3 tools/mission_analytics.py --feature=pattern_effect
+python3 tools/mission_analytics.py --feature=summary_interactions
+python3 tools/mission_analytics.py --feature=llm_reliability
+python3 tools/mission_analytics.py --feature=human_reviews</pre>
       <ul>
-        <li><a href="http://localhost:16686" target="_blank">Jaeger</a> — traces (service: <code>agent_service</code>)</li>
-        <li><a href="http://localhost:9092" target="_blank">Prometheus</a> — metrics (<code>agent_llm_requests_total</code>, …)</li>
+        <li><a href="http://localhost:16686" target="_blank">Jaeger</a> — traces (service: <code>agent_service</code>; filter by tag <code>run.patterns</code>)</li>
+        <li><a href="http://localhost:9092" target="_blank">Prometheus</a> — metrics (<code>agent_llm_retries_total</code>, <code>agent_unchecked_errors_total</code>, …)</li>
         <li><a href="http://localhost:3001" target="_blank">Grafana</a> — dashboards</li>
         <li><a href="http://localhost:3000" target="_blank">Langfuse</a> — LLM interaction logs (optional)</li>
       </ul>

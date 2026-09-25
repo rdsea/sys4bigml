@@ -81,3 +81,174 @@ button:hover:not(:disabled) { background: #3d7bff; }
 .links li { margin: 0.3rem 0; }
 .links a { color: #6ea8ff; }
 code { color: #9ecbff; font-size: 0.85em; }
+
+/* --------------------------------------------------------------------------
+   The pattern ladder and the run console.
+   -------------------------------------------------------------------------- */
+
+main { max-width: 900px; }
+
+button.ghost {
+  background: transparent;
+  border: 1px solid #2a3442;
+  color: #a6b1c0;
+}
+button.ghost:hover:not(:disabled) { background: #222b37; color: #dce3ec; }
+button.small { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+
+.readout { color: #8b98a9; font-size: 0.8rem; font-family: ui-monospace, monospace; }
+.ladder-actions { margin-bottom: 0.9rem; }
+
+.pattern {
+  border: 1px solid #2a3442;
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 0.6rem;
+  background: #161d26;
+  border-left: 3px solid #2f6feb;
+}
+.pattern.is-off { border-left-color: #3a4554; opacity: 0.72; }
+/* Pattern not used by the selected task: locked and dimmed. */
+.pattern.not-used { opacity: 0.4; }
+.pattern.not-used .switch { cursor: not-allowed; }
+.unused-note { margin-left: auto; margin-right: 0.5rem; font-size: 0.72rem;
+               color: #b0bccb; font-style: italic; }
+
+.pattern-head {
+  display: flex; justify-content: space-between;
+  align-items: center; gap: 0.6rem;
+}
+.switch { display: flex; align-items: center; gap: 0.55rem; cursor: pointer; }
+.switch input { width: 1rem; height: 1rem; accent-color: #2f6feb; cursor: pointer; }
+.pattern-number {
+  display: inline-grid; place-items: center;
+  width: 1.4rem; height: 1.4rem; border-radius: 50%;
+  background: #2a3442; color: #cbd5e3;
+  font-size: 0.75rem; font-weight: 600;
+}
+.pattern-title { font-weight: 600; font-size: 0.93rem; }
+
+.pattern-body { margin-top: 0.55rem; padding-left: 2rem; }
+.pattern-body p { font-size: 0.83rem; margin-bottom: 0.3rem; color: #a6b1c0; }
+.pattern-body .breaks { color: #e0b070; }
+
+.tag {
+  display: inline-block; padding: 0 0.35rem; border-radius: 3px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em;
+  margin-right: 0.35rem; vertical-align: 1px;
+}
+.tag.on { background: #1d4a2b; color: #7fe0a0; }
+.tag.off { background: #3a2a2a; color: #e09090; }
+.tag.warn { background: #4a3a1d; color: #e0b070; }
+
+details { margin-top: 0.45rem; }
+summary { cursor: pointer; color: #6ea8ff; font-size: 0.8rem; }
+dl.observe { margin: 0.4rem 0 0; font-size: 0.8rem; }
+dl.observe dt { color: #7f8b9c; font-weight: 600; margin-top: 0.35rem; }
+dl.observe dd { color: #a6b1c0; margin-left: 0; }
+
+.task-inputs { margin: 0.5rem 0 0.9rem; }
+.task-inputs label {
+  display: block; font-size: 0.8rem; color: #8b98a9; margin-bottom: 0.3rem;
+}
+.task-inputs select { width: 100%; flex: none; }
+.hint { font-size: 0.78rem !important; color: #7f8b9c !important; margin-top: 0.35rem; }
+
+/* --- results --- */
+
+.waiting { color: #8b98a9; font-size: 0.85rem; }
+.compare-intro { font-size: 0.85rem; margin-bottom: 0.6rem; }
+
+.status {
+  display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px;
+  font-size: 0.8rem; font-weight: 600; margin-bottom: 0.6rem;
+}
+.s-approved { background: #1d4a2b; color: #7fe0a0; }
+.s-unreviewed { background: #4a3a1d; color: #e0b070; }
+.s-aborted, .s-budget_exhausted { background: #4a2020; color: #e09090; }
+
+.verdict { font-size: 0.85rem; margin-bottom: 0.4rem; }
+.action {
+  font-size: 0.86rem; background: #0b0f14; border-left: 2px solid #2f6feb;
+  padding: 0.5rem 0.7rem; border-radius: 0 4px 4px 0; margin-bottom: 0.6rem;
+}
+
+table.map, table.delta {
+  width: 100%; border-collapse: collapse; font-size: 0.8rem;
+  margin-bottom: 0.7rem;
+}
+table.map th, table.delta th {
+  text-align: left; color: #7f8b9c; font-weight: 600;
+  border-bottom: 1px solid #2a3442; padding: 0.3rem 0.4rem;
+}
+table.map td, table.delta td {
+  padding: 0.3rem 0.4rem; border-bottom: 1px solid #1e2631; vertical-align: top;
+}
+table.map .src { color: #7f8b9c; font-size: 0.75rem; }
+td.bad { color: #ff8f8f; font-weight: 600; }
+td.good { color: #7fe0a0; font-weight: 600; }
+
+.steps { margin: 0.5rem 0 0.7rem; }
+.steps h4, .issues h4, .score h4 {
+  font-size: 0.78rem; color: #7f8b9c; text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 0.4rem;
+}
+.step {
+  display: flex; gap: 0.5rem; align-items: baseline;
+  padding: 0.22rem 0; border-bottom: 1px solid #1a222c; font-size: 0.8rem;
+}
+.actor {
+  flex: none; width: 2.1rem; text-align: center; border-radius: 3px;
+  font-size: 0.68rem; font-weight: 700; padding: 0.05rem 0;
+}
+/* Actor badges: AI, S (software), H (human). */
+.a-AI { background: #1e3a5f; color: #8fc1ff; }
+.a-S  { background: #2a3442; color: #b0bccb; }
+.a-H  { background: #4a3a1d; color: #f0c98a; }
+.t-ok { background: #1d4a2b; color: #7fe0a0; }
+.t-repeat { background: #4a3a1d; color: #e0b070; }
+.t-error { background: #4a2020; color: #e09090; }
+.step-name { flex: none; width: 7.5rem; color: #dce3ec; font-weight: 600; }
+.step-detail { color: #9aa7b6; }
+
+.issues p, .score p { font-size: 0.8rem; color: #a6b1c0; margin-bottom: 0.3rem; }
+.score.bad p { color: #ff9a9a; }
+
+.metrics {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem;
+  padding-top: 0.55rem; border-top: 1px solid #222b37;
+}
+.metrics span {
+  font-size: 0.72rem; color: #7f8b9c; background: #10151c;
+  border: 1px solid #222b37; border-radius: 4px; padding: 0.2rem 0.45rem;
+}
+.metrics b { color: #dce3ec; font-size: 0.85rem; margin-right: 0.3rem; }
+
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+.arm { border: 1px solid #2a3442; border-radius: 8px; padding: 0.75rem; }
+.arm h3 {
+  font-size: 0.78rem; letter-spacing: 0.05em; margin-bottom: 0.6rem;
+  padding-bottom: 0.4rem; border-bottom: 1px solid #2a3442;
+}
+.arm.off { border-top: 2px solid #8c4a4a; }
+.arm.off h3 { color: #e09090; }
+.arm.on { border-top: 2px solid #3f8c5a; }
+.arm.on h3 { color: #7fe0a0; }
+
+.output.static { max-height: none; margin-bottom: 0.8rem; }
+
+@media (max-width: 760px) {
+  .compare { grid-template-columns: 1fr; }
+  .pattern-body { padding-left: 0; }
+  .step { flex-wrap: wrap; }
+  .step-name { width: auto; }
+}
+
+/* The "requirement" text shown for each pattern. */
+.tag.need { background: #2a3a52; color: #9dc4ff; }
+.pattern-body .requirement {
+  color: #c3cedd;
+  border-left: 2px solid #2f6feb;
+  padding-left: 0.6rem;
+  margin-bottom: 0.5rem;
+}

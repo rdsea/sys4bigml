@@ -8,9 +8,11 @@ services:
     environment:
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT_GRPC:-http://otel-collector:4317}
       OTEL_SERVICE_NAME: ${DETECTION_OTEL_SERVICE_NAME:-detection_service}
+      # "mock" = built-in example data; "real" = RealSource in detection_service/main.py
+      DETECTION_SOURCE: ${DETECTION_SOURCE:-mock}
       # Prometheus scrapes /metrics every few seconds and each scrape is an
       # HTTP request FastAPI would trace, burying the mission traces.
-      # See "The low-level data underneath" in the README.
+      # Excluding /metrics keeps those scrapes out of Jaeger.
       OTEL_PYTHON_EXCLUDED_URLS: ${OTEL_PYTHON_EXCLUDED_URLS:-metrics}
     ports:
       - "8000:8000"
@@ -37,6 +39,8 @@ services:
       LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
       LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
       LANGFUSE_HOST: ${LANGFUSE_HOST:-http://host.docker.internal:3000}
+      LANGFUSE_ENVIRONMENT: ${LANGFUSE_ENVIRONMENT:-development}
+      LANGFUSE_RELEASE: ${LANGFUSE_RELEASE:-his-llm-tutorial}
     ports:
       - "8001:8001"
     depends_on:

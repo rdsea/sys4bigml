@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
-"""Analyze HIS-LLM interaction metrics from Jaeger tracing data.
+"""Analyze HIS-LLM interactions from Jaeger traces.
 
-Fetches traces from the Jaeger API, walks their spans, and aggregates the
-interaction taxonomy (S2S with its sub-kinds, H2S, H2H) plus LLM-specific
-signals (retry rate, per-task volume) and human-gate behavior (decision
-latency, rejection rate).
+Fetches spans from Jaeger and reports:
+  - interaction counts (S2S:ai_to_llm, S2S:ai_to_service, S2S, H2S, H2H)
+  - LLM reliability (retries, calls per task)
+  - human reviews (decisions, latency)
+  - the effect of each pattern configuration
 
-The taxonomy is *derived* from the traces here, not tagged at the call sites —
-see ``derive_interaction`` for how, and why that is the cheaper half of the
-bargain.
+Interaction types are worked out from the spans (see ``derive_interaction``),
+not tagged in the services.
 
 Examples:
 
     python3 mission_analytics.py --feature=summary_interactions
+    python3 mission_analytics.py --feature=pattern_effect
     python3 mission_analytics.py --feature=llm_reliability
+
+    # only include runs with one pattern configuration
+    python3 mission_analytics.py --feature=summary_interactions --patterns=all
+    python3 mission_analytics.py --feature=summary_interactions \
+        --patterns=structured+dispatcher+routing+parallel
     python3 mission_analytics.py --services=agent_service,human_service \
         --jaeger-api=http://localhost:16686/api/traces --feature=human_reviews
 """
@@ -24,17 +30,11 @@ import requests
 
 
 def fetch_spans(jaeger_api, services, limit=200):
-    """All spans of the last `limit` traces of each service, flattened.
+    """Return all spans from the last `limit` traces of each service.
 
-    Two details the Jaeger API forces on every consumer:
-
-    - A trace is returned in full by *each* service it touches, so the spans
-      of a cross-service trace (every mission) arrive once per service.
-      Without the (traceID, spanID) dedupe below, one mission's model calls are
-      counted twice or three times — the metrics inflate silently.
-    - ``span["processID"]`` is only meaningful *within* its trace; the service
-      name lives in the trace's ``processes`` map. Resolve it here, once, into
-      ``_service`` so the features downstream can group by service.
+    - Jaeger returns a shared trace once per service, so spans are
+      de-duplicated by (traceID, spanID).
+    - Each span gets a `_service` field with its service name.
     """
     spans, seen = [], set()
     for service in services:
@@ -55,7 +55,19 @@ def fetch_spans(jaeger_api, services, limit=200):
     return spans
 
 
+def scope_to_patterns(spans, config):
+    """Keep only traces whose `run.patterns` tag equals `config`.
+
+    The tag is only on the root span, so we find matching trace IDs first
+    and then keep every span in those traces.
+    """
+    wanted = {s.get("traceID") for s in spans
+              if tag(s, "run.patterns") == config}
+    return [s for s in spans if s.get("traceID") in wanted]
+
+
 def tag(span, key, default=None):
+    """Value of tag `key` on a Jaeger span, or `default`."""
     for t in span.get("tags", []):
         if t["key"] == key:
             return t["value"]
@@ -63,64 +75,53 @@ def tag(span, key, default=None):
 
 
 # ---------------------------------------------------------------------------
-# Deriving the taxonomy instead of declaring it.
+# Working out the interaction type of each span (no manual tags needed).
 #
-# `interaction_type` used to be set by hand at every call site, which made the
-# taxonomy a convention N producers had to keep in sync — and a rename nothing
-# would catch. None of it was necessary, because a span already says what kind
-# of interaction it is. Two tiers, in order of how much they cost you:
-#
-#   1. TOPOLOGY (free). An interaction across a process boundary is defined by
-#      who emitted the span and who they talked to, and auto-instrumentation
-#      records both: RequestsInstrumentor emits a client span carrying
-#      `http.url` for every hop, and context propagation links it to the
-#      callee's server span. One table of roles replaces every hand-set tag.
-#
-#   2. SPAN NAMES (already paid for). An interaction *inside* one process
-#      crosses no boundary, so topology is blind to it. But `llm.complete` and
-#      `vote_by_*` are names the instrumentation must choose anyway, and that
-#      `llm_reliability` and `human_reviews` below already depend on. Reusing
-#      them costs no new convention; a parallel tag would have been a second
-#      one to keep in sync.
-#
-# Tier 2 is a naming convention, not an observation — worth knowing when you
-# extend this. What it is *not* is an extra one.
+#   1. Between services: from a client HTTP span, use who made the call
+#      (its service) and who received it (the child server span, or the URL).
+#   2. Inside one service: from span names — `llm.complete` is a model call,
+#      `vote_by_*` is an expert vote.
+# If you rename those spans, update the constants below.
 # ---------------------------------------------------------------------------
 
-# The roles a span's service plays in the taxonomy.
+# Service name -> role.
 ROLES = {"agent_service": "AI",       # an LLM-driven component
          "detection_service": "S",    # a plain software service
          "human_service": "H"}        # humans (the expert panel)
 
-# Peers that run no OTel SDK of their own, so they never emit a span: they are
-# recognised from the URL the caller used.
+# Services that emit no spans (Ollama), recognised by URL. "L" = LLM.
 PEER_ROLES = {"11434": "L",           # Ollama's port
               "/api/generate": "L",   # ...or its route, whichever matches
               "/v1/chat/completions": "L"}
 
-# Tier 2: the in-process interactions, keyed on the span names the rest of this
-# file already treats as load-bearing.
+# Span names used to detect in-service interactions.
 LLM_SPAN = "llm.complete"             # one model call
 VOTE_PREFIX = "vote_by_"              # one expert deliberating
 
-# The taxonomy, declared in full so the report can show a category that this
-# system never exercises. An empty row is a finding, not a gap: `orchestration`
-# and `H2H` below are both structurally 0 here, and the README explains why.
-TAXONOMY = [("S2S", "ai_to_ai"),
+# All interaction types. Every row is always shown, even when it is 0
+# (bare S2S and H2H are always 0 in this system).
+#
+#   S2S  software <-> software (agents, LLMs, services)
+#          ai_to_llm      agent <-> LLM
+#          ai_to_service  agent <-> software service (e.g. detection_service)
+#          (no sub-kind)  service <-> service, no agent involved
+#   H2S  human <-> software (prompting, monitoring, feedback)
+#   H2H  human <-> human, through a service
+TAXONOMY = [("S2S", "ai_to_llm"),
             ("S2S", "ai_to_service"),
-            ("S2S", "orchestration"),
+            ("S2S", None),
             ("H2S", None),
             ("H2H", None)]
 
 
 def label(interaction):
-    """("S2S", "ai_to_ai") -> "S2S:ai_to_ai"; ("H2S", None) -> "H2S"."""
+    """("S2S", "ai_to_llm") -> "S2S:ai_to_llm"; ("H2S", None) -> "H2S"."""
     category, subkind = interaction
     return f"{category}:{subkind}" if subkind else category
 
 
 def index_spans(spans):
-    """Child spans indexed by their parent's (traceID, spanID)."""
+    """Map (traceID, parent spanID) -> list of child spans."""
     children = defaultdict(list)
     for span in spans:
         for ref in span.get("references", []):
@@ -130,13 +131,12 @@ def index_spans(spans):
 
 
 def peer_role(span, children):
-    """Who is on the other end of this client span?"""
-    # Preferred: the callee instrumented itself, so its server span is our
-    # child and names its own service.
+    """Role of the service this client span called, or None."""
+    # Best: the called service's server span is a child of this span.
     for child in children.get((span.get("traceID"), span.get("spanID")), []):
         if child.get("_service") != span.get("_service"):
             return ROLES.get(child.get("_service"))
-    # Fallback: an uninstrumented peer (Ollama) — read it off the URL.
+    # Otherwise (e.g. Ollama): match the URL.
     url = tag(span, "http.url", "") or ""
     for marker, role in PEER_ROLES.items():
         if marker in url:
@@ -145,48 +145,45 @@ def peer_role(span, children):
 
 
 def derive_interaction(span, children):
-    """The (category, sub-kind) a span implies, or None if it implies none.
+    """Return the span's interaction type as (category, sub-kind), or None.
 
-    S2S covers everything between computational components — the agent, the
-    model and the services — split by sub-kind because the *failure and cost
-    models* differ: an `ai_to_ai` call fails as HTTP 200 carrying unusable
-    content, an `ai_to_service` call fails as a 404 or a timeout. H2S is any
-    interaction that crosses to or from a human. H2H would be humans
-    interacting through a service, which this system does not do.
+    e.g. ("S2S", "ai_to_llm"), ("S2S", "ai_to_service"), ("H2S", None).
+    H2H never occurs here: experts vote independently.
     """
     source = ROLES.get(span.get("_service"))
     if source is None:
         return None
     op = span.get("operationName", "")
-    # -- tier 2: in-process, recognised by name --
+    # -- inside one service: by span name --
     if op == LLM_SPAN and source == "AI":
-        # Counted here rather than on the HTTP hop underneath, so the label
-        # survives swapping a remote model for an in-process one: such a
-        # backend emits no client span at all, and this still reports S2S.
-        return ("S2S", "ai_to_ai")
+        # Counted on llm.complete (not the HTTP call) so it also works for
+        # models that don't make HTTP calls.
+        return ("S2S", "ai_to_llm")
     if op.startswith(VOTE_PREFIX) and source == "H":
-        # An expert's decision, recorded by the service: human -> service.
+        # An expert's vote: human -> service.
         return ("H2S", None)
-    # -- tier 1: across a boundary, read off the topology --
+    # -- between services: by who called whom --
     if tag(span, "span.kind") == "client":
         target = peer_role(span, children)
         if target is None or target == "L":
-            # The POST to Ollama is already counted on its llm.complete parent.
+            # Ollama calls are already counted on llm.complete.
             return None
-        # Counted on the client side only: one edge, one interaction. The
-        # callee's server span is the same interaction seen from the far end,
-        # which is why tagging both ends used to double-count the human gate.
+        # Count on the client side only, so each call is counted once.
         if target == "H" or source == "H":
             return ("H2S", None)
         if target == "AI":
-            return ("S2S", "ai_to_ai")
-        # An LLM-agent reaching a supporting module, versus plain
-        # workflow-driven traffic between two services.
-        return ("S2S", "ai_to_service" if source == "AI" else "orchestration")
+            # Agent -> another AI service. Always 0 here (only one agent).
+            return ("S2S", "ai_to_llm")
+        if source == "AI":
+            # Agent -> software service.
+            return ("S2S", "ai_to_service")
+        # Service -> service, no agent: S2S with no sub-kind.
+        return ("S2S", None)
     return None
 
 
 def table(headers, rows):
+    """Format rows as an ASCII table."""
     widths = [max(len(str(h)), *(len(str(r[i])) for r in rows)) if rows
               else len(str(h)) for i, h in enumerate(headers)]
     sep = "+" + "+".join("-" * (w + 2) for w in widths) + "+"
@@ -199,6 +196,7 @@ def table(headers, rows):
 
 
 def summary_interactions(spans):
+    """Count and average duration for each interaction type."""
     children = index_spans(spans)
     stats = defaultdict(lambda: [0, 0.0])
     for s in spans:
@@ -216,6 +214,7 @@ def summary_interactions(spans):
 
 
 def per_service_interactions(spans):
+    """Interaction counts per service."""
     children = index_spans(spans)
     stats = Counter()
     for s in spans:
@@ -229,6 +228,7 @@ def per_service_interactions(spans):
 
 
 def llm_reliability(spans):
+    """LLM call count, retry rate, and calls per task."""
     llm = [s for s in spans if s.get("operationName") == "llm.complete"]
     retries = [s for s in llm if str(tag(s, "llm.is_retry")).lower() == "true"]
     by_task = Counter(tag(s, "llm.task", "?") for s in llm)
@@ -241,6 +241,7 @@ def llm_reliability(spans):
 
 
 def human_reviews(spans):
+    """Human review decisions and expert decision latency."""
     reviews = [s for s in spans if s.get("operationName") == "review_victim_map"]
     votes = [s for s in spans if s.get("operationName", "").startswith("vote_by_")]
     rows = []
@@ -256,7 +257,72 @@ def human_reviews(spans):
         print(table(["Decision", "Panel Latency (ms)", "Reason"], rows))
 
 
+def pattern_effect(spans):
+    """One row per pattern configuration (`run.patterns` tag).
+
+    Shows cost (LLM calls, retries, tool calls, time) and quality
+    ("Errors shipped" = wrong values in the final map, compared with
+    ground truth).
+    """
+    by_trace = defaultdict(list)
+    for s in spans:
+        by_trace[s.get("traceID")].append(s)
+
+    rows, mixed = defaultdict(lambda: Counter()), 0
+    for group in by_trace.values():
+        configs = {tag(s, "run.patterns") for s in group
+                   if tag(s, "run.patterns") is not None}
+        if not configs:
+            continue          # not a task trace (e.g. /greet)
+        if len(configs) > 1:
+            # A trace with two configurations can't be assigned to one row,
+            # so skip it and report how many were skipped.
+            mixed += 1
+            continue
+        config = configs.pop()
+        r = rows[config]
+        r["runs"] += 1
+        r["llm"] += sum(1 for s in group
+                        if s.get("operationName") == LLM_SPAN)
+        r["retries"] += sum(1 for s in group
+                            if str(tag(s, "llm.is_retry")).lower() == "true")
+        r["tools"] += sum(1 for s in group
+                          if s.get("operationName", "").startswith("tool."))
+        r["human"] += sum(1 for s in group
+                          if s.get("operationName") == "human.review")
+        # Count aborted runs separately, so "0 errors because nothing
+        # shipped" isn't mistaken for a correct map.
+        shipped = next((tag(s, "score.shipped") for s in group
+                        if tag(s, "score.shipped") is not None), None)
+        if shipped is False or str(shipped).lower() == "false":
+            r["nothing_shipped"] += 1
+        errors = next((tag(s, "score.errors") for s in group
+                       if tag(s, "score.errors") is not None), 0)
+        r["errors"] += int(errors or 0)
+        # Trace duration = its longest span (the root covers everything).
+        r["ms"] += max((s.get("duration", 0) for s in group), default=0) / 1000.0
+
+    if mixed:
+        print(f"note: skipped {mixed} trace(s) carrying more than one pattern "
+              f"configuration. Older /compare runs put both arms in one "
+              f"trace; current ones give each arm its own.\n")
+    if not rows:
+        print("no runs carrying a run.patterns tag — run a task from the "
+              "console or POST /mission first")
+        return
+    # Sort by number of patterns on: "none" first, "all" last.
+    order = sorted(rows, key=lambda k: (0 if k == "none" else
+                                        99 if k == "all" else k.count("+") + 1))
+    print(table(["Patterns", "Runs", "LLM calls", "Retries", "Tool calls",
+                 "Human gates", "Errors shipped", "Refused to ship", "Avg ms"],
+                [[k, rows[k]["runs"], rows[k]["llm"], rows[k]["retries"],
+                  rows[k]["tools"], rows[k]["human"], rows[k]["errors"],
+                  rows[k]["nothing_shipped"],
+                  f"{rows[k]['ms'] / rows[k]['runs']:.0f}"] for k in order]))
+
+
 def detailed_trace_table(spans):
+    """First 60 spans by start time, with their interaction type."""
     children = index_spans(spans)
     rows = [[s.get("operationName", "?")[:40],
              label(derive_interaction(s, children) or ("-", None)),
@@ -266,11 +332,9 @@ def detailed_trace_table(spans):
 
 
 def taxonomy_audit(spans):
-    """Hand-set `interaction_type` tags vs the labels derived here.
+    """Compare manual `interaction_type` tags (if any) with the derived types.
 
-    Run this *before* deleting tags from a service: it proves the derivation
-    reproduces them. Afterwards the declared column reads 0, which is the
-    confirmation the tags are gone and nothing regressed.
+    Lists any spans where the two disagree.
     """
     children = index_spans(spans)
     declared, derived, disagree = Counter(), Counter(), Counter()
@@ -299,6 +363,7 @@ FEATURES = {"summary_interactions": summary_interactions,
             "taxonomy_audit": taxonomy_audit,
             "llm_reliability": llm_reliability,
             "human_reviews": human_reviews,
+            "pattern_effect": pattern_effect,
             "detailed_trace_table": detailed_trace_table}
 
 
@@ -311,9 +376,21 @@ if __name__ == "__main__":
                     help="Jaeger API endpoint to fetch traces from")
     ap.add_argument("--feature", default="summary_interactions",
                     choices=sorted(FEATURES))
+    ap.add_argument("--patterns", default=None,
+                    help="only traces run under this pattern configuration, "
+                         "as the `run.patterns` tag spells it — e.g. 'all', "
+                         "'none', or 'structured+dispatcher'. Use "
+                         "--feature=pattern_effect to list what is available.")
     args = ap.parse_args()
 
     spans = fetch_spans(args.jaeger_api, args.services.split(","))
+    if args.patterns:
+        spans = scope_to_patterns(spans, args.patterns)
+        if not spans:
+            raise SystemExit(
+                f"no traces tagged run.patterns={args.patterns!r} — run that "
+                f"configuration first, or use --feature=pattern_effect to see "
+                f"which configurations are in the window")
     if not spans:
         print("no traces found — run a mission first "
               "(POST http://localhost:8001/mission or use the frontend)")

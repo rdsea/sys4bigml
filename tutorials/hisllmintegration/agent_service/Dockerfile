@@ -5,7 +5,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY main.py llm.py ./
+COPY main.py llm.py patterns.py tracing.py ./
 
 EXPOSE 8001
 

@@ -52,15 +52,12 @@ app.mount("/metrics", make_asgi_app())
 FastAPIInstrumentor.instrument_app(app)
 
 # ---------------------------------------------------------------------------
-# Human-as-a-Service: a panel of crowd experts reviews the agent's victim map
-# before it reaches rescuers. Each expert applies one review policy; the
-# decision is the majority vote. The span DURATION of each vote is the
-# simulated human decision latency — the human is a component, and often the
-# bottleneck, so the trace should say so.
+# Human-as-a-Service: a simulated panel of three experts reviews the victim
+# map. Each expert applies one rule; the map is approved only if all approve.
+# Each vote's span duration is the simulated human decision time.
 #
-# Rejection reasons follow a fixed vocabulary ("sector <name> ...") so the
-# agent can PARSE them and react — human feedback is data, if you design it
-# to be.
+# Rejection reasons use the form "sector <name> ..." so the agent can parse
+# them and investigate that sector.
 # ---------------------------------------------------------------------------
 
 CONFIDENCE_FLOOR = 0.7
@@ -111,18 +108,16 @@ def review_victim_map(data: dict):
         for name, policy in EXPERTS.items():
             with tracer.start_as_current_span(f"vote_by_{name}") as vote_span:
                 vote_span.set_attribute("expert", name)
-                # Simulated thinking time: the span duration IS the
-                # human decision latency.
+                # Simulated thinking time (shows up as span duration).
                 time.sleep(random.uniform(0.2, 0.6))
                 vote, comment = policy(victim_map)
                 vote_span.set_attribute("vote", vote)
                 votes.append({"expert": name, "vote": vote, "comment": comment})
 
-        # Safety-critical decision: consensus required — any expert can block.
+        # All experts must approve; any one can block.
         approvals = sum(v["vote"] == "approve" for v in votes)
         decision = "approve" if approvals == len(votes) else "reject"
-        # The reason handed back is the FIRST reject comment: specific,
-        # parseable, actionable.
+        # Return the first rejection comment as the reason.
         reason = next((v["comment"] for v in votes if v["vote"] == "reject"),
                       "map accepted for rescue tasking")
         if decision == "reject":
