@@ -63,10 +63,10 @@ As an advanced and research-oriented course, we will use the pass/fail as a way 
 Date|Place|Content|Lead person
 ---|---|---|---
 02.09.2026 |U402  |[Lecture 1 - Service-based Hybrid Intelligence Software Systems ](slides/cs-e4660-lecture1-multicontinuum_v0.8.pdf) | Linh Truong
-09.09.2026 | U402 |[Lecture 2 - Observability and Analytics Experimentation](slides/) | Hong-Tri Nguyen
+09.09.2026 | U402 |[Lecture 2 - Observability and Analytics Experimentation](slides/cs-e4660-lecture2-observerability-analytics-experimentation.pdf) | Hong-Tri Nguyen
 16.09.2026 |U402  | [Lecture 3 - Hands-on on Observability and Scenario-based Analytics Experimentation]() | Hong-Tri Nguyen, Korawit Rupanya
-23.09.2026 | U402  | [Lecture 4 - Fundamental Design and Integration of LLM Workflows and Agentic AI](slides/)| Korawit Rupanya - Hong Tri Nguyen
-30.09.2026 |U402  | [Lecture 5 - Coordination, Trustworthiness, Sovereignty, and Performance Assurance](slides/)| Linh Truong
+23.09.2026 | U402  | [Lecture 4 - Fundamental Design and Integration of LLM Workflows and Agentic AI](slides/cse4660-lecture4_HIS_AI_Agent.pdf)| Korawit Rupanya - Hong Tri Nguyen
+30.09.2026 |U402  | [Lecture 5 - Coordination, Trustworthiness, Sovereignty, and Performance Assurance](slides/cs-e4660-lecture5_coordination_v0.9.pdf)| Linh Truong
 07.10.2026 | U402  |Topic Introduction/discussion| All
 21.10.2026 |U402  | Project progress presentation| All
 28.10.2026 |flexible| Project topic discussion| All
