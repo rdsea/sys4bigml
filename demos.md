@@ -1,5 +1,9 @@
 # Public Student Projects
 List of student works. The status of the git spaces is not up-to-date.
+. [LLM Cost Decomposition Platform](https://github.com/daoa0601/cs-e4660-advanced-topics-software)
+- [Observability for Multi-layer IoT System in the LLM Era](https://github.com/Rico00121/cs-e4660)
+- [Edge ML Quality Framework](https://github.com/sa1am8/ml_class)
+- [Multi-Agent Geospatial Analysis System](https://github.com/masiini/atss)
 - [Green e2e ML](https://github.com/OtsoF/cs-e4660-course-repo)
 - [Monitoring Data Drift for End-to-end Machine Learning Models](https://github.com/thaoducphung/advancedtopicproject)
 - [ML Continuous Training and Testing](https://version.aalto.fi/gitlab/nguyenl21/cs-e4660-project-continuous-servering/-/tree/master/MLService)
